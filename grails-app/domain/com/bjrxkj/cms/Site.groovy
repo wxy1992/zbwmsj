@@ -30,7 +30,7 @@ class Site {
     @Title(zh_CN='设为主站')
     Boolean homesite=false
     @Title(zh_CN='是否启用')
-    Boolean disabled=false
+    Boolean enabled=true
     Date dateCreated
     Date lastUpdated
 
@@ -46,7 +46,7 @@ class Site {
         url(size:0..500,blank: true,nullable:true)
         picture(nullable:true,size:0..8000)
         sequencer(nullable:true)
-        disabled(nullable:true)
+        enabled(nullable:true)
         address(nullable:true)
         homesite(nullable:true)
     }
@@ -58,6 +58,7 @@ class Site {
     static Site home(){
         return Site.createCriteria().get {
             eq('homesite',true)
+            eq('enabled',true)
             order('id','desc')
             maxResults(1)
         }

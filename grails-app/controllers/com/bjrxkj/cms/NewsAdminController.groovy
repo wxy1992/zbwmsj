@@ -36,7 +36,6 @@ class NewsAdminController {
         if(!params.offset) params.offset ='0';
         def currentUser=springSecurityService.currentUser;
         def sortMap = ['sequencer': 'asc','publishDate':'desc','id':'desc'];
-        def current_catalogs=BaseUser.getUserCatalogs(currentUser).collect{it.toLong()};
         def newsResult=News.createCriteria().list ([max: params.max.toInteger(),offset: params.offset.toInteger()]){
             createAlias('catalog','c')
             projections{
@@ -47,9 +46,6 @@ class NewsAdminController {
                 property('publishDate','publishDate')
                 property('state','state')
                 property('sequencer','sequencer')
-            }
-            if(current_catalogs.size()>0){
-                inList('c.id',current_catalogs)
             }
             if(params['catalog.id']){
                 eq("c.id",params['catalog.id'].toLong())
@@ -383,12 +379,8 @@ class NewsAdminController {
             currentUser=BaseUser.get(params.userId);
         }
         def orgList = [];
-        def current_catalogs=BaseUser.getUserCatalogs(currentUser);
         if(params.id =="#"){
             list = Site.createCriteria().list{
-                if(currentUser.sitestr&&!['baseUser','baseRole','catalogParent'].contains(params.usage)){
-                    inList('id',currentUser.sitestr.tokenize(',').toList().collect{it.toLong()})
-                }
                 order("sequencer","asc")
                 order("id","asc")
             }
@@ -419,26 +411,16 @@ class NewsAdminController {
                 map.text = it.companyName;
                 map.name=it.name;
             }else{
-                if(current_catalogs?.size()>0&&!['baseUser','baseRole','catalogParent'].contains(params.usage)){
-                    if(!current_catalogs.contains(it.id.toString())){
-                        return ;
-                    }
-                }
                 map.id = it.id;
                 map.children = !it.children.isEmpty()
                 map.state.isleaf = it.children.isEmpty();
                 if(it.children.isEmpty()){
                     map.type='isleaf'
-                    if(current_catalogs.contains(it.id.toString())&&current_catalogs?.size()>0&&['baseUser','baseRole'].contains(params.usage)){
-                        map.state.selected=true;
-                    }
                 }else{
                     map.type='catalog'
                 }
                 map.state.type='catalog';
                 map.text = it.name;
-//                map.text = "${it.id}_${it.name}";
-
             }
             orgList << map;
         }

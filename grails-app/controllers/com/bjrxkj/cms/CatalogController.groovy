@@ -45,10 +45,6 @@ class CatalogController {
        if(params['parent.id']?.startsWith('P_')){
            catalogInstance.parent=null;
        }
-       if(catalogInstance.parent){
-           catalogInstance.parentIds=Catalog.parentUrl(catalogInstance.parent,'');
-           catalogInstance.parentNames=Catalog.parentName(catalogInstance.parent,'');
-       }
        catalogInstance.save(flush:true)
        if(catalogInstance.hasErrors()) {
            log.error(catalogInstance.errors.toString());
@@ -101,8 +97,9 @@ class CatalogController {
             def m=[:];
             m.id=it.id;
             m.name=it.name;
-            m.parent=it.parent?it.parent.name:""
-            m.needPreview=(it.needPreview||it.needPubPreview)?'是':'否';
+            m.parent=it.parent?it.parent.name:"";
+            m.showIndex=it.showIndex?"首页":"其他";
+            m.enabled=it.enabled?'是':'否';
             list<<m;
         }
         map.rows=list;

@@ -167,18 +167,6 @@ class WebController {
 
 
     /**
-     * 百问百答详情
-     * @return
-     */
-    def questionAnswerDetail(){
-        def obj;
-        if(params.id&&params.id.isNumber()){
-            obj=QuestionAnswer.get(params.id.toInteger())
-        }
-        return [obj:obj]
-    }
-
-    /**
      * 新闻浏览量
      */
     def newsVisitnum(){
@@ -206,20 +194,4 @@ class WebController {
         render map as JSON;
     }
 
-    def clearCookies(){
-        def map=[result:'ok'];
-        try{
-            Cookie[] cookies = request.getCookies();
-            cookies.each {cookie->
-                if(cookie&&cookie.name){
-                    if(cookie.name.startsWith("JCY_CERT")){
-                        cookie.setMaxAge(0);
-                    }
-                }
-            }
-        }catch(e){
-            map=[result:'fail'];
-        }
-        render map as JSON;
-    }
 }

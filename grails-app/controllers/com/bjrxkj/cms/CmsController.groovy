@@ -41,11 +41,7 @@ class CmsController {
      * @return
      */
     def countMyTask(){
-        def catalogstr=springSecurityService.currentUser.catalogstr;
         def newsSql=new StringBuilder("select count(id) as num,state as state from News where state in ('初步审核','拟发审核') ");
-        if(catalogstr){
-            newsSql.append("and catalog.id in (${catalogstr.tokenize(',').toList().collect{it.toLong()}})");
-        }
         newsSql.append("group by state");
         def newstotal=News.executeQuery(newsSql.toString());
         def map=[:];

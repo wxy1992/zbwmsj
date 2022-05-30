@@ -49,7 +49,6 @@ class BaseUserController {
             map.username = user?.username;
             map.realName = user?.realName;
             map.enabled = user?.enabled;
-            map.site = user?.sitestr;
             map.roleName = BaseUserBaseRole.findAllByBaseUser(user)?.baseRole?.name;
             ecList << map;
         }
@@ -63,23 +62,14 @@ class BaseUserController {
      * 新增用户页面
      */
     def createOrEdit() {
-        def roles = BaseRole.findAll();def user;def userRoles=[],catalogNames = '';
+        def roles = BaseRole.findAll();def user;def userRoles=[];
         if(params?.id){
             user = BaseUser.get(params?.id);
             userRoles = BaseUserBaseRole.findByBaseUser(user)?.baseRole;
-            if (user.catalogstr) {
-                catalogNames = Catalog.createCriteria().list {
-                    projections {
-                        distinct('name')
-                    }
-                    inList('id',user.catalogstr.tokenize(',').toList().collect{it.toLong()})
-
-                }.join(',');
-            }
         }else{
             user = new BaseUser();
         }
-        return [baseUser: user, userRoles: userRoles, roles: roles,catalogNames:catalogNames];
+        return [baseUser: user, userRoles: userRoles, roles: roles];
     }
 
     /**
