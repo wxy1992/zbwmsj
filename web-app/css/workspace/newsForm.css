@@ -1,0 +1,38 @@
+button.glyphicon{
+    height: 40px;
+}
+.tab-pane{
+    padding: 10px 20px;
+}
+.progress-bar{
+    height: 15px;
+}
+input[name=title]{
+    font-size: 32px;
+}
+input[name=subtitle]{
+    font-size: 24px;
+}
+.form-control-inline input{
+    display: inline-block;
+    width: 89%;
+
+}
+input[type=text],input[type=number]{
+    border-top:none ;
+    border-left:none ;
+    border-right:none ;
+    border-bottom: 1px solid #ddd;
+    background-color: transparent !important;
+    /*background-color: #e4e8f1 !important;*/
+}
+.pictureBox{
+    width: 255px;
+    height: 150px;
+    display: inline-block;
+    overflow: hidden;
+}
+.pictureBox img{
+    /*max-width: 214px;*/
+    max-height: 150px;
+}

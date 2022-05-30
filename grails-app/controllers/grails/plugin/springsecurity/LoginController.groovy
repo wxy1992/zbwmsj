@@ -1,0 +1,182 @@
+/* Copyright 2013-2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package grails.plugin.springsecurity
+
+import com.bjrxkj.core.BaseUser
+import grails.converters.JSON
+import grails.plugin.springsecurity.SpringSecurityUtils
+import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
+import org.springframework.context.MessageSource
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.authentication.*
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.WebAttributes
+import org.springframework.security.web.authentication.session.SessionAuthenticationException
+import ricicms.CmsService
+import javax.servlet.http.HttpServletResponse
+
+@Secured('permitAll')
+class LoginController {
+	CmsService cmsService;
+	/** Dependency injection for the authenticationTrustResolver. */
+	AuthenticationTrustResolver authenticationTrustResolver
+
+	/** Dependency injection for the springSecurityService. */
+	def springSecurityService
+
+	/** Dependency injection for the messageSource. */
+	MessageSource messageSource
+
+	/** Default action; redirects to 'defaultTargetUrl' if logged in, /login/auth otherwise. */
+	def index() {
+		if (springSecurityService.isLoggedIn()) {
+			redirect uri: conf.successHandler.defaultTargetUrl
+		}
+		else {
+			redirect action: 'auth', params: params
+		}
+	}
+
+	/** Show the login page. */
+	def auth() {
+		def conf = getConf()
+		if (springSecurityService.isLoggedIn()) {
+			redirect uri: conf.successHandler.defaultTargetUrl
+			return
+		}
+		String postUrl = request.contextPath + conf.apf.filterProcessesUrl
+		render view: 'auth', model: [postUrl            : postUrl,
+									 rememberMeParameter: conf.rememberMe.parameter,
+									 usernameParameter  : conf.apf.usernameParameter,
+									 passwordParameter  : conf.apf.passwordParameter,
+									 gspLayout          : conf.gsp.layoutAuth]
+		return;
+	}
+
+	/** The redirect action for Ajax requests. */
+	def authAjax() {
+		response.setHeader 'Location', conf.auth.ajaxLoginFormUrl
+		render(status: HttpServletResponse.SC_UNAUTHORIZED, text: 'Unauthorized')
+	}
+
+	/** Show denied page. */
+	def denied() {
+		if (springSecurityService.isLoggedIn() && authenticationTrustResolver.isRememberMe(authentication)) {
+			// have cookie but the page is guarded with IS_AUTHENTICATED_FULLY (or the equivalent expression)
+			redirect action: 'full', params: params
+			return
+		}
+
+		[gspLayout: conf.gsp.layoutDenied]
+	}
+
+	/** Login page for users with a remember-me cookie but accessing a IS_AUTHENTICATED_FULLY page. */
+	def full() {
+		def conf = getConf()
+		render view: 'auth', params: params,
+		       model: [hasCookie: authenticationTrustResolver.isRememberMe(authentication),
+		               postUrl: request.contextPath + conf.apf.filterProcessesUrl,
+		               rememberMeParameter: conf.rememberMe.parameter,
+		               usernameParameter: conf.apf.usernameParameter,
+		               passwordParameter: conf.apf.passwordParameter,
+		               gspLayout: conf.gsp.layoutAuth]
+	}
+
+    /** Callback after a failed login. Redirects to the auth page with a warning message. */
+    def authfail() {
+
+        String msg = ''
+        def exception = session[WebAttributes.AUTHENTICATION_EXCEPTION]
+        if (exception) {
+            if (exception instanceof AccountExpiredException) {
+                msg = messageSource.getMessage('springSecurity.errors.login.expired', null, "Account Expired", request.locale)
+            } else if (exception instanceof CredentialsExpiredException) {
+                msg = messageSource.getMessage('springSecurity.errors.login.passwordExpired', null, "Password Expired", request.locale)
+            } else if (exception instanceof DisabledException) {
+                msg = messageSource.getMessage('springSecurity.errors.login.disabled', null, "Account Disabled", request.locale)
+            } else if (exception instanceof LockedException) {
+                msg = messageSource.getMessage('springSecurity.errors.login.locked', null, "Account Locked", request.locale)
+            } else if (exception instanceof SessionAuthenticationException) {
+                msg = messageSource.getMessage('springSecurity.errors.login.max.sessions.exceeded', null, "Sorry, you have exceeded your maximum number of open sessions.", request.locale)
+            } else {
+                msg = messageSource.getMessage('springSecurity.errors.login.fail', null, "Authentication Failure", request.locale)
+            }
+        }
+
+        if (springSecurityService.isAjax(request)) {
+            render([error: msg] as JSON)
+        } else {
+            flash.message = msg
+            redirect action: 'auth', params: params
+        }
+    }
+
+    /** The Ajax success redirect url. */
+	def ajaxSuccess() {
+		render([success: true, username: authentication.name] as JSON)
+	}
+
+	/** The Ajax denied redirect url. */
+	def ajaxDenied() {
+		render([error: 'access denied'] as JSON)
+	}
+
+	protected Authentication getAuthentication() {
+		SecurityContextHolder.context?.authentication
+	}
+
+	protected ConfigObject getConf() {
+		SpringSecurityUtils.securityConfig
+	}
+
+
+	def loginVerify() {
+		try {
+			def username = params.username?.trim();
+			flash.username = username;
+			flash.loginType = params.loginType;
+			if (!username || !params.password?.trim()) {
+				flash.message = "请输入用户名和密码";
+				redirect(action: 'auth')
+				return
+			}
+			def baseUser = BaseUser.findByUsername(username);
+			if (!baseUser) {
+				flash.message = "暂无此账号，请联系管理员";
+				redirect(action: 'auth')
+				return
+			} else if (springSecurityService.passwordEncoder.isPasswordValid(baseUser.password, params.password.trim(), null)) {
+				springSecurityService.reauthenticate(username, baseUser?.password);
+				cmsService.cacheClear('siteIndex');
+				if (SpringSecurityUtils.ifAllGranted('ROLE_USER') || params.loginType != 'workspace') {
+					redirect uri: '/'
+					return
+				} else {
+					redirect uri: getConf().successHandler.defaultTargetUrl
+					return
+				}
+			} else {
+				flash.message = "用户名或密码不正确";
+				redirect(action: 'auth')
+				return
+			}
+		} catch (e) {
+			flash.message = "登录异常";
+			redirect(action: 'auth')
+			return
+		}
+	}
+}

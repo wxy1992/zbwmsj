@@ -1,0 +1,122 @@
+/*内部孩子间距*/
+.mc-ui-between-space1{margin:-.5px}
+.mc-ui-between-space1>*{padding:.5px}
+.mc-ui-between-space2{margin:-1.5px}
+.mc-ui-between-space2>*{padding:1.5px}
+.mc-ui-between-space3{margin:-2.5px}
+.mc-ui-between-space3>*{padding:2.5px}
+.mc-ui-between-space4{margin:-3.5px}
+.mc-ui-between-space4>*{padding:3.5px}
+.mc-ui-between-space5{margin:-5px}
+.mc-ui-between-space5>*{padding:5px}
+.mc-ui-between-space6{margin:-6px}
+.mc-ui-between-space6>*{padding:6px}
+.mc-ui-between-space7{margin:-7.5px}
+.mc-ui-between-space7>*{padding:7.5px}
+.mc-ui-between-space8{margin:-9px}
+.mc-ui-between-space8>*{padding:9px}
+.mc-ui-between-space9{margin:-10px}
+.mc-ui-between-space9>*{padding:10px}
+.mc-ui-between-space10{margin:-11px}
+.mc-ui-between-space10>*{padding:11px}
+.mc-ui-between-space11{margin:-12.5px}
+.mc-ui-between-space11>*{padding:12.5px}
+.mc-ui-between-space12{margin:-15px}
+.mc-ui-between-space12>*{padding:15px}
+/*内部孩子居中*/
+.mc-ui-flex-box{
+
+}
+/*水平垂直居中*/
+.mc-ui-flex-start{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    text-align: left !important;
+    -webkit-box-pack: start !important;
+    -ms-flex-pack: start !important;
+    justify-content: flex-start !important;
+
+
+    -webkit-box-align: start !important;
+    -ms-flex-align: start !important;
+    align-items: flex-start !important;
+}
+/*水平垂直居中*/
+.mc-ui-flex-center{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    text-align: center !important;
+    -webkit-box-pack: center !important;
+    -ms-flex-pack: center !important;
+    justify-content: center !important;
+
+
+    -webkit-box-align: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+}
+/*水平垂直居中*/
+.mc-ui-flex-end{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    text-align: right !important;
+    -webkit-box-pack: end !important;
+    -ms-flex-pack: end !important;
+    justify-content: flex-end !important;
+
+    -webkit-box-align: end !important;
+    -ms-flex-align: end !important;
+    align-items: flex-end !important;
+}
+
+
+/*扩展的新容器面板*/
+.mc-ui-absolute-pane{
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+
+/*不能出现带margin-left margin-top*/
+.mc-ui-absolute-pane>.layui-btn{
+    margin-left:0px;
+}
+/*大部分控件拖拽到这里会变得很奇怪 所以这里给最小值*/
+.mc-ui-absolute-pane>form,
+.mc-ui-absolute-pane>table,
+.mc-ui-absolute-pane>fieldset,
+.mc-ui-absolute-pane>blockquote,
+.mc-ui-absolute-pane>img,
+.mc-ui-absolute-pane>div,
+.mc-ui-absolute-pane>input,
+.mc-ui-absolute-pane>ul,
+.mc-ui-absolute-pane>ol,
+.mc-ui-absolute-pane>hr,
+.mc-ui-absolute-pane>textarea{
+    width: 400px;
+}
+.mc-ui-absolute-pane>span{
+    width: 150px;
+}
+.mc-ui-absolute-pane>.magicalcoder-color-picker{
+    width: 46px;
+}
+.mc-ui-absolute-pane>.layui-form-mid{
+    width: 4px;
+}
+.mc-ui-absolute-pane>.layui-badge-dot{
+    width: 8px;
+}
+
