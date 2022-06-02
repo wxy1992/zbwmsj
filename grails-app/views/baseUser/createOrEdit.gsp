@@ -15,13 +15,15 @@
                             <input type="text" class="form-control" required name="username" maxlength="50" value="${baseUser?.username}"
                                    autocomplete="false" <g:if test="${baseUser?.id}">readonly</g:if> >
                         </div>
-                        <div class="col-md-1">姓名</div>
+                        <div class="col-md-1">志愿队名称</div>
                         <div class="col-md-5">
                             <input type="text" class="form-control" required name="realName" maxlength="50" value="${baseUser?.realName}">
                         </div>
-                        <div class="col-md-1">Ukey唯一标识</div>
+
+
+                        <div class="col-md-1">联系方式</div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="ukey" maxlength="50" value="${baseUser?.ukey}">
+                            <input type="text" class="form-control" name="phoneNumber" maxlength="50" value="${baseUser?.phoneNumber}">
                         </div>
                         <div class="col-md-1">密码</div>
                         <div class="col-md-5">
@@ -34,12 +36,6 @@
                         <div class="col-md-1">邮箱</div>
                         <div class="col-md-5">
                             <input type="email" class="form-control" name="email" value="${baseUser?.email}">
-                        </div>
-                        <div class="col-md-1">可维护站点及栏目</div>
-                        <div class="col-md-5">
-                            <input type="hidden" class="form-control" name="sitestr" value="${baseUser?.sitestr}">
-                            <input type="hidden" class="form-control" name="catalogstr" value="${baseUser?.catalogstr}">
-                            <input type="text" name="catalogName" readonly class="form-control" value="${catalogNames}" onclick="showCatalogMenuModal();"/>
                         </div>
                         <div class="col-md-1">角色</div>
                         <div class="col-md-5">

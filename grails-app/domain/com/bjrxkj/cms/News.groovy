@@ -3,6 +3,7 @@ package com.bjrxkj.cms
 import com.bjrxkj.cms.behaviour.Commentary
 import com.bjrxkj.core.BaseUser
 import com.bjrxkj.annotation.Title
+import org.grails.databinding.BindingFormat
 
 
 @Title('新闻')
@@ -26,9 +27,11 @@ class News {
     @Title('发布者')
     BaseUser publisher
     @Title('发布日期')
+    @BindingFormat("yyyy-MM-dd HH:mm")
     Date publishDate=new Date()
     @Title('过期日期')
-    Date expireDate=new Date().parse('yyyy-MM-dd','2077-07-07')
+    @BindingFormat("yyyy-MM-dd HH:mm")
+    Date expireDate=new Date().parse('yyyy-MM-dd','2077-07-07 23:59')
     @Title('跳转链接')
     String redirectURL
     @Title('新闻图片')

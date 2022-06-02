@@ -15,13 +15,6 @@
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/js/bootstrap-table-1.11.0/bootstrap-table.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/js/jstree-3.2.1/dist/themes/default/style.min.css">
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
-%{--    <asset:stylesheet src="bootstrap.min.css"/>--}%
-%{--    <asset:stylesheet src="workspace/sidebar.css"/>--}%
-%{--    <asset:stylesheet src="workspace/style.css"/>--}%
-%{--    <asset:stylesheet src="workspace/fonts.css"/>--}%
-%{--    <asset:stylesheet src="bootstrap-table-1.11.0/bootstrap-table.css"/>--}%
-%{--    <asset:stylesheet src="jstree-3.2.1/dist/themes/default/style.min.css"/>--}%
-%{--    <asset:stylesheet src="bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" />--}%
     <g:render template="/layouts/jsMain"/>
     <g:layoutHead/>
 </head>
@@ -62,7 +55,7 @@
                             ${currentUser?.toString()}
                             </a>
 
-                            <a href="javascript://" onclick="window.location.href = 'http://www.gj/jcy/logout';">
+                            <a href="javascript://" onclick="window.location.href = '${request.contextPath}/logout';">
                                 <i class="glyphicon glyphicon-log-out"></i>
                                 <span>退出</span>
                             </a>

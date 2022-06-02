@@ -61,14 +61,12 @@ class CatalogController {
     }
     def catalogJsonSearch(def params,boolean isList){
         return Catalog.withCriteria{
+            createAlias("site","s")
             if (params.keywords) {
                 like("name", "%" + params.keywords + "%")
             }
-            site {
-                if (params.siteId) {
-                    eq("id", params.siteId.toLong())
-                }
-                order('sequencer','asc')
+            if (params.siteId) {
+                eq("s.id",params.siteId.toLong())
             }
             if(isList){
                 order('sequencer','asc')
@@ -85,13 +83,18 @@ class CatalogController {
     def json(){
         if(!params.max) params.max='10'
         if(!params.offset) params.offset ='0'
-        def objs,objsCount
-        if(params.siteId){
-            objs=catalogJsonSearch(params,true);
-            objsCount=catalogJsonSearch(params,false);
-        }else{
-            objsCount=0
+        def result=Catalog.createCriteria().list ([max: params.max.toInteger(),offset: params.offset.toInteger()]){
+            createAlias("site","s")
+            if (params.keywords) {
+                like("name", "%" + params.keywords + "%")
+            }
+            if (params.siteId) {
+                eq("s.id",params.siteId.toLong())
+            }
+            order('sequencer','asc')
+            order('id','desc')
         }
+        def objs=result.resultList;
         def map=[:],list=[];
         objs.each{Catalog
             def m=[:];
@@ -103,7 +106,7 @@ class CatalogController {
             list<<m;
         }
         map.rows=list;
-        map.total=objsCount;
+        map.total=result.totalCount;
         render "${map as JSON}";
     }
 

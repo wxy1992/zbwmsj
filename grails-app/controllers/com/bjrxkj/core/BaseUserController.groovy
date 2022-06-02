@@ -48,6 +48,7 @@ class BaseUserController {
             map.id = user?.id;
             map.username = user?.username;
             map.realName = user?.realName;
+            map.phoneNumber = user?.phoneNumber;
             map.enabled = user?.enabled;
             map.roleName = BaseUserBaseRole.findAllByBaseUser(user)?.baseRole?.name;
             ecList << map;

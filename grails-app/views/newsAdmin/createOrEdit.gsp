@@ -325,7 +325,7 @@
 
     $(function(){
         $('#catalogId').val('${newsInstance?.catalogId}')
-        $( ".datetimepicker" ).datetimepicker({language: 'zh-CN',autoclose: true,todayBtn: true,format: 'yyyy-mm-dd hh:ii',endDate:'${new Date().format('yyyy-MM-dd')}'});
+        $( ".datetimepicker" ).datetimepicker({language: 'zh-CN',autoclose: true,todayBtn: true,format: 'yyyy-mm-dd hh:ii'});
         // ueoutline.ready(function() {});
         // var uessss = UE.getContent();
         // console.log(uessss);

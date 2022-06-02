@@ -51,7 +51,6 @@ class SiteController {
                 map.message="请先删除该站点栏目！";
             }else{
                 try{
-                    def sitename=site.name;
                     site.delete(flush: true);
                     map.result=true;
                     map.message="删除成功";

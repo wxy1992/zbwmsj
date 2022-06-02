@@ -5,7 +5,6 @@ import com.bjrxkj.core.BaseUser
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.SpringSecurityUtils
-import grails.util.Environment
 import org.hibernate.criterion.CriteriaSpecification
 import ricicms.CmsService
 import ricicms.CommonService
@@ -115,11 +114,6 @@ class NewsAdminController {
             }else{
                 newsInstance = new News();
                 catalog=Catalog.get(params['catalog.id']);
-            }
-            newsInstance.publishDate=new Date();
-            newsInstance.expireDate=new Date().parse('yyyy-MM-dd','2077-07-07');
-            if(params.publishDate){
-                newsInstance.publishDate=Date.parse('yyyy-MM-dd HH:mm',params.remove('publishDate'))
             }
             if(params.expireDate){
                 newsInstance.expireDate=Date.parse('yyyy-MM-dd',params.remove('expireDate'))

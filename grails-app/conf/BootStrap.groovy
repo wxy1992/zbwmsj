@@ -186,13 +186,13 @@ class BootStrap {
             def catalogs=['文明实践':[],'实践阵地':[],'志愿团体':[],
                           '学习课堂':['理论','文化','教育','科普','体育'],
                           '生活服务':['生活缴费','便民生活','生活出行']];
-            catalogs.each {catalog->
-                def indexCatalog=new Catalog(name:catalog.key,site: site,showIndex: true);
+            catalogs.eachWithIndex {catalog,index->
+                def indexCatalog=new Catalog(name:catalog.key,site: site,showIndex: true,sequencer: index+1);
                 if(indexCatalog.save(flush: true)){
                     def children=catalog.value;
                     if(children.size()>0){
-                        children.each {child->
-                            def childCatalog=new Catalog(name: child,parent:indexCatalog,site: site,showIndex:false);
+                        children.eachWithIndex {child,subindex->
+                            def childCatalog=new Catalog(name: child,parent:indexCatalog,site: site,showIndex:false,sequencer:index+1+subindex+1);
                             if(!childCatalog.save(flush: true)){
                                 log.error("子栏目创建异常："+childCatalog.errors);
                             }

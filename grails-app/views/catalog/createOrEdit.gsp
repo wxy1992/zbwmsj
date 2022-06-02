@@ -63,21 +63,21 @@
         <div class="col-lg-12 advanceAttributes"><span class="hidden-sm-up"><i
                 class="glyphicon glyphicon-new-window"></i></span> <span class="hidden-xs-down">高级属性</span></div>
 
-        <div class="col-lg-2" align="right">审核流程</div>
+        <div class="col-lg-2" align="right">发稿流程</div>
 
         <div class="col-lg-4">
             <label><input type="checkbox" id="needPreview" name="needPreview" value="true"
-                          <g:if test="${catalogInstance?.needPreview}">checked</g:if>/></label> 初步审核
-            <label><input type="checkbox" id="needPubPreview" name="needPubPreview"  value="true"
-                          <g:if test="${catalogInstance?.needPubPreview}">checked</g:if>
-                          onchange="pubPreview()"/></label> 拟发审核
+                          <g:if test="${catalogInstance?.needPreview}">checked</g:if>/></label> 需要审核
+%{--            <label><input type="checkbox" id="needPubPreview" name="needPubPreview"  value="true"--}%
+%{--                          <g:if test="${catalogInstance?.needPubPreview}">checked</g:if>--}%
+%{--                          onchange="pubPreview()"/></label> 拟发审核--}%
         </div>
 
 
-        <div class="col-lg-2" align="right">是否禁用</div>
+        <div class="col-lg-2" align="right">是否启用</div>
 
-        <div class="col-lg-4"><label><input type="checkbox" id="disabled" name="disabled" value="true"
-                                            <g:if test="${catalogInstance?.disabled}">checked</g:if> /></label></div>
+        <div class="col-lg-4"><label><input type="checkbox" id="enabled" name="enabled" value="true"
+                                            <g:if test="${catalogInstance?.enabled}">checked</g:if> /></label></div>
 
         <div class="col-lg-2" align="right">首页展示</div>
 

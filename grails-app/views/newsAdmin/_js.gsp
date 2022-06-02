@@ -24,18 +24,11 @@
 
     function titleFormatter(value, row, index) {
         var bgcolor='';
-        // if(row['title'].indexOf('纯附件')<0){
-        //     bgcolor='bg-danger';
-        // }
         var str='<a href="javascript://" class="'+bgcolor+'" onclick="previewIndex(\''+row.id+'\');">'+row['title']+'</a>';
         return str;
     }
     function catalogFormatter(value, row, index) {
-        var cname=value;
-        if(row.catalogstr){
-            cname='<font class="text-danger">自['+value+']引用至['+row.citename+']</font>';
-        }
-        var str='<a href="javascript://" class="" onclick="previewIndex(\''+row.id+'\');">'+cname+'</a>';
+        var str='<a href="javascript://" class="" onclick="previewIndex(\''+row.id+'\');">'+value+'</a>';
         return str;
     }
 

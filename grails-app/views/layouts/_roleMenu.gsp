@@ -3,22 +3,18 @@
     <div class="logo"><a><span>${cmsTitle}</span></a></div>
 
     <li class="label">待办事项</li>
-    <li><a class="sidebar-sub-toggle"><i class="glyphicon glyphicon-tags"></i> 新闻 <span class="badge badge-primary sumTodoNum">0</span>
-        <span class="sidebar-collapse-icon ti-angle-down"></span></a>
-        <ul class="badgeTodo">
-            <li><a href="javascript://" onclick="loadRemotePage('${request.contextPath}/newsAdmin/list?operation=audit&state=初步审核')"><i class="glyphicon glyphicon-tag"></i>初步审核<span class="badge badge-primary auditNewsNum">0</span></a></li>
-            <li><a href="javascript://" onclick="loadRemotePage('${request.contextPath}/newsAdmin/list?operation=pubaudit&state=拟发审核')"><i class="glyphicon glyphicon-tag"></i>拟发审核<span class="badge badge-primary pubauditNewsNum">0</span></a></li>
-        </ul>
-    </li>
-
+    <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/list')">
+        <i class="glyphicon glyphicon-edit"></i> 稿件 </a></li>
+    <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/list')">
+    <i class="glyphicon glyphicon-share"></i> 点单 </a></li>
 
     <li class="label">采编/运维</li>
-    <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/list')"><i class="glyphicon glyphicon-list-alt"></i> 新闻管理 </a></li>
+    <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/list')"><i class="glyphicon glyphicon-duplicate"></i> 新闻管理 </a></li>
     <sec:ifAnyGranted roles="ROLE_ADMIN">
         <li><a onclick="loadRemotePage('${request.contextPath}/catalog/list')"><i class="glyphicon glyphicon-th-list"></i> 栏目管理 </a></li>
         <li><a onclick="loadRemotePage('${request.contextPath}/site/list')"><i class="glyphicon glyphicon-home"></i> 站点管理 </a></li>
     </sec:ifAnyGranted>
-    <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/list')"><i class="glyphicon glyphicon-list-alt"></i> 点单管理 </a></li>
+    <li><a onclick="loadRemotePage('${request.contextPath}/trade/list')"><i class="glyphicon glyphicon-list-alt"></i> 点单管理 </a></li>
 
 
     <sec:ifAnyGranted roles="ROLE_ADMIN">

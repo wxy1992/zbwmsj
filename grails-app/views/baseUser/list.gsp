@@ -31,11 +31,11 @@
                         <thead>
                         <tr>
                             <th data-checkbox="true"></th>
-                            <th data-align="center" data-field="realName" data-width="200">姓名</th>
                             <th data-align="center" data-field="username">用户名</th>
+                            <th data-align="center" data-field="realName" data-width="200">志愿队名称</th>
                             <th data-align="center" data-field="roleName">角色</th>
+                            <th data-align="center" data-field="phoneNumber">联系方式</th>
                             <th data-align="center" data-field="enabled" data-formatter="booleanFormatter">启用/禁用</th>
-                            <th data-align="center" data-field="site.name">所属站点</th>
                             <th data-align="center" data-field="id" data-formatter="optionFormatter">操作</th>
                         </tr>
                         </thead>
