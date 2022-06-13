@@ -151,7 +151,7 @@ class BootStrap {
             for (String url in [
                     '/error', '/index', '/index.gsp', '/**/favicon.ico', '/shutdown',
                     '/assets/**', '/**/js/**', '/**/css/**', '/**/images/**',
-                    '/login/**', '/logout/**', 'uploads/*', '/web/**', '/news/**']) {
+                    '/login/**', '/logout/**', 'uploads/*', '/web/**','/api/**', '/news/**']) {
                 new Requestmap(url: url, configAttribute: 'permitAll').save()
             }
             new Requestmap(url: '/site/**', configAttribute: 'ROLE_MANAGER,ROLE_ADMIN').save(flush: true)
@@ -187,12 +187,12 @@ class BootStrap {
                           '学习课堂':['理论','文化','教育','科普','体育'],
                           '生活服务':['生活缴费','便民生活','生活出行']];
             catalogs.eachWithIndex {catalog,index->
-                def indexCatalog=new Catalog(name:catalog.key,site: site,showIndex: true,sequencer: index+1);
+                def indexCatalog=new Catalog(name:catalog.key,site: site,positions: 1,sequencer: index+1);
                 if(indexCatalog.save(flush: true)){
                     def children=catalog.value;
                     if(children.size()>0){
                         children.eachWithIndex {child,subindex->
-                            def childCatalog=new Catalog(name: child,parent:indexCatalog,site: site,showIndex:false,sequencer:index+1+subindex+1);
+                            def childCatalog=new Catalog(name: child,parent:indexCatalog,site: site,positions: 1,sequencer:index+1+subindex+1);
                             if(!childCatalog.save(flush: true)){
                                 log.error("子栏目创建异常："+childCatalog.errors);
                             }

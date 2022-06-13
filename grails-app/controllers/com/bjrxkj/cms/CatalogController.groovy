@@ -101,7 +101,7 @@ class CatalogController {
             m.id=it.id;
             m.name=it.name;
             m.parent=it.parent?it.parent.name:"";
-            m.showIndex=it.showIndex?"首页":"其他";
+            m.positions=it.positions?"首页":"其他";
             m.enabled=it.enabled?'是':'否';
             list<<m;
         }

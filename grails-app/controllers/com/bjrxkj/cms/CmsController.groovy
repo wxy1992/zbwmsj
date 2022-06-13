@@ -16,10 +16,6 @@ class CmsController {
         redirect(action: 'workSpace')
     }
     def workSpace(){
-        if(SpringSecurityUtils.ifAllGranted('ROLE_USER')){
-            redirect(controller: 'site',action: 'siteIndex')
-            return
-        }
         def map=[:],current=new Date();
         map.num1=News.count();
         map.num2=Catalog.count();

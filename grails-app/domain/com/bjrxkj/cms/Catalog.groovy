@@ -8,7 +8,7 @@ class Catalog {
     @Title(zh_CN='栏目名称')
     String name
     @Title(zh_CN='列表模板')
-    String templateTop
+    String templateList
     @Title(zh_CN='内容模板')
     String templateDetail
     @Title(zh_CN='是否启用')
@@ -19,8 +19,8 @@ class Catalog {
     Boolean needPubPreview=false
     @Title(zh_CN='排序号')
     Integer sequencer=9999999
-    @Title(zh_CN='是否首页显示')
-    Boolean showIndex=false
+    @Title(zh_CN='展示位置')
+    Integer positions=0//首页为1
     @Title(zh_CN='是否显示详情')
     Boolean showFirst=false
     @Title(zh_CN='是否显示日期来源作者')
@@ -44,9 +44,9 @@ class Catalog {
         needPubPreview(nullable:true)
         enabled(nullable:true)
         sequencer(nullable:true)
-        templateTop(size:0..50,blank: true, nullable:true)
+        templateList(size:0..50,blank: true, nullable:true)
         templateDetail(size:0..50,blank: true, nullable:true)
-        showIndex(nullable:true)
+        positions(nullable:true)
         showFirst(nullable:true)
         showTimeAuthor(nullable:true)
         nochildren(nullable:true)

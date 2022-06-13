@@ -16,12 +16,11 @@ class ChartController {
      */
     def newsVisitBarChartJson(){
         def map=[:];
-        def list= Visit.createCriteria().list{
+        def list= News.createCriteria().list{
             projections{
-                count('id','nums')
+                count('clicknum','nums')
                 groupProperty('news')
             }
-            isNotNull('news')
             order('nums','desc')
             maxResults(10)
         }
@@ -34,25 +33,23 @@ class ChartController {
      */
     def catalogVisitPieJson(){
         def map=[:];
-        def list=Visit.createCriteria().list{
-            createAlias('news','n')
+        def list=News.createCriteria().list{
             projections{
-                count('id','nums')
-                groupProperty('n.catalog')
+                property('clicknum','nums')
+                groupProperty('catalog')
             }
-            isNotNull('news')
-            order('nums','desc')
+            order('clicknum','desc')
             maxResults(5)
         }
         def lmap=[];
         list.each {
            def m=[:];
             m.value=it[0];
-            m.name="${it[1].name}-${it[1].id}";
+            m.name="${it[1].name}";
             lmap<<m;
         }
         map.seriesData=lmap;
-        map.catalogsName=list.collect{"${it[1].name}-${it[1].id}"};
+        map.catalogsName=list.collect{it[1].name};
         render "${map as JSON}";
     }
 

@@ -22,13 +22,13 @@
     </style>
 </head>
 
-<body style="background: #FF3528;">
+<body>
 <g:set var="cmsTitle" value="${grailsApplication.config.project.setting.name}"/>
 <div class="container-fluid pr-0 pl-0">
     <div class="row mr-0 ml-0">
         <h1 class="text-white text-center container">${cmsTitle}</h1>
     </div>
-    <div class="row mr-0 ml-0" style="background: #eeca5c;">
+    <div class="row mr-0 ml-0">
         <div style="margin: 50px auto;width: 20%;min-width: 300px;">
             <form action="${request.contextPath}/login/loginVerify" method="POST" id="loginForm" class="form-horizontal" autocomplete="off">
                 <input value="${params.loginType?:flash?.loginType?:'show'}" type="hidden" name="loginType"/>

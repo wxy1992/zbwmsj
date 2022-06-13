@@ -4,12 +4,9 @@
     <title>500</title>
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/bootstrap.min.css"/>
 </head>
-<body style="background: #004662;">
+<body>
 <div class="container-fluid pr-0 pl-0">
     <div class="row mr-0 ml-0">
-        <img src="${request.contextPath}/template/index01/images/logo.png" style="width: 50%;margin: 30px auto;">
-    </div>
-    <div class="row mr-0 ml-0" style="background: #0a3748;">
         <g:if env="development">
             <g:if test="${Throwable.isInstance(exception)}">
                 <g:renderException exception="${exception}" />

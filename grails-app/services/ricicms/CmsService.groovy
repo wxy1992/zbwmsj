@@ -1,42 +1,15 @@
 package ricicms
 
-import com.bjrxkj.cms.Catalog
 import com.bjrxkj.cms.behaviour.Commentary
 import com.bjrxkj.cms.News
-import com.bjrxkj.cms.Site
 import com.bjrxkj.cms.behaviour.Favourite
 import com.bjrxkj.core.BaseUser
-import grails.plugin.cache.GrailsConcurrentMapCache
 import grails.transaction.Transactional
 import org.hibernate.criterion.CriteriaSpecification
 
 @Transactional
 class CmsService {
-    def grailsApplicaion;
-    def grailsCacheManager;
-    /**
-     * 创建站点的默认栏目
-     * @param site
-     * @return
-     */
-    def createCatalogBySite(Site site){
-        def catalogMap= Catalog.indexCatalogMap;
-        catalogMap.keySet().eachWithIndex{de,i->
-            def num=Catalog.countByNameAndSite(de,site);
-            if(!num){
-                def c=new Catalog(name:de,site: site,sequencer:i+1,showIndex: true,allowComment: true);
-                if(c.save(flush: true)){
-                    catalogMap[de].eachWithIndex{ca,j->
-                        def c1=Catalog.countByParentAndName(c,ca);
-                        if(!c1){
-                            c1=new Catalog(name:ca,site: site,parent:c,sequencer:j+1,showIndex: true);
-                            c1.save(flush: true);
-                        }
-                    }
-                };
-            }
-        }
-    }
+
 
     /**
      * 评论
@@ -173,59 +146,4 @@ class CmsService {
         return res;
     }
 
-    def siteLayoutSeting(def servletContext,def site){
-        def template=site?.template;
-        def siteId=site?.id;
-        if(!servletContext.getAttribute("site-${siteId}")){
-            def catalogs=[:];
-            def clist=Catalog.executeQuery("select name,id from Catalog c where c.site.id=? and c.showIndex=?",[siteId,true]);
-            clist.each{c->
-                catalogs[c[0]]=c[1];
-            }
-            def contentMap=['template':template,'catalogs':catalogs,
-                            'site':site,'staticResource':"${servletContext.contextPath}/sites/template/${template}"]
-            servletContext.setAttribute("site-${siteId}",contentMap);
-        }
-    }
-
-    def cacheByName(String cacheName){
-        GrailsConcurrentMapCache cache = grailsCacheManager.getCache(cacheName);
-        cache.allKeys.each { key ->
-            println key
-        }
-    }
-
-    def cacheEvictByDomain(String cacheName,String domains){
-        GrailsConcurrentMapCache cache = grailsCacheManager.getCache(cacheName);
-        cache.allKeys.each { key ->
-            domains?.tokenize(',').each{word->
-                if(key.toString().contains(word)){
-                    cache.evict(key);
-                }
-            }
-        }
-    }
-    def cacheSomeEvict(String cacheName,String keywords){
-        GrailsConcurrentMapCache cache = grailsCacheManager.getCache(cacheName);
-        cache.allKeys.each { key ->
-            if(key.toString().contains(keywords)){
-                cache.evict(key);
-            }
-        }
-    }
-    def cacheEvict(String cacheName,String cacheKey){
-        GrailsConcurrentMapCache cache = grailsCacheManager.getCache(cacheName);
-        cache.evict(cacheKey);
-    }
-    def cacheClear(String cacheName){
-        GrailsConcurrentMapCache cache = grailsCacheManager.getCache(cacheName);
-        cache.clear();
-    }
-
-    def clearNewsCache(){
-        ['siteIndex','newsTopTag','newsTop','newsDetail','newsSearch'].each{cacheName->
-            GrailsConcurrentMapCache cache = grailsCacheManager.getCache(cacheName);
-            cache.clear();
-        }
-    }
 }

@@ -90,7 +90,7 @@
                                     缩略图
                                     <div class="bg-light border pictureBox text-center">
                                         <g:if test="${newsInstance?.picture}">
-                                            <img src="${request.contextPath}/news/picture/${newsInstance?.id}.jpg"/>
+                                            <img src="${request.contextPath}/web/picture/${newsInstance?.id}.jpg"/>
                                         </g:if><g:else>
                                         <img src="${request.contextPath}/template/default.png">
                                         </g:else>

@@ -45,7 +45,7 @@
                                             <th data-align="center" data-field="id">ID</th>
                                             <th data-align="center" data-field="name">栏目名称</th>
                                             <th data-align="center" data-field="parent">父级栏目</th>
-                                            <th data-align="center" data-field="showIndex">展示位置</th>
+                                            <th data-align="center" data-field="positions">展示位置</th>
                                             <th data-align="center" data-field="enabled">是否启用</th>
                                             <th data-align="center" data-field="id" data-formatter="optionFormatter">操作</th>
                                         </tr>

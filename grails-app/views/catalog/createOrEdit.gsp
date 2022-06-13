@@ -44,8 +44,8 @@
 
         <div class="col-lg-2" align="right">列表模板</div>
 
-        <div class="col-lg-4"><input type="text" class="form-control input-default" name="templateTop"
-                                     value="${catalogInstance?.templateTop}"/></div>
+        <div class="col-lg-4"><input type="text" class="form-control input-default" name="templateList"
+                                     value="${catalogInstance?.templateList}"/></div>
 
         <div class="col-lg-2" align="right">内容模板</div>
 
@@ -83,12 +83,12 @@
 
         <div class="col-lg-4">
             <div class="row">
-                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="showIndex" value="true"
-                                                              <g:if test="${catalogInstance?.showIndex}">checked</g:if>>是
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="positions" value="true"
+                                                              <g:if test="${catalogInstance?.positions}">checked</g:if>>是
                 </label></div>
 
-                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="showIndex" value="false"
-                                                              <g:if test="${!catalogInstance?.showIndex}">checked</g:if>>否
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="positions" value="false"
+                                                              <g:if test="${!catalogInstance?.positions}">checked</g:if>>否
                 </label></div>
             </div>
         </div>

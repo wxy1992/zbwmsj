@@ -194,4 +194,28 @@ class WebController {
         render map as JSON;
     }
 
+
+    def picture(){
+        def picturePath;
+        if(!(params.id && params.id.isLong())){
+            render '新闻不存在'
+            return
+        }
+        def newsInstance = News.get(params.id.toLong());
+        if(newsInstance && newsInstance.picture){
+            picturePath=newsInstance.picture;
+        }else{
+            picturePath=request.servletContext.getRealPath("/sites/template/default.png");
+        }
+        try{
+            def outdata=new File(picturePath).bytes;
+            response.setContentType("image/jpeg");
+            response.setContentLength(outdata.size());
+            OutputStream out = response.outputStream;
+            out.write(outdata);
+            out.close();
+        }catch(Exception e){
+            return
+        }
+    }
 }

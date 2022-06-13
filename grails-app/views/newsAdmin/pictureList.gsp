@@ -36,7 +36,7 @@
         }
         function optionFormatterP(value, row, index) {
             var str=[];
-            str.push('<a href="${request.contextPath}/news/picture/'+row.id+'.jpg" target="_blank"><img src="${request.contextPath}/news/picture/'+row.id+'.jpg" width="150" height="100"/></a>');
+            str.push('<a href="${request.contextPath}/web/picture/'+row.id+'.jpg" target="_blank"><img src="${request.contextPath}/news/picture/'+row.id+'.jpg" width="150" height="100"/></a>');
             return str.join('');
         }
         function delNewsPic(id){
