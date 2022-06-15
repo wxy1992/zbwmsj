@@ -59,27 +59,22 @@ class CmsController {
             calendar.add(Calendar.DAY_OF_MONTH, +1);
             map.dateX<<simpleDateFormat.format(calendar.getTime());
         }
-        def catalogsTop4=Visit.createCriteria().list{
-            createAlias('news','n')
+        def catalogsTop4=News.createCriteria().list{
             projections{
-                count('id','nums')
-                groupProperty('n.catalog')
+                property('clicknum','nums')
+                groupProperty('catalog')
             }
-            isNotNull('news')
             ge('dateCreated',Date.parse('yyyy-MM-dd HH:mm:ss',"${day1} 00:00:00"))
             le('dateCreated',new Date())
             order('nums','desc')
             maxResults(5)
         }
-        def list=Visit.createCriteria().list{
-            createAlias('news','n')
-            createAlias('n.catalog','c')
+        def list=News.createCriteria().list{
             projections{
-                count('id','nums')
-                groupProperty('n.catalog')
+                property('clicknum','nums')
+                groupProperty('catalog')
                 groupProperty('dateCreated')
             }
-            isNotNull('news')
             ge('dateCreated',Date.parse('yyyy-MM-dd HH:mm:ss',"${day1} 00:00:00"))
             le('dateCreated',new Date())
             order('nums','desc')

@@ -27,10 +27,19 @@ class TradeController {
                 property('beginDate','beginDate')
                 property('endDate','endDate')
                 property('status','status')
+                property('backreason','backreason')
             }
-            if(!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){
+            if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//管理员
+                if(params.operation=='todo'){
+                    eq("status",10)//待办已提交服务
+                }
+            }else{//二级用户只管理本单位服务
                 eq("o.id",currentUser.organizationId)
+                if(params.operation=='todo'){//待办退回服务
+                    eq("status",5)
+                }
             }
+
             if(params.organization){
                 eq("o.id",params.organization.toLong())
             }
@@ -106,12 +115,50 @@ class TradeController {
         render map as JSON;
     }
 
+    /**
+     * 删除工单
+     * @return
+     */
     def deleteTrade(){
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="数据不存在";
         if(params.id){
             int num=Trade.executeUpdate("update Trade set deleted=1 where id=?",[params.id]);
+            if(num>0){
+                map.result=true;
+                map.message="操作成功";
+            }
+        }
+        render "${map as JSON}";
+    }
+
+
+    /**
+     * 审核工单
+      * @return
+     */
+    def changeTradeStatus(){
+        def map=[:];
+        map.result=false;
+        map.message="网络错误，请重试";
+        def operations=Trade.OPERATIONMAP;
+        if(!["提交","发布","退回"].contains(params.operation)&&!operations.get(params.operation)){
+            render "${map as JSON}";
+            return;
+        }
+        def ids = params.fields?.split(',').toList().collect {it.toLong()};
+        try{
+            def updateMap=[:];
+            updateMap.status=operations.get(params.operation);
+            updateMap.backreason=params.backreason;
+            updateMap.auditDate=new Date();
+            updateMap.auditUser=springSecurityService.currentUser;
+            Trade.where{id in ids}.updateAll(updateMap);
+            map.result=true;
+            map.message="操作成功";
+        }catch(e){
+            log.error(e.message);
         }
         render "${map as JSON}";
     }

@@ -3,6 +3,12 @@
     $(function(){
         showNewsList('');
     });
+
+    function doSearch(){
+        $("#newsTable").bootstrapTable("refresh",[]);
+        operateGroup();
+    }
+
     //点击左侧栏目树方法
     function showNewsList(cid,state,operation,pageNum){
         var obj=new Object();
@@ -19,7 +25,7 @@
     }
     //预览新闻
     function previewIndex(id){
-        window.open('${request.contextPath}/news/detail/'+id+'.html');
+        window.open('${request.contextPath}/newsAdmin/preview/'+id);
     }
 
     function titleFormatter(value, row, index) {
@@ -65,8 +71,8 @@
             }
             $.post('${request.contextPath}/newsAdmin/changeNewsState',obj,function (data){
                 alert(data.message);
-                countTodoTask();
                 doSearch();
+                countTodoTask();
             },"json");
         }
     }

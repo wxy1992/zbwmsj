@@ -24,7 +24,7 @@ class BootStrap {
 
     private void createDefaultRoles() {
         if (BaseRole.count() == 0) {
-            def roles = ['ROLE_USER': '群众用户', 'ROLE_SUBADMIN': '二级管理员', 'ROLE_MANAGER': '管理员', 'ROLE_ADMIN': '超级管理员'];
+            def roles = ['ROLE_USER': '群众用户', 'ROLE_SUBADMIN': '二级管理员', 'ROLE_ADMIN': '超级管理员'];
             roles.keySet().each {
                 if (!BaseRole.findByAuthority(it)) {
                     def role = new BaseRole(authority: it, description: roles[it], name: roles[it]);
@@ -151,14 +151,15 @@ class BootStrap {
             for (String url in [
                     '/error', '/index', '/index.gsp', '/**/favicon.ico', '/shutdown',
                     '/assets/**', '/**/js/**', '/**/css/**', '/**/images/**',
-                    '/login/**', '/logout/**', 'uploads/*', '/web/**','/api/**', '/news/**']) {
+                    '/login/**', '/logout/**', 'uploads/*', '/web/**','/api/**']) {
                 new Requestmap(url: url, configAttribute: 'permitAll').save()
             }
-            new Requestmap(url: '/site/**', configAttribute: 'ROLE_MANAGER,ROLE_ADMIN').save(flush: true)
-            new Requestmap(url: '/catalog/**', configAttribute: 'ROLE_MANAGER,ROLE_ADMIN').save(flush: true)
-            new Requestmap(url: '/baseUser/**', configAttribute: 'ROLE_MANAGER,ROLE_ADMIN').save(flush: true)
-            new Requestmap(url: '/baseRole/**', configAttribute: 'ROLE_MANAGER,ROLE_ADMIN').save(flush: true)
-            new Requestmap(url: '/newsAdmin/**', configAttribute: 'ROLE_EDITOR,ROLE_AUDITOR,ROLE_PUBAUDITOR,ROLE_MANAGER,ROLE_ADMIN').save(flush: true)
+            new Requestmap(url: '/site/**', configAttribute: 'ROLE_ADMIN').save(flush: true)
+            new Requestmap(url: '/catalog/**', configAttribute: 'ROLE_ADMIN').save(flush: true)
+            new Requestmap(url: '/baseUser/**', configAttribute: 'ROLE_ADMIN').save(flush: true)
+            new Requestmap(url: '/baseRole/**', configAttribute: 'ROLE_ADMIN').save(flush: true)
+            new Requestmap(url: '/newsAdmin/**', configAttribute: 'ROLE_SUBADMIN,ROLE_ADMIN').save(flush: true)
+            new Requestmap(url: '/trade/**', configAttribute: 'ROLE_SUBADMIN,ROLE_ADMIN').save(flush: true)
             new Requestmap(url: '/', configAttribute: 'isFullyAuthenticated()').save(flush: true)
             new Requestmap(url: '/**', configAttribute: 'isFullyAuthenticated()').save(flush: true)
         }

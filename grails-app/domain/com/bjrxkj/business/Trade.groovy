@@ -1,6 +1,7 @@
 package com.bjrxkj.business
 
 import com.bjrxkj.annotation.Title
+import com.bjrxkj.core.BaseUser
 import com.bjrxkj.core.Organization
 import org.grails.databinding.BindingFormat
 
@@ -16,7 +17,7 @@ class Trade {
     @Title(zh_CN='人数设置')
     Integer peopleNum
     @Title(zh_CN='状态')
-    Integer status=10//00草稿，10已提交，20发布中，30已完成（待评价），40已结束
+    Integer status=10//00草稿，05退回，10已提交，20发布中，30已完成（待评价），40已结束
     @Title(zh_CN='开始时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date beginDate
@@ -29,6 +30,12 @@ class Trade {
     String telephone
     @Title(zh_CN='服务地址')
     String address
+    @Title('退回原因')
+    String backreason
+    @Title('最后审核操作员')
+    BaseUser auditUser
+    @Title('审核时间')
+    Date auditDate
     @Title(zh_CN='是否删除')
     Boolean deleted=false
     @Title(zh_CN='创建时间')
@@ -46,13 +53,17 @@ class Trade {
         organization(nullable: false)
         telephone(nullable: false,size: 0..50)
         address(nullable: true,size: 0..200)
+        backreason(nullable: true,size: 0..500)
+        auditUser(nullable: true)
+        auditDate(nullable: true)
     }
 
     static mapping = {
         content type: 'text'
     }
 
-    transient static final Map STATUSMAP=[0:"草稿",10:"已提交",20:"发布中",30:"已完成",40:"已结束"];
+    transient static final Map OPERATIONMAP=["保存":0,"退回":5,"提交":10,"发布":20,"完成":30,"结束":40];
+    transient static final Map STATUSMAP=[0:"草稿",5:"退回",10:"已提交",20:"发布中",30:"已完成",40:"已结束"];
     transient static final Map WAYMAP=[1:"定点服务",2:"上门服务"];
 
     String toString(){

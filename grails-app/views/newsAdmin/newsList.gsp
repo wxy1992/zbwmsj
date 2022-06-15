@@ -7,10 +7,9 @@
     </div>
     <div class="col-lg-5 text-right">
         <button class="btn btn-info" type="button" onclick="doSearch();"><i class="glyphicon glyphicon-search"></i> 搜索</button>
-        <sec:ifNotGranted roles="ROLE_AUDITOR,ROLE_PUBAUDITOR">
+        <sec:ifAnyGranted roles="ROLE_SUBADMIN,ROLE_ADMIN">
             <button class="btn btn-primary" type="button" onclick="createOrEdit('');"><i class="glyphicon glyphicon-plus"></i>新增</button>
-            <button class="btn btn-info" type="button" onclick="exportSelectNews();"><i class="glyphicon glyphicon-save"></i> 导出</button>
-        </sec:ifNotGranted>
+        </sec:ifAnyGranted>
     </div>
 </div>
     <div class="row">
@@ -21,15 +20,12 @@
                         <div class="btn-group">
                             <a href="javascript:searchNewsTable({'#state':'草稿'});" class="btn btn-info draft" title="草稿库">草稿库</a>
                             <a href="javascript:searchNewsTable({'#state':'发布'});" class="btn btn-info publish active" title="发布库">发布库</a>
-                            <g:set var="isAudit" value="${catalog?.needPreview?:(params.operation?.contains('audit'))}"/>
+                            <g:set var="isAudit" value="${catalog?.needPreview}"/>
                             <g:if test="${isAudit}">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">审核库<span class="caret"></span></button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="javascript:searchNewsTable({'#state':'初步审核'});" class="audit" title="初步审核">初步审核</a></li>
-                                        <g:if test="${catalog?.needPubPreview||isAudit}">
-                                            <li><a href="javascript:searchNewsTable({'#state':'拟发审核'});" class="pubaudit" title="拟发审核">拟发审核</a></li>
-                                        </g:if>
+                                        <li><a href="javascript:searchNewsTable({'#state':'已提交'});" class="audit" title="已提交">已提交</a></li>
                                         <li><a href="javascript:searchNewsTable({'#state':'退回'});" class="audit" title="退回">退回</a></li>
                                     </ul>
                                 </div>
@@ -40,13 +36,7 @@
                     <div class="col-md-5 text-right">
                         <div class="btn-group btn-group-justified operateButtonGroup">
                         <!--审核库-->
-                            <sec:ifAnyGranted roles="ROLE_AUDITOR">
-                                <button onclick="changeNewsState('${catalog?.needPubPreview?'拟发审核':'发布'}');" class="btn btn-warning audit"
-                                        title="审核通过">审核通过</button>
-                                <button onclick="changeNewsState('退回');" class="btn btn-danger audit"
-                                        title="退回">退回</button>
-                            </sec:ifAnyGranted>
-                            <sec:ifAnyGranted roles="ROLE_PUBAUDITOR">
+                            <sec:ifAnyGranted roles="ROLE_ADMIN">
                                 <button onclick="changeNewsState('发布');" class="btn btn-warning pubaudit"
                                         title="审核通过">审核通过</button>
                                 <button onclick="changeNewsState('退回');" class="btn btn-danger pubaudit"
@@ -55,8 +45,8 @@
 
                             <sec:ifNotGranted roles="ROLE_AUDITOR,ROLE_PUBAUDITOR">
                                 <!--草稿库-->
-                                <g:if test="${(catalog?.needPreview||catalog?.needPubPreview)&&!SpringSecurityUtils.ifAnyGranted("ROLE_MANAGER,ROLE_ADMIN")}">
-                                    <button onclick="changeNewsState('初步审核');" class="btn btn-warning draft" title="提交至初步审核">提交</button>
+                                <g:if test="${catalog?.needPreview&&!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")}">
+                                    <button onclick="changeNewsState('已提交');" class="btn btn-warning draft" title="已提交">提交</button>
                                 </g:if><g:else>
                                 <button onclick="changeNewsState('发布');" class="btn btn-warning draft" title="发布">发布</button>
                                 </g:else>
@@ -122,10 +112,6 @@
         doSearch();
     }
 
-    function doSearch(){
-        $("#newsTable").bootstrapTable("refresh",[]);
-        operateGroup();
-    }
     //控制撤稿、复制等按钮显示
     function operateGroup(){
         if($('#state').val()){

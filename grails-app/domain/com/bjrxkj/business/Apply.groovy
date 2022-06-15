@@ -32,6 +32,6 @@ class Apply {
     }
 
     String toString(){
-        return "【${name}】申请了："+trade;
+        return "【${name}】报名了："+trade;
     }
 }

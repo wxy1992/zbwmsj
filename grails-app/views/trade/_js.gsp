@@ -1,26 +1,8 @@
 <script>
 
     $(function () {
-        $( ".datetimepicker" ).datetimepicker({language: 'zh-CN',autoclose: true,todayBtn: true,format: 'yyyy-mm-dd hh:ii',endDate:'${new Date().format('yyyy-MM-dd')}'});
-
-        $("#tradeForm").validate({
-            rules:{
-                title:{
-                    required :true,
-                },
-                domainName:{
-                    required :true,
-                }
-            },
-            message:{
-                name:{
-                    required:"请输入站点名称",
-                },
-                domainName:{
-                    required:"请输入站点域名",
-                }
-            }
-        });
+        $(".datetimepicker" ).datetimepicker({language: 'zh-CN',autoclose: true,todayBtn: true,format: 'yyyy-mm-dd hh:ii',endDate:'${new Date().format('yyyy-MM-dd')}'});
+        $("#tradeForm input:required").after('<span class="error-span">*</span>');
     });
 
     function createOrEdit(id,typeId,typeName){
@@ -70,7 +52,7 @@
     }
 
     function deleteTrade(id){
-        if(id&&window.confirm("删除选中订单数据？")){
+        if(id&&window.confirm("删除选中的服务？")){
             $.post("${request.contextPath}/trade/deleteTrade", {id:id}, function (data) {
                 alert(data.message);
                 if (data.result) {
@@ -86,21 +68,23 @@
         if (selectRows.length <= 0) {
             alert("请至少选择一条数据！");
         }else {
-            var fields='';
-            for (var i = 0; i < selectRows.length; i++) {
-                if (fields != '') fields += ',';
-                fields += selectRows[i].id;
+            if(window.confirm(operation+"选中的服务？")){
+                var fields='';
+                for (var i = 0; i < selectRows.length; i++) {
+                    if (fields != '') fields += ',';
+                    fields += selectRows[i].id;
+                }
+                var obj=new Object();
+                obj.fields=fields;
+                obj.operation=operation;
+                if(operation=='退回'){
+                    obj.backreason = prompt('意见建议', '');
+                }
+                $.post('${request.contextPath}/trade/changeTradeStatus',obj,function (data){
+                    alert(data.message);
+                    doSearch();
+                },"json");
             }
-            var obj=new Object();
-            obj.fields=fields;
-            obj.operation=operation;
-            if(operation=='退回'){
-                obj.backreason = prompt('意见建议', '');
-            }
-            $.post('${request.contextPath}/trade/changeTradeStatus',obj,function (data){
-                alert(data.message);
-                doSearch();
-            },"json");
         }
     }
 

@@ -8,7 +8,6 @@ import org.grails.databinding.BindingFormat
 
 @Title('新闻')
 class News {
-//    transient def grailsCacheManager;
     static searchable = true
     @Title('隶属栏目')
     Catalog catalog
@@ -58,7 +57,7 @@ class News {
     Date lastUpdated
     static hasMany = [comments: Commentary]
     static constraints = {
-        state(size:1..200,blank: false,nullable:false,inList: ['草稿','初步审核','拟发审核','退回','发布','回收站'])
+        state(size:1..200,blank: false,nullable:false,inList: ['草稿','退回','已提交','发布','回收站'])
         title(size:1..2000,blank: false,nullable: false)
         subtitle(size:0..2000,blank: true,nullable:true)
         source(size:0..100,blank: true,nullable:true)

@@ -19,13 +19,13 @@ class ChartController {
         def list= News.createCriteria().list{
             projections{
                 count('clicknum','nums')
-                groupProperty('news')
+                groupProperty('title')
             }
             order('nums','desc')
             maxResults(10)
         }
         map.seriesData=list.collect{it[0]};
-        map.newsName=list.collect{it[1]?.title};
+        map.newsName=list.collect{it[1]};
         render "${map as JSON}";
     }
     /**

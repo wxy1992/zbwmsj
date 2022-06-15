@@ -68,9 +68,6 @@
         <div class="col-lg-4">
             <label><input type="checkbox" id="needPreview" name="needPreview" value="true"
                           <g:if test="${catalogInstance?.needPreview}">checked</g:if>/></label> 需要审核
-%{--            <label><input type="checkbox" id="needPubPreview" name="needPubPreview"  value="true"--}%
-%{--                          <g:if test="${catalogInstance?.needPubPreview}">checked</g:if>--}%
-%{--                          onchange="pubPreview()"/></label> 拟发审核--}%
         </div>
 
 
@@ -83,11 +80,11 @@
 
         <div class="col-lg-4">
             <div class="row">
-                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="positions" value="true"
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="positions" value="1"
                                                               <g:if test="${catalogInstance?.positions}">checked</g:if>>是
                 </label></div>
 
-                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="positions" value="false"
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="positions" value="0"
                                                               <g:if test="${!catalogInstance?.positions}">checked</g:if>>否
                 </label></div>
             </div>
@@ -194,14 +191,5 @@
         }
     }
 
-    function pubPreview() {
-        var needPreview = $("#needPreview").prop('checked');
-        var needPubPreview = $("#needPubPreview").prop('checked');
-        if (needPubPreview == true) {
-            if (needPreview == false) {
-                alert("请先勾选初步审核");
-            }
-        }
-    }
 </script>
 <g:render template="/catalog/catalogTreeModal" model="['usage':'catalogParent','checkbox':false]"></g:render>

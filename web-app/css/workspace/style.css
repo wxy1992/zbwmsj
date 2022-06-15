@@ -5369,3 +5369,9 @@ h6.h1 {
     background: #5873fe;
     color: #fff;
 }
+.error-span{
+    color: #dc3545 !important;
+    position: absolute;
+    right: 5px;
+    top: 20%;
+}

@@ -13,10 +13,8 @@ class Catalog {
     String templateDetail
     @Title(zh_CN='是否启用')
     Boolean enabled=true
-    @Title(zh_CN='需要初步审核')
+    @Title(zh_CN='需要审核')
     Boolean needPreview=false
-    @Title(zh_CN='需要拟发审核')
-    Boolean needPubPreview=false
     @Title(zh_CN='排序号')
     Integer sequencer=9999999
     @Title(zh_CN='展示位置')
@@ -41,7 +39,6 @@ class Catalog {
         parent(nullable:true)
         site(nullable:false)
         needPreview(nullable:true)
-        needPubPreview(nullable:true)
         enabled(nullable:true)
         sequencer(nullable:true)
         templateList(size:0..50,blank: true, nullable:true)

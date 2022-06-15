@@ -19,8 +19,12 @@
                         <div class="col-md-5">
                             <input type="text" class="form-control" required name="realName" maxlength="50" value="${baseUser?.realName}">
                         </div>
-
-
+                        <div class="col-md-1">所属单位</div>
+                        <div class="col-md-5">
+                            <g:select from="${com.bjrxkj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
+                                      class="form-control" name="organization.id" noSelection="['':'请选择']"
+                                      value="${baseUser?.organizationId}"></g:select>
+                        </div>
                         <div class="col-md-1">联系方式</div>
                         <div class="col-md-5">
                             <input type="text" class="form-control" name="phoneNumber" maxlength="50" value="${baseUser?.phoneNumber}">

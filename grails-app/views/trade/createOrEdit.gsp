@@ -38,7 +38,7 @@ input[type="radio"], input[type="checkbox"] {
                     <input type="hidden" name="operation" id="operation" value=""/>
                     <div class="row">
                         <div class="col-md-12">
-                            <input type="text" class="form-control text-center font-weight-bold" name="title"
+                            <input type="text" class="form-control text-center font-weight-bold" name="title" required
                                    value="${trade?.title}" maxlength="200" placeholder="在此输入服务名称"/>
                         </div>
                         <div class="col-md-12">
@@ -47,13 +47,15 @@ input[type="radio"], input[type="checkbox"] {
                         <div class="col-md-1">发单类型</div>
                         <div class="col-md-5">
                             <g:select from="${tradeTypes}" optionKey="id" optionValue="name"
-                                      class="form-control" name="tradeType.id" noSelection="['':'请选择类型']" value="${trade?.tradeTypeId?:params?.typeId}"></g:select>
+                                      class="form-control" name="tradeType.id" noSelection="['':'请选择类型']"
+                                      value="${trade?.tradeTypeId?:params?.typeId}"></g:select>
                         </div>
                         <div class="col-md-1">发单机构</div>
                         <div class="col-md-5">
                             <sec:ifAnyGranted roles="ROLE_ADMIN">
                                 <g:select from="${com.bjrxkj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
-                                          class="form-control" name="organization.id" noSelection="['':'请选择机构']" value="${trade?.organizationId}"></g:select>
+                                          class="form-control" name="organization.id" noSelection="['':'请选择机构']"
+                                          value="${trade?.organizationId}"></g:select>
                             </sec:ifAnyGranted>
                             <sec:ifAllGranted roles="ROLE_SUBADMIN">
                                 <input type="text" disabled class="form-control" maxlength="40" value="${trade?.organization?.name?:user?.organization?.name}">
@@ -66,24 +68,24 @@ input[type="radio"], input[type="checkbox"] {
                         </div>
                         <div class="col-md-1">服务地址</div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="address" maxlength="40" value="${trade?.address}">
+                            <input type="text" class="form-control" name="address" required maxlength="40" value="${trade?.address}">
                         </div>
                         <div class="col-md-1">人数设置</div>
                         <div class="col-md-5">
-                            <input type="number" class="form-control" name="address" value="${trade?.address}">
+                            <input type="peopleNum" class="form-control" required name="peopleNum" value="${trade?.peopleNum}" min="1">
                         </div>
                         <div class="col-md-1">联系方式</div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="address" maxlength="40" value="${trade?.address}">
+                            <input type="text" class="form-control" name="telephone" required maxlength="40" value="${trade?.telephone}">
                         </div>
                         <div class="col-md-1">开始时间</div>
                         <div class="col-md-5">
-                            <input type="text" readonly class="form-control datetimepicker" name="beginDate"
+                            <input type="text" readonly class="form-control datetimepicker" name="beginDate" required
                             value="${(trade?.beginDate?:today)?.format('yyyy-MM-dd HH:mm')}"/>
                         </div>
                         <div class="col-md-1">结束时间</div>
                         <div class="col-md-5">
-                            <input type="text" readonly class="form-control datetimepicker" name="endDate"
+                            <input type="text" readonly class="form-control datetimepicker" name="endDate" required
                                    value="${(trade?.endDate?:(today+10))?.format('yyyy-MM-dd HH:mm')}"/>
                         </div>
 

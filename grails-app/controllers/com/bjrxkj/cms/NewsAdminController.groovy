@@ -6,13 +6,9 @@ import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.SpringSecurityUtils
 import org.hibernate.criterion.CriteriaSpecification
-import ricicms.CmsService
-import ricicms.CommonService
 
 class NewsAdminController {
-    CommonService commonService;
     SpringSecurityService springSecurityService;
-    CmsService cmsService;
     def index (){ redirect(action:list(),params:params) }
 
     //列表
@@ -26,6 +22,7 @@ class NewsAdminController {
     def list(){
 
     }
+
     def newsJsonSearch(def params,def currentUser){
 
     }
@@ -33,6 +30,7 @@ class NewsAdminController {
     def json(){
         if(!params.max) params.max='20';
         if(!params.offset) params.offset ='0';
+        if(!params.state) params.state ='发布';
         def currentUser=springSecurityService.currentUser;
         def sortMap = ['sequencer': 'asc','publishDate':'desc','id':'desc'];
         def newsResult=News.createCriteria().list ([max: params.max.toInteger(),offset: params.offset.toInteger()]){
@@ -46,6 +44,11 @@ class NewsAdminController {
                 property('state','state')
                 property('sequencer','sequencer')
             }
+            if(!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//二级用户
+                createAlias('publisher','p')
+                createAlias('p.organization','o')
+                eq("o.id",currentUser.organizationId)
+            }
             if(params['catalog.id']){
                 eq("c.id",params['catalog.id'].toLong())
 
@@ -53,21 +56,12 @@ class NewsAdminController {
                 createAlias('c.site','s')
                 eq("s.id", params['site.id'].toLong())
             }
-            if(params.approve){
-                eq("state",'发布')
-            } else if (params.state) {
-                eq("state", params.state)
-            }
-            if(params.state)
+            if(params.state){
                 eq("state",params.state)
-            if(params.title)
+            }
+            if(params.title){
                 like("title","%"+params.title.trim()+"%")
-            if(params.author)
-                like("author","%"+params.author.trim()+"%")
-            if(params.source)
-                like("source","%"+params.source.trim()+"%")
-            if(params.keywords)
-                like("keywords","%"+params.keywords.trim()+"%")
+            }
             if(params.beginDate){
                 ge("publishDate",Date.parse("yyyy-MM-dd HH:mm:ss",params.beginDate+" 00:00:00"))
             }
@@ -124,8 +118,8 @@ class NewsAdminController {
                 newsInstance.author = baseUser.realName;
             }
             //需要审核
-            if(params.state=='发布'&&((catalog?.needPreview||catalog?.needPubPreview)&&!SpringSecurityUtils.ifAnyGranted("ROLE_MANAGER,ROLE_ADMIN"))){
-                newsInstance.state='初步审核';
+            if(params.state=='发布'&&(catalog?.needPreview&&!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN"))){
+                newsInstance.state='已提交';
             }
             if(newsInstance?.content)  {
                 XmlSlurper slurper = new XmlSlurper(new org.ccil.cowan.tagsoup.Parser());
@@ -189,7 +183,6 @@ class NewsAdminController {
             }
             map.result=true;
             map.message="操作成功";
-            cmsService.clearNewsCache();
         }catch(e){
             log.error(e.message);
         }
@@ -203,46 +196,26 @@ class NewsAdminController {
         def map=[:];
         map.result=false;
         map.message="网络错误，请重试！";
+        if(!News.constraints."state".inList.contains(params.state)){
+            render "${map as JSON}";
+            return;
+        }
         def ids = params.fields?.split(',').toList().collect {it.toLong()};
         try{
-            def updateMap=[:],audit=springSecurityService.currentUser;
+            def updateMap=[:];
             updateMap.state=params.state;
             updateMap.backreason=params.backreason;
-            if(['初步审核','拟发审核','退回'].contains(params.state)){
-                updateMap.auditDate=new Date();
-                updateMap.auditUser=audit;
-            }else if(params.state=='发布'){
-                updateMap.publisher=audit;
-            }
+            updateMap.auditDate=new Date();
+            updateMap.auditUser=springSecurityService.currentUser;
             News.where{id in ids}.updateAll(updateMap);
             map.result=true;
             map.message="操作成功";
-            cmsService.clearNewsCache();
         }catch(e){
             log.error(e.message);
         }
         render "${map as JSON}";
     }
 
-    /**
-     * 审批新闻
-     */
-    def approveAll(){
-        def map=[:];
-        map.result=false;
-        map.message="网络错误，请重试！";
-        if(SpringSecurityUtils.ifAnyGranted("ROLE_PREVIEW")){
-            try{
-                def ids = params.fields?.split(',').toList().collect {it.toLong()};
-                News.where{id in ids}.updateAll(state: '发布');
-                map.result=true;
-                map.message="操作成功";
-            }catch(e){
-                log.error(e.message);
-            }
-        }
-        render "${map as JSON}";
-    }
 
     /*YYH
     * 后台资源管理-->图片管理
@@ -283,7 +256,6 @@ class NewsAdminController {
             def m=[:];
             m.id=it.id;
             m.title=it.title;
-            m.publishDate=it.publishDate.format("yyyy-MM-dd")
             list<<m;
         }
         map.rows=list;
@@ -421,69 +393,63 @@ class NewsAdminController {
         render "${orgList as JSON}";
     }
 
-    def importZipFile(){
-        def map=[:];
-        map.result=false;
-        if(!['insert','update'].contains(params.impType)){
-            map.message='导入方式参数错误';
-        }else if(!['toByte','toDoc'].contains(params.attachmentType)){
-            map.message='附件存储方式参数错误';
-        }else if (!params.impCatalogId){
-            map.message='缺少导入栏目参数';
-        }else{
-            def zipFileData = request.getFile('zipFile');
-            def path=request.servletContext.getRealPath("/temp_zip${new Date().format('yyyy-MM-dd')}.zip");
-            def docfilePath="/uploads/docfile/";
-            map.result=commonService.importZipFile(zipFileData,path,docfilePath,params);
+    def preview(){
+        News news;
+        if(params.id){
+            news=News.get(params.id);
         }
-        cmsService.clearNewsCache();
-        render "${map as JSON}";
+        return [news:news];
     }
 
-    /**
-     * 外网栏目
-     * @return
-     */
-    def catalogsFromSppweb(){
-        render commonService.catalogsFromSppweb();
-    }
+    def todoList(){
 
-    /**
-     * 外网栏目
-     * @return
-     */
-    def importNewsFromSppweb(){
-        def map=commonService.importNewsFromSppweb(params);
-        render "${map as JSON}";
     }
+    def todoJson(){
+        if(!params.max) params.max='10';
+        if(!params.offset) params.offset ='0';
+        def currentUser=springSecurityService.currentUser;
+        def sortMap = ['sequencer': 'asc','publishDate':'desc','id':'desc'];
+        def newsResult=News.createCriteria().list ([max: params.max.toInteger(),offset: params.offset.toInteger()]){
+            createAlias('catalog','c')
+            createAlias('publisher','p')
+            createAlias('p.organization','o')
+            projections{
+                property('id','id')
+                property('c.id','catalogId')
+                property('c.name','catalogName')
+                property('title','title')
+                property('publishDate','publishDate')
+                property('state','state')
+                property('o.shortName','organizationName')
+                property('backreason','backreason')
+            }
+            if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//管理员
+                eq("state","已提交")//待办已提交服务
+            }else{//二级用户只管理本单位服务
 
-    /**
-     * 获取选中的新闻导出
-     * @return
-     */
-    def exportSelectNews(){
-        if(params.exportNewsId){
-            def ids = params.exportNewsId?.split(',')?.toList().collect {it.toLong()};
-            try{
-                List newsList=News.createCriteria().list {
-                    inList('id',ids)
-                }
-                def today=new Date();
-                def zippath="NEWS${today.format('yyyyMMdd')}${today.time}";
-                commonService.mapToXML(newsList,zippath);
-                File file=new File("${zippath}.zip");
-                response.setContentType("application/x-msdownload;charset=UTF-8")
-                response.addHeader("Content-Disposition", 'attachment; filename="' + new String("${file.name}".getBytes("GBK"),"ISO8859-1")+'"')
-                OutputStream out = response.outputStream
-                out.write(file.bytes)
-                out.close();
-                file.delete();
-                File xmlfile=new File("${zippath}.xml");
-                xmlfile.delete();
-            }catch(e){
-                log.error(e.message);
+                eq("o.id",currentUser.organizationId)
+                eq("state","退回")
+            }
+            if(params.state){
+                eq("state",params.state)
+            }
+            if(params.title){
+                like("title","%"+params.title.trim()+"%")
+            }
+            if(params.beginDate){
+                ge("publishDate",Date.parse("yyyy-MM-dd HH:mm:ss",params.beginDate+" 00:00:00"))
+            }
+            if(params.endDate){
+                le("publishDate",Date.parse("yyyy-MM-dd HH:mm:ss",params.endDate+" 23:59:59"))
+            }
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            sortMap.keySet().each {st->
+                order(st,sortMap[st])
             }
         }
+        def map=[:]
+        map.rows=newsResult.resultList;
+        map.total=newsResult.totalCount;
+        render "${map as JSON}";
     }
-
 }
