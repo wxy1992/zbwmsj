@@ -118,10 +118,10 @@ log4j.main = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.bjrxkj.core.BaseUser'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.bjrxkj.core.BaseUserBaseRole'
-grails.plugin.springsecurity.authority.className = 'com.bjrxkj.core.BaseRole'
-grails.plugin.springsecurity.requestMap.className = 'com.bjrxkj.core.Requestmap'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.wmsj.core.BaseUser'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.wmsj.core.BaseUserBaseRole'
+grails.plugin.springsecurity.authority.className = 'com.wmsj.core.BaseRole'
+grails.plugin.springsecurity.requestMap.className = 'com.wmsj.core.Requestmap'
 grails.plugin.springsecurity.securityConfigType = 'Requestmap'
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/cms/workSpace'

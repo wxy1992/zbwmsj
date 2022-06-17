@@ -14,7 +14,7 @@
  */
 package grails.plugin.springsecurity
 
-import com.bjrxkj.core.BaseUser
+import com.wmsj.core.BaseUser
 import grails.converters.JSON
 import org.springframework.context.MessageSource
 import org.springframework.security.access.annotation.Secured

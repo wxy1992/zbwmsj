@@ -1,8 +1,8 @@
 package com.wmsj.cms.behaviour
 
-import com.bjrxkj.annotation.Title
-import com.bjrxkj.business.Apply
-import com.bjrxkj.core.BaseUser
+import com.wmsj.annotation.Title
+import com.wmsj.business.Apply
+import com.wmsj.core.BaseUser
 import org.grails.databinding.BindingFormat
 
 @Title(zh_CN='评论')

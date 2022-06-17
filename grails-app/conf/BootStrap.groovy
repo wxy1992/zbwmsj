@@ -1,10 +1,10 @@
-import com.bjrxkj.cms.Catalog
-import com.bjrxkj.cms.Site
-import com.bjrxkj.core.BaseRole
-import com.bjrxkj.core.BaseUser
-import com.bjrxkj.core.BaseUserBaseRole
-import com.bjrxkj.core.Organization
-import com.bjrxkj.core.Requestmap
+import com.wmsj.cms.Catalog
+import com.wmsj.cms.Site
+import com.wmsj.core.BaseRole
+import com.wmsj.core.BaseUser
+import com.wmsj.core.BaseUserBaseRole
+import com.wmsj.core.Organization
+import com.wmsj.core.Requestmap
 import grails.converters.JSON
 
 class BootStrap {

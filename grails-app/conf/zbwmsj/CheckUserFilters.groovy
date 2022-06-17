@@ -1,6 +1,6 @@
 package zbwmsj
 
-import com.bjrxkj.core.BaseUser
+import com.wmsj.core.BaseUser
 
 class CheckUserFilters {
 

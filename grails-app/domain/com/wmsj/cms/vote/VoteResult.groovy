@@ -1,6 +1,6 @@
 package com.wmsj.cms.vote
 
-import com.bjrxkj.core.BaseUser
+import com.wmsj.core.BaseUser
 
 class VoteResult {
     VoteDetail voteDetail

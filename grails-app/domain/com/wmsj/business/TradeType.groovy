@@ -1,6 +1,6 @@
 package com.wmsj.business
 
-import com.bjrxkj.annotation.Title
+import com.wmsj.annotation.Title
 
 class TradeType {
     @Title(zh_CN='类型名称')

@@ -1,6 +1,6 @@
 package com.wmsj.cms
 
-import com.bjrxkj.annotation.Title
+import com.wmsj.annotation.Title
 
 class Site {
     @Title(zh_CN='代码')

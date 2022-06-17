@@ -1,10 +1,10 @@
 package com.wmsj.other
 
-import com.bjrxkj.cms.Attachment
-import com.bjrxkj.cms.Catalog
-import com.bjrxkj.cms.News
-import com.bjrxkj.cms.Site
-import com.bjrxkj.core.BaseUser
+import com.wmsj.cms.Attachment
+import com.wmsj.cms.Catalog
+import com.wmsj.cms.News
+import com.wmsj.cms.Site
+import com.wmsj.core.BaseUser
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
 

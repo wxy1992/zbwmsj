@@ -1,7 +1,7 @@
 package com.wmsj.cms.behaviour
 
-import com.bjrxkj.annotation.Title
-import com.bjrxkj.core.BaseUser
+import com.wmsj.annotation.Title
+import com.wmsj.core.BaseUser
 
 class Favourite {
     @Title(zh_CN='收藏内容ID')//若type=comment,则newsid-commentid

@@ -1,6 +1,6 @@
 package com.wmsj.cms.vote
 
-import com.bjrxkj.cms.News
+import com.wmsj.cms.News
 import grails.plugin.springsecurity.SpringSecurityService
 
 class VoteController {

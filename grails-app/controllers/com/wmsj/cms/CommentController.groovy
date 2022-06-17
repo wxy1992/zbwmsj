@@ -1,6 +1,6 @@
 package com.wmsj.cms
 
-import com.bjrxkj.cms.behaviour.Commentary
+import com.wmsj.cms.behaviour.Commentary
 
 
 class CommentController {

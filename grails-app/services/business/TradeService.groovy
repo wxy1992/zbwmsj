@@ -1,10 +1,10 @@
 package business
 
-import com.bjrxkj.business.Apply
-import com.bjrxkj.business.Trade
-import com.bjrxkj.business.TradeType
-import com.bjrxkj.cms.behaviour.Commentary
-import com.bjrxkj.core.BaseUser
+import com.wmsj.business.Apply
+import com.wmsj.business.Trade
+import com.wmsj.business.TradeType
+import com.wmsj.cms.behaviour.Commentary
+import com.wmsj.core.BaseUser
 import grails.transaction.Transactional
 import org.hibernate.criterion.CriteriaSpecification
 

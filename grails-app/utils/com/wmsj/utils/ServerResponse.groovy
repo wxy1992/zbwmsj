@@ -1,6 +1,6 @@
 package com.wmsj.utils
 
-import com.bjrxkj.annotation.Title
+import com.wmsj.annotation.Title
 import grails.converters.JSON
 
 class ServerResponse {

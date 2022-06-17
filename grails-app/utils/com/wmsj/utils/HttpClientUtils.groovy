@@ -1,7 +1,7 @@
 package com.wmsj.utils
 
-import com.bjrxkj.ssl.CustomizeHostnameVerifier
-import com.bjrxkj.ssl.CustomizeX509TrustManager
+import com.wmsj.ssl.CustomizeHostnameVerifier
+import com.wmsj.ssl.CustomizeX509TrustManager
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.apache.http.entity.ContentType

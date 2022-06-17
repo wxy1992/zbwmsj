@@ -1,8 +1,8 @@
 package com.wmsj.business
 
-import com.bjrxkj.annotation.Title
-import com.bjrxkj.core.BaseUser
-import com.bjrxkj.core.Organization
+import com.wmsj.annotation.Title
+import com.wmsj.core.BaseUser
+import com.wmsj.core.Organization
 import org.grails.databinding.BindingFormat
 
 class Trade {

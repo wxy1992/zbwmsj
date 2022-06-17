@@ -1,8 +1,8 @@
 package cms
 
-import com.bjrxkj.cms.Attachment
-import com.bjrxkj.cms.Catalog
-import com.bjrxkj.cms.News
+import com.wmsj.cms.Attachment
+import com.wmsj.cms.Catalog
+import com.wmsj.cms.News
 import grails.converters.JSON
 import grails.transaction.Transactional
 import groovy.xml.MarkupBuilder

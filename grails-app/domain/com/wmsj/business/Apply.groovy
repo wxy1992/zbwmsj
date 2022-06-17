@@ -1,6 +1,6 @@
 package com.wmsj.business
 
-import com.bjrxkj.annotation.Title
+import com.wmsj.annotation.Title
 import org.grails.databinding.BindingFormat
 
 @Title(zh_CN='标题')

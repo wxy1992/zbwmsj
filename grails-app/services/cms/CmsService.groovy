@@ -1,12 +1,12 @@
 package cms
 
-import com.bjrxkj.business.Apply
-import com.bjrxkj.business.Trade
-import com.bjrxkj.cms.Catalog
-import com.bjrxkj.cms.behaviour.Commentary
-import com.bjrxkj.cms.News
-import com.bjrxkj.cms.behaviour.Favourite
-import com.bjrxkj.core.BaseUser
+import com.wmsj.business.Apply
+import com.wmsj.business.Trade
+import com.wmsj.cms.Catalog
+import com.wmsj.cms.behaviour.Commentary
+import com.wmsj.cms.News
+import com.wmsj.cms.behaviour.Favourite
+import com.wmsj.core.BaseUser
 import grails.transaction.Transactional
 import org.hibernate.criterion.CriteriaSpecification
 

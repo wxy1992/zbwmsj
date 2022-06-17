@@ -1,7 +1,7 @@
 package com.wmsj.cms
 
-import com.bjrxkj.core.BaseUser
-import com.bjrxkj.annotation.Title;
+import com.wmsj.core.BaseUser
+import com.wmsj.annotation.Title;
 
 @Title(zh_CN='快速链接')
 class QuickLink {

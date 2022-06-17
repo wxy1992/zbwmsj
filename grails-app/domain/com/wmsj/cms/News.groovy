@@ -1,8 +1,8 @@
 package com.wmsj.cms
 
-import com.bjrxkj.cms.behaviour.Commentary
-import com.bjrxkj.core.BaseUser
-import com.bjrxkj.annotation.Title
+import com.wmsj.cms.behaviour.Commentary
+import com.wmsj.core.BaseUser
+import com.wmsj.annotation.Title
 import org.grails.databinding.BindingFormat
 
 

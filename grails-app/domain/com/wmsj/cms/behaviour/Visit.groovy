@@ -1,8 +1,8 @@
 package com.wmsj.cms.behaviour
 
-import com.bjrxkj.cms.News
-import com.bjrxkj.cms.Site
-import com.bjrxkj.annotation.Title
+import com.wmsj.cms.News
+import com.wmsj.cms.Site
+import com.wmsj.annotation.Title
 
 @Title(zh_CN='访问信息')
 class Visit {

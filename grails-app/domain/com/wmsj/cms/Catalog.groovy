@@ -1,6 +1,6 @@
 package com.wmsj.cms
 
-import com.bjrxkj.annotation.Title
+import com.wmsj.annotation.Title
 
 class Catalog {
     @Title(zh_CN='站点')

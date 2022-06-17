@@ -1,6 +1,6 @@
 package com.wmsj.cms
 
-import com.bjrxkj.annotation.Title
+import com.wmsj.annotation.Title
 
 @Title(zh_CN='附件表')
 class Attachment {

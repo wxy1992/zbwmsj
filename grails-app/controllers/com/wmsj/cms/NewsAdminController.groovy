@@ -1,7 +1,7 @@
 package com.wmsj.cms
 
-import com.bjrxkj.cms.behaviour.Visit
-import com.bjrxkj.core.BaseUser
+import com.wmsj.cms.behaviour.Visit
+import com.wmsj.core.BaseUser
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.SpringSecurityUtils

@@ -1,6 +1,6 @@
 package com.wmsj.core
 
-import com.bjrxkj.annotation.Title
+import com.wmsj.annotation.Title
 
 @Title(zh_CN = "用户表")
 class BaseUser{

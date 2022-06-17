@@ -1,6 +1,6 @@
 package com.wmsj.core
 
-import com.bjrxkj.cms.Catalog
+import com.wmsj.cms.Catalog
 import grails.converters.JSON
 import grails.transaction.Transactional
 
