@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.cms.News; grails.plugin.springsecurity.SpringSecurityUtils" %>
+<%@ page import="com.wmsj.cms.News; grails.plugin.springsecurity.SpringSecurityUtils" %>
 <g:render template="ueditor_config"/>
 <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/workspace/newsForm.css"/>
 <script type="text/javascript">

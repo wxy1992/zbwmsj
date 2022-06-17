@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.core.Organization" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.wmsj.core.Organization" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <g:if test="${!request.xhr}">
@@ -19,13 +19,13 @@
             <div class="row form-control-inline">
                 <sec:ifAnyGranted roles="ROLE_ADMIN">
                     <div class="col-lg-4">
-                        <g:select from="${com.bjrxkj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
+                        <g:select from="${com.wmsj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
                                   class="form-control" name="organization" noSelection="['':'发单机构']"></g:select>
                     </div>
                 </sec:ifAnyGranted>
 
                 <div class="col-lg-2">
-                    <g:select from="${com.bjrxkj.business.Trade.STATUSMAP}" optionKey="key" optionValue="value"
+                    <g:select from="${com.wmsj.business.Trade.STATUSMAP}" optionKey="key" optionValue="value"
                               class="form-control" name="status" noSelection="['':'状态']"></g:select>
                 </div>
                 <div class="col-lg-2">

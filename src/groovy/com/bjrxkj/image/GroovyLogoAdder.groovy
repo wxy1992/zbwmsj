@@ -1,4 +1,4 @@
-package com.bjrxkj.image
+package com.wmsj.image
 
 import javax.imageio.ImageIO
 import java.awt.*

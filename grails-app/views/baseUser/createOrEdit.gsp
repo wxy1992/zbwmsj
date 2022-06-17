@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.core.BaseRole; com.bjrxkj.cms.Site" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.wmsj.core.BaseRole; com.wmsj.cms.Site" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
 </head>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-md-1">所属单位</div>
                         <div class="col-md-5">
-                            <g:select from="${com.bjrxkj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
+                            <g:select from="${com.wmsj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
                                       class="form-control" name="organization.id" noSelection="['':'请选择']"
                                       value="${baseUser?.organizationId}"></g:select>
                         </div>

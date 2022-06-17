@@ -49,7 +49,7 @@ input[type="radio"], input[type="checkbox"] {
                     <div class="row">
                         <div class="col-md-2">上级单位</div>
                         <div class="col-md-10">
-                            <g:select from="${com.bjrxkj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
+                            <g:select from="${com.wmsj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
                                       class="form-control" name="parent.id" noSelection="['':'请选择']"
                                       value="${organization?.parentId}"></g:select>
                         </div>

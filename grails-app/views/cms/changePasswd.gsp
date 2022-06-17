@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.core.Organization; com.bjrxkj.core.BaseRole; com.bjrxkj.cms.Site" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.wmsj.core.*" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title></title>

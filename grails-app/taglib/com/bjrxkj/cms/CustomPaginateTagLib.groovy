@@ -1,4 +1,4 @@
-package com.bjrxkj.cms
+package com.wmsj.cms
 
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -37,9 +37,9 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		def postParams = [max:max]
 		if(params.sort) linkParams.sort = params.sort
 		if(params.order) linkParams.order = params.order
-		
+
 		// to change for search page
-		if(attrs.params && attrs.params=="search"){  
+		if(attrs.params && attrs.params=="search"){
 			 params.remove('offset')
 		     linkParams.putAll(params)
 			 postParams.putAll(params)
@@ -76,11 +76,11 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		// display steps when steps are enabled and laststep is not firststep
 		if(steps && laststep > firststep) {
 			def formaction=request.getRequestURI()-".dispatch"-"/grails"
-			
-			
-			
-			
-			
+
+
+
+
+
 			htmlStr="""
 			<input id="laststep" value="${laststep}" type="hidden"/>
 			<input id="paginateTotal" value="${total}" type="hidden"/>
@@ -96,7 +96,7 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 					
 					
 					"""
-			
+
 			}
 				htmlStr=htmlStr+"""
 					<input name="offset" id="paginateOffset" value="" type="hidden"/>
@@ -104,8 +104,8 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 					</form>
 	
 				"""
-				
-			
+
+
 			linkTagAttrs.class = 'step'
 
 			// determine begin and endstep paging variables
@@ -126,7 +126,7 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 			// display paginate steps
 			(beginstep..endstep).each { i ->
 				if(currentstep == i) {
-					
+
 					url5= "<span class=\"currentStep\" style=\"text-align: right\">${totalStr}&nbsp;${attrs.total}&nbsp;条&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${noStr}&nbsp;${i}/${laststep.toString()}</span>"
 				}
 				else {
@@ -144,7 +144,7 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 				//writer << '<span class="step">..</span>'
 		//	}
 
-		
+
 
 			// display laststep link when endstep is not laststep
 		//	if(endstep < laststep) {
@@ -172,24 +172,24 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		if(url2){
 			writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			writer << url2
-			
+
 		}
 		if(url1){
 			writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			writer << url1
-			
+
 		}
-		
+
 		if(url3){
 			writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			writer << url3
-			
+
 		}
-		
+
 		if(url4){
 			writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			writer << url4
-			
+
 		}
 		def scriptStr="""
 		<script language="javascript">
@@ -219,8 +219,8 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		
 		
 		"""
-		
-	
+
+
 	    writer << scriptStr
         if(htmlStr){
             writer << htmlStr
@@ -236,24 +236,24 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		 def writer = out
 		 if(attrs.total == null)
 			 throwTagError("Tag [paginate] is missing required attribute [total]")
- 
+
 		 def messageSource = grailsAttributes.getApplicationContext().getBean("messageSource")
 		 def locale = RequestContextUtils.getLocale(request)
- 
+
 		 def total = attrs.total.toInteger()
 		 def action = (attrs.action ? attrs.action : (params.action ? params.action : "list"))
 		 def offset = params.offset?.toInteger()
 		 def max = params.max?.toInteger()
 		 def maxsteps = (attrs.maxsteps ? attrs.maxsteps.toInteger() : 10)
- 
+
 		 if(!offset) offset = (attrs.offset ? attrs.offset.toInteger() : 0)
 		 if(!max) max = (attrs.max ? attrs.max.toInteger() : 10)
- 
+
 		 def linkParams = [offset:offset - max, max:max]
 		 def postParams = [max:max]
 		 if(params.sort) linkParams.sort = params.sort
 		 if(params.order) linkParams.order = params.order
-		 
+
 		 // to change for search page
 		 if(attrs.params && attrs.params=="search"){
 			  params.remove('offset')
@@ -263,7 +263,7 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 			  postParams.remove('controller')
 		 }
 		 //if(attrs.params) linkParams.putAll(attrs.params)
- 
+
 		 def linkTagAttrs = [action:action]
 		 if(attrs.controller) {
 			 linkTagAttrs.controller = attrs.controller
@@ -272,13 +272,13 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 			 linkTagAttrs.id = attrs.id
 		 }
 		 linkTagAttrs.params = linkParams
- 
+
 		 // determine paging variables
 		 def steps = maxsteps > 0
 		 int currentstep = (offset / max) + 1
 		 int firststep = 1
 		 int laststep = Math.round(Math.ceil(total / max))
- 
+
 		 // display previous link when not on firststep
 		 String totalStr= "Total:"
          String noStr= "Page:"
@@ -288,15 +288,15 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 				 "Previous"
 					 }
 		 }
- 
+
 		 // display steps when steps are enabled and laststep is not firststep
 		 if(steps && laststep > firststep) {
 			 def formaction=request.getRequestURI()-".dispatch"-"/grails"
-			 
-			 
-			 
-			 
-			 
+
+
+
+
+
 			 htmlStr="""
 			 <input id="laststep" value="${laststep}" type="hidden"/>
 			 <input id="paginateTotal" value="${total}" type="hidden"/>
@@ -312,7 +312,7 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 					 
 					 
 					 """
-			 
+
 			 }
 				 htmlStr=htmlStr+"""
 					 <input name="offset" id="paginateOffset" value="" type="hidden"/>
@@ -320,14 +320,14 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 					 </form>
 	 
 				 """
-				 
-			 
+
+
 			 linkTagAttrs.class = 'step'
- 
+
 			 // determine begin and endstep paging variables
 			 int beginstep = currentstep - Math.round(maxsteps / 2) + (maxsteps % 2)
 			 int endstep = currentstep + Math.round(maxsteps / 2) - 1
- 
+
 			 if(beginstep < firststep) {
 				 beginstep = firststep
 				 endstep = maxsteps
@@ -342,7 +342,7 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 			 // display paginate steps
 			 (beginstep..endstep).each { i ->
 				 if(currentstep == i) {
-					 
+
 					 url5= "<span class=\"currentStep\">${totalStr}&nbsp;${attrs.total}&nbsp;&nbsp;&nbsp;&nbsp;${noStr}&nbsp;${i}/${laststep.toString()}</span>"
 				 }
 				 else {
@@ -359,9 +359,9 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 				 //writer <<"&nbsp;&nbsp;&nbsp;&nbsp;"
 				 //writer << '<span class="step">..</span>'
 		 //	}
- 
-		 
- 
+
+
+
 			 // display laststep link when endstep is not laststep
 		 //	if(endstep < laststep) {
 				 //writer << '<span class="step">..</span>'
@@ -375,7 +375,7 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		 else{
 			 url5="<span class=\"currentStep\">${totalStr}&nbsp;${attrs.total}&nbsp;&nbsp;&nbsp;&nbsp;${noStr}&nbsp;1/1</span>"
 		 }
- 
+
 		 // display next link when not on laststep
 		 if(currentstep < laststep) {
 			 linkTagAttrs.class = 'nextLink'
@@ -388,24 +388,24 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		 if(url2){
 			 writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			 writer << url2
-			 
+
 		 }
 		 if(url1){
 			 writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			 writer << url1
-			 
+
 		 }
-		 
+
 		 if(url3){
 			 writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			 writer << url3
-			 
+
 		 }
-		 
+
 		 if(url4){
 			 writer << "&nbsp;&nbsp;&nbsp;&nbsp;"
 			 writer << url4
-			 
+
 		 }
 		 def scriptStr="""
 		 <script language="javascript">
@@ -435,14 +435,14 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 		 
 		 
 		 """
-		 
-	 
+
+
 	    writer << scriptStr
          if(htmlStr){
              writer << htmlStr
          }
      }
-	
+
 	 /**
 		 * Renders a sortable column to support sorting in list views
 		 *
@@ -485,23 +485,23 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 			def sort = params.sort
 			def order = params.order
 
-			
+
 			// add sorting property and params to link params
 			def linkParams = [sort:property]
-			if(params.id) linkParams.put("id",params.id)		
+			if(params.id) linkParams.put("id",params.id)
 
 			//xiaopeng add it
 			if(params.max) linkParams.max = params.max
 			if(params.offset) linkParams.offset = params.offset
 			//if(attrs.params) linkParams.putAll(attrs.remove("params"))
-			if(attrs.params && attrs.params == "search"){ 
+			if(attrs.params && attrs.params == "search"){
 			     linkParams.putAll(params)
 			     linkParams.sort = property
 			}
-			
+
 			// determine and add sorting order for this column to link params
 			attrs.class = (attrs.class ? "${attrs.class} sortable" : "sortable")
-			if(property == sort) {			
+			if(property == sort) {
 				attrs.class = attrs.class + " sorted " + order
 				if(order == "asc") {
 					linkParams.order = "desc"
@@ -511,11 +511,11 @@ class CustomPaginateTagLib implements com.opensymphony.module.sitemesh.RequestCo
 				}
 			}
 			else {
-				
+
 				linkParams.order = defaultOrder
 			}
 
-			
+
 			// determine column title
 			def title = attrs.remove("title")
 			def titleKey = attrs.remove("titleKey")

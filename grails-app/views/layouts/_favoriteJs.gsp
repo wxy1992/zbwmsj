@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.cms.behaviour.Favourite" %>
+<%@ page import="com.wmsj.cms.behaviour.Favourite" %>
 <%
     def baseUserId=sec.loggedInUserInfo('field':"id")?:'-1';
     def ifLikeNews=Favourite.createCriteria().count {

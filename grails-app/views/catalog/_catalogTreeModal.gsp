@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.cms.Catalog" %>
+<%@ page import="com.wmsj.cms.Catalog" %>
 <div class="modal fade" id="catalogMenuModal" tabindex="-1" role="dialog" aria-labelledby="messageModalHead" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.cms.Site" %>
+<%@ page import="com.wmsj.cms.Site" %>
 <ul id="rolemenuUl">
     <div class="logo"><a href="${request.contextPath}/"><span>${cmsTitle}</span></a></div>
 

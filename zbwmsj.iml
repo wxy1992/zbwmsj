@@ -64,6 +64,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target/work/scriptCache" />
       <excludeFolder url="file://$MODULE_DIR$/target/work/stubs" />
       <excludeFolder url="file://$MODULE_DIR$/target/work/tomcat" />
+      <excludeFolder url="file://$MODULE_DIR$/target/work/gspcompile" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.cms.Catalog" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.wmsj.cms.Catalog" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <g:if test="${!request.xhr}">

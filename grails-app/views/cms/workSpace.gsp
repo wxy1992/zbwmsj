@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.cms.News" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.wmsj.cms.News" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
 <g:if test="${!request.xhr}">

@@ -1,9 +1,9 @@
-package com.bjrxkj.annotation;
+package com.wmsj.annotation;
 
 import java.lang.annotation.*;
 
 /**
- * Annotation for Domain Class field Title 
+ * Annotation for Domain Class field Title
  * generate gsp use it
  * author :xiaopeng date:2009-06-01
  */
@@ -13,8 +13,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface Title {
 	/**
-	 * 
-	 * @return  the title 
+	 *
+	 * @return  the title
 	 */
     String value() default "";
     String en() default "";

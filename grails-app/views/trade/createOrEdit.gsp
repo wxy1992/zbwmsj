@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.business.Trade" contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.wmsj.business.Trade" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <title></title>
@@ -53,7 +53,7 @@ input[type="radio"], input[type="checkbox"] {
                         <div class="col-md-1">发单机构</div>
                         <div class="col-md-5">
                             <sec:ifAnyGranted roles="ROLE_ADMIN">
-                                <g:select from="${com.bjrxkj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
+                                <g:select from="${com.wmsj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
                                           class="form-control" name="organization.id" noSelection="['':'请选择机构']"
                                           value="${trade?.organizationId}"></g:select>
                             </sec:ifAnyGranted>

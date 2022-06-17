@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.core.BaseUser" %>
+<%@ page import="com.wmsj.core.BaseUser" %>
 <g:set var="cmsTitle" value="${grailsApplication.config.project.setting.name}"/>
 <!doctype html>
 <html lang="en" class="no-js">

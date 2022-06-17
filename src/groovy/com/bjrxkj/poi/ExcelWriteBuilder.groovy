@@ -1,4 +1,4 @@
-package com.bjrxkj.poi
+package com.wmsj.poi
 
 import org.apache.poi.hssf.usermodel.HSSFRichTextString
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
@@ -71,7 +71,7 @@ class ExcelWriteBuilder {
                 case Date: cell.setCellValue((Date) value); break
                 case Double: cell.setCellValue((Double) value); break
                 case BigDecimal: cell.setCellValue(((BigDecimal) value).doubleValue()); break
-                default: 
+                default:
                     def newValue;
                     if(type==2003)  newValue=new HSSFRichTextString("" + value)
                     if(type==2007)  newValue=new XSSFRichTextString("" + value)

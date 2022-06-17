@@ -1,4 +1,4 @@
-<%@ page import="com.bjrxkj.business.Trade; com.bjrxkj.business.TradeStatusEnum; com.bjrxkj.core.BaseUser; com.bjrxkj.core.BaseUserBaseRole" %>
+<%@ page import="com.wmsj.core.*" %>
 <html>
 <head>
     <title>登录</title>

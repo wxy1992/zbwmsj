@@ -1,4 +1,4 @@
-package com.bjrxkj.ssl;
+package com.wmsj.ssl;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;

@@ -1,4 +1,4 @@
-package com.bjrxkj.ssl;
+package com.wmsj.ssl;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 
