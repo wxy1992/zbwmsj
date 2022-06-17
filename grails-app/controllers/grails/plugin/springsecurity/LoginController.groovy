@@ -16,8 +16,6 @@ package grails.plugin.springsecurity
 
 import com.bjrxkj.core.BaseUser
 import grails.converters.JSON
-import grails.plugin.springsecurity.SpringSecurityUtils
-import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
 import org.springframework.context.MessageSource
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.authentication.*
@@ -25,12 +23,10 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.WebAttributes
 import org.springframework.security.web.authentication.session.SessionAuthenticationException
-import ricicms.CmsService
 import javax.servlet.http.HttpServletResponse
 
 @Secured('permitAll')
 class LoginController {
-	CmsService cmsService;
 	/** Dependency injection for the authenticationTrustResolver. */
 	AuthenticationTrustResolver authenticationTrustResolver
 
@@ -160,7 +156,6 @@ class LoginController {
 				return
 			} else if (springSecurityService.passwordEncoder.isPasswordValid(baseUser.password, params.password.trim(), null)) {
 				springSecurityService.reauthenticate(username, baseUser?.password);
-				cmsService.cacheClear('siteIndex');
 				if (SpringSecurityUtils.ifAllGranted('ROLE_USER') || params.loginType != 'workspace') {
 					redirect uri: '/'
 					return

@@ -1,29 +1,34 @@
 package com.bjrxkj.cms.behaviour
 
 import com.bjrxkj.annotation.Title
-import com.bjrxkj.cms.News
+import com.bjrxkj.business.Apply
 import com.bjrxkj.core.BaseUser
+import org.grails.databinding.BindingFormat
 
 @Title(zh_CN='评论')
 class Commentary {
-    @Title(zh_CN='新闻')
-    News news
-    @Title(zh_CN='发表人')
-    BaseUser baseUser
-    @Title(zh_CN='状态')
-    Integer state=0
+    @Title(zh_CN='报名信息')
+    Apply apply
+    @Title(zh_CN='评论人姓名')
+    String createdBy
+    @Title(zh_CN='评分')
+    Integer score=5
     @Title(zh_CN='内容')
     String content
-    @Title(zh_CN='点赞数')
-    Integer clicknum=0
+    @Title(zh_CN='评论人')
+    BaseUser baseUser
+    @Title(zh_CN='评论时间')
+    @BindingFormat("yyyy-MM-dd HH:mm")
     Date dateCreated
+    @Title(zh_CN='修改时间')
+    @BindingFormat("yyyy-MM-dd HH:mm")
     Date lastUpdated
     static constraints = {
-        news(nullable: false)
-        baseUser(size:1..50,nullable: false)
+        apply(nullable: false)
+        createdBy(nullable: false,size: 0..100)
+        baseUser(nullable: false)
+        score(nullable: false,min: 0)
         content(size:1..2000,nullable: false)
-        state(nullable:false)
-        clicknum(nullable: true)
     }
 
     static mapping = {
@@ -32,6 +37,6 @@ class Commentary {
     }
 
     String toString(){
-        return "${baseUser.toString()}发表对${news.title}的评论：${content} "
+        return "${createdBy}：${content} "
     }
 }

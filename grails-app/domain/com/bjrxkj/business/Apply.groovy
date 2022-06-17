@@ -1,6 +1,7 @@
 package com.bjrxkj.business
 
 import com.bjrxkj.annotation.Title
+import org.grails.databinding.BindingFormat
 
 @Title(zh_CN='标题')
 class Apply {
@@ -18,9 +19,11 @@ class Apply {
     Boolean approve=false
     @Title(zh_CN='是否删除')
     Boolean deleted=false
-    @Title(zh_CN='创建时间')
+    @Title(zh_CN='报名时间')
+    @BindingFormat("yyyy-MM-dd HH:mm")
     Date dateCreated
     @Title(zh_CN='修改时间')
+    @BindingFormat("yyyy-MM-dd HH:mm")
     Date lastUpdated
 
     static constraints = {

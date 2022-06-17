@@ -30,6 +30,8 @@ class Trade {
     String telephone
     @Title(zh_CN='服务地址')
     String address
+    @Title('排序数值')
+    int sequencer=9999999
     @Title('退回原因')
     String backreason
     @Title('最后审核操作员')
@@ -56,6 +58,7 @@ class Trade {
         backreason(nullable: true,size: 0..500)
         auditUser(nullable: true)
         auditDate(nullable: true)
+        sequencer(nullable: true)
     }
 
     static mapping = {

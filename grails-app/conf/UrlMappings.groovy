@@ -6,12 +6,20 @@ class UrlMappings {
                 // apply constraints here
             }
         }
-        "/news/picture/${id}.jpg"{
-            controller="news"
-            action="picture"
+
+        "/api/trade/$action"{
+            controller="tradeApi"
+            action=action
         }
+
+
+        "/api/cms/$action"{
+            controller="cmsApi"
+            action=action
+        }
+
         "/"(controller: "cms",action: "workSpace")
-        "404"(view:'/error')
+        "404"(view:'/error404')
         "500"(view:'/error')
 	}
 }

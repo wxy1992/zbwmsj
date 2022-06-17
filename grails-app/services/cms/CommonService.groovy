@@ -1,4 +1,4 @@
-package ricicms
+package cms
 
 import com.bjrxkj.cms.Attachment
 import com.bjrxkj.cms.Catalog

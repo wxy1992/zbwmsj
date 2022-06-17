@@ -1,4 +1,4 @@
-<%@ page import="sun.misc.BASE64Encoder; com.ricicms.utils.CommonUtils" %>
+<%@ page import="sun.misc.BASE64Encoder; com.cms.utils.CommonUtils" %>
 <form id="fileDetailForm" enctype="multipart/form-data">
     <div class="row">
         <div class="col-lg-12">
