@@ -121,6 +121,12 @@ class TradeService {
                 eq("trade.id",params.tradeId.toLong())
                 eq("deleted",false)
             }
+            trade["isApplied"]=Commentary.createCriteria().count{
+                createAlias("apply","a")
+                createAlias("a.trade","t")
+                eq("creator.id",wxUser.id)
+                eq("t.id",params.tradeId.toLong())
+            }
         }
         return trade;
     }
