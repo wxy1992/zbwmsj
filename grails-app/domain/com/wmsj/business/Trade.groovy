@@ -32,6 +32,8 @@ class Trade {
     String address
     @Title('排序数值')
     int sequencer=9999999
+    @Title('新闻图片')
+    String picture
     @Title('退回原因')
     String backreason
     @Title('最后审核操作员')
@@ -49,6 +51,7 @@ class Trade {
         title(nullable:false,size:0..500)
         way(nullable: false,inList: [1,2])
         peopleNum(nullable: true,min: 0)
+        picture(nullable: true)
         status(nullable: false)
         beginDate(nullable: false)
         endDate(nullable: true)

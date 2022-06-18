@@ -102,11 +102,14 @@ class CmsService {
             projections{
                 property('id','id')
                 property('name','name')
+                property('positions','positions')
                 property('allowComment','allowComment')
                 property('templateList','templateList')
                 property('templateDetail','templateDetail')
             }
-            eq("positions",params.positions.toInteger())
+            if(params.positions){
+                eq("positions",params.positions.toInteger())
+            }
             eq("enabled",true)
             eq("site.id",siteId.toLong());
             setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
@@ -131,7 +134,6 @@ class CmsService {
                 property('title','title')
                 property('subtitle','subtitle')
                 property('publishDate','publishDate')
-                property('picture','picture')
                 property('clicknum','clicknum')
             }
             eq("catalog.id",params.catalogId.toLong())

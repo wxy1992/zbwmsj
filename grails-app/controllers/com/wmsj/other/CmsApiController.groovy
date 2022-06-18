@@ -16,10 +16,7 @@ class CmsApiController {
         if(!params.max) params.max='10';
         if(!params.offset) params.offset ='0';
         try{
-            def catalogs=[];
-            if(params.positions){
-                catalogs=cmsService.describeCatalogs(params);
-            }
+            def catalogs=cmsService.describeCatalogs(params);
             render ServerResponse.success(catalogs);
         }catch(e){
             render ServerResponse.fail();

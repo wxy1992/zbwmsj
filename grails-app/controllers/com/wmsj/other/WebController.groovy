@@ -1,5 +1,6 @@
 package com.wmsj.other
 
+import com.wmsj.business.Trade
 import com.wmsj.cms.Attachment
 import com.wmsj.cms.Catalog
 import com.wmsj.cms.News
@@ -196,15 +197,20 @@ class WebController {
 
     def picture(){
         def picturePath;
-        if(!(params.id && params.id.isLong())){
-            render '新闻不存在'
+        if(!(params.id && params.id.isLong())||!params.type){
+            render '缺少参数'
             return
         }
-        def newsInstance = News.get(params.id.toLong());
-        if(newsInstance && newsInstance.picture){
-            picturePath=newsInstance.picture;
+        def objInstance;
+        if(params.type=="news"){
+            objInstance = News.get(params.id.toLong());
+        }else if(params.type=="trade"){
+            objInstance = Trade.get(params.id.toLong());
+        }
+        if(objInstance && objInstance.picture){
+            picturePath=objInstance.picture;
         }else{
-            picturePath=request.servletContext.getRealPath("/sites/template/default.png");
+            picturePath=request.servletContext.getRealPath("/template/default.png");
         }
         try{
             def outdata=new File(picturePath).bytes;

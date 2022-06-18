@@ -5,7 +5,7 @@ import com.wmsj.core.BaseUser
 class CheckUserFilters {
 
     def filters = {
-        justApi(url:'api/*') {
+        justApi(uri:'/api/*') {
             before = {
                 def token=request.getHeader("Authorization")?.replace("Bearer ","");
                 println  "------------------token：${token}-----------------------------------"
@@ -16,12 +16,12 @@ class CheckUserFilters {
                         request.setAttribute("baseUser",baseUser);
                     }else{
                         render "非法用户";
-                        return false;
+                        return true;
                     }
                     return true;
                 }else{
                     render "请求头缺少token";
-                    return false;
+                    return true;
                 }
             }
             after = { Map model ->

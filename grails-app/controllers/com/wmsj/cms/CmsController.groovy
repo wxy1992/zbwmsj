@@ -14,7 +14,12 @@ class CmsController {
         def map=[:],current=new Date();
         map.num1=News.count();
         map.num2=Catalog.count();
-        map.num3= Visit.count();
+        map.num3= News.createCriteria().list{
+            projections{
+                sum("clicknum")
+            }
+            eq("state","发布")
+        }?.getAt(0);
         map.num4=News.createCriteria().count{
             ge('dateCreated',Date.parse('yyyy-MM-dd HH:mm:ss',current.format('yyyy-MM-dd 00:00:00')))
             le('dateCreated',Date.parse('yyyy-MM-dd HH:mm:ss',current.format('yyyy-MM-dd 23:59:59')))
