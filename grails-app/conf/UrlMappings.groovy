@@ -7,13 +7,13 @@ class UrlMappings {
             }
         }
 
-        "/api/trade/$action"{
+        "/api/trade/$action?/$id?"{
             controller="tradeApi"
             action=action
         }
 
 
-        "/api/cms/$action"{
+        "/api/cms/$action?/$id?"{
             controller="cmsApi"
             action=action
         }

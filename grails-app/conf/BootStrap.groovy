@@ -151,7 +151,7 @@ class BootStrap {
             for (String url in [
                     '/error', '/index', '/index.gsp', '/**/favicon.ico', '/shutdown',
                     '/assets/**', '/**/js/**', '/**/css/**', '/**/images/**',
-                    '/login/**', '/logout/**', 'uploads/*', '/web/**','/api/**']) {
+                    '/login/**', '/logout/**', 'uploads/*','/api/**']) {
                 new Requestmap(url: url, configAttribute: 'permitAll').save()
             }
             new Requestmap(url: '/site/**', configAttribute: 'ROLE_ADMIN').save(flush: true)

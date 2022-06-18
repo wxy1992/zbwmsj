@@ -1,11 +1,13 @@
 package com.wmsj.cms
 
+import cms.CommonService
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
 
 import java.text.SimpleDateFormat
 
 class CmsController {
+    CommonService commonService;
     SpringSecurityService springSecurityService;
     def index(){
         redirect(action: 'workSpace')
@@ -301,5 +303,28 @@ class CmsController {
         render "${map as JSON}";
     }
 
+
+    /**
+     * 封面图片
+     * @return
+     */
+    def picture(){
+        println "================"
+        if(!(params.id && params.id.isLong())){
+            return
+        }
+        commonService.picture(params,request,response);
+    }
+
+    /**
+     * 附件
+     * @return
+     */
+    def getFile(){
+        if(!(params.id && params.id.isLong())){
+            return
+        }
+        commonService.getFile(params,response);
+    }
 
 }
