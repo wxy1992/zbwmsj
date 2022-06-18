@@ -68,7 +68,11 @@ class TradeService {
                 count("creator.id","num")
                 groupProperty("trade.id","tradeId")
             }
-            inList("trade.id",tradeList*.id)
+            if(tradeList.size()>0){
+                inList("trade.id",tradeList*.id)
+            }else{
+                eq("id",-1L)
+            }
             eq("approve",true)
             eq("deleted",false)
         }
@@ -77,11 +81,14 @@ class TradeService {
             def tradeId=tradeMap?.get("id");
             def currentApplyNum= applynum.find{return it.getAt(1)==tradeId}?.getAt(0);
             tradeMap["remain"]=tradeMap.getAt("peopleNum")-(currentApplyNum?:0);
-            tradeMap["isApplied"]=Apply.createCriteria().count{
+            tradeMap["applyStatus"]=Apply.createCriteria().get{
+                projections{
+                    property("status","status")
+                }
                 eq("creator.id",wxUser.id)
                 eq("trade.id",tradeId)
                 eq("deleted",false)
-            }
+            }?:0;
         }
         resultMap["total"]=tradeResult.totalCount;
         resultMap["rows"]=tradeList;
@@ -116,12 +123,16 @@ class TradeService {
                 eq("id",params.tradeId.toLong())
                 maxResults(1)
             }
-            trade["isApplied"]=Apply.createCriteria().count{
+            trade["applyStatus"]=Apply.createCriteria().get{
+                projections{
+                    property("status","status")
+                }
                 eq("creator.id",wxUser.id)
                 eq("trade.id",params.tradeId.toLong())
                 eq("deleted",false)
-            }
-            trade["isApplied"]=Commentary.createCriteria().count{
+                maxResults(1)
+            }?:0;
+            trade["isCommented"]=Commentary.createCriteria().count{
                 createAlias("apply","a")
                 createAlias("a.trade","t")
                 eq("creator.id",wxUser.id)

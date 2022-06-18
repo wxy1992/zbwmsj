@@ -22,7 +22,7 @@ class Apply {
     @Title(zh_CN='状态')
     Integer status=10//10报名成功，20已完成，30已评价
     @Title(zh_CN='审核通过')
-    Boolean approve=false
+    Boolean approve=true
     @Title(zh_CN='是否删除')
     Boolean deleted=false
     @Title(zh_CN='报名时间')
