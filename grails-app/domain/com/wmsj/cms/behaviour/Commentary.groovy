@@ -3,6 +3,7 @@ package com.wmsj.cms.behaviour
 import com.wmsj.annotation.Title
 import com.wmsj.business.Apply
 import com.wmsj.core.BaseUser
+import com.wmsj.core.WxUser
 import org.grails.databinding.BindingFormat
 
 @Title(zh_CN='评论')
@@ -16,7 +17,7 @@ class Commentary {
     @Title(zh_CN='内容')
     String content
     @Title(zh_CN='评论人')
-    BaseUser baseUser
+    WxUser creator
     @Title(zh_CN='评论时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date dateCreated
@@ -26,7 +27,7 @@ class Commentary {
     static constraints = {
         apply(nullable: false)
         createdBy(nullable: false,size: 0..100)
-        baseUser(nullable: false)
+        creator(nullable: false)
         score(nullable: false,min: 0)
         content(size:1..2000,nullable: false)
     }

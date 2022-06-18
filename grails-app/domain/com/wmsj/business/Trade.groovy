@@ -17,7 +17,7 @@ class Trade {
     @Title(zh_CN='人数设置')
     Integer peopleNum
     @Title(zh_CN='状态')
-    Integer status=10//00草稿，05退回，10已提交，20发布中，30已完成（待评价），40已结束
+    Integer status=10//00草稿，05退回，10已提交，20发布中，30已结束
     @Title(zh_CN='开始时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date beginDate
@@ -50,7 +50,7 @@ class Trade {
     static constraints = {
         title(nullable:false,size:0..500)
         way(nullable: false,inList: [1,2])
-        peopleNum(nullable: true,min: 0)
+        peopleNum(nullable: false,min: 0)
         picture(nullable: true)
         status(nullable: false)
         beginDate(nullable: false)
@@ -68,8 +68,8 @@ class Trade {
         content type: 'text'
     }
 
-    transient static final Map OPERATIONMAP=["保存":0,"退回":5,"提交":10,"发布":20,"完成":30,"结束":40];
-    transient static final Map STATUSMAP=[0:"草稿",5:"退回",10:"已提交",20:"发布中",30:"已完成",40:"已结束"];
+    transient static final Map OPERATIONMAP=["保存":0,"退回":5,"提交":10,"发布":20,"结束":30];
+    transient static final Map STATUSMAP=[0:"草稿",5:"退回",10:"已提交",20:"进行中",30:"已结束"];
     transient static final Map WAYMAP=[1:"定点服务",2:"上门服务"];
 
     String toString(){

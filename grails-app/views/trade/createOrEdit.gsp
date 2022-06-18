@@ -72,7 +72,7 @@ input[type="radio"], input[type="checkbox"] {
                         </div>
                         <div class="col-md-1">人数设置</div>
                         <div class="col-md-5">
-                            <input type="peopleNum" class="form-control" required name="peopleNum" value="${trade?.peopleNum}" min="1">
+                            <input type="peopleNum" class="form-control" name="peopleNum" value="${trade?.peopleNum}" required min="1">
                         </div>
                         <div class="col-md-1">联系方式</div>
                         <div class="col-md-5">

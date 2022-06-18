@@ -1,6 +1,8 @@
 package com.wmsj.business
 
 import com.wmsj.annotation.Title
+import com.wmsj.core.BaseUser
+import com.wmsj.core.WxUser
 import org.grails.databinding.BindingFormat
 
 @Title(zh_CN='标题')
@@ -15,6 +17,10 @@ class Apply {
     String telephone
     @Title(zh_CN='联系地址')
     String address
+    @Title(zh_CN='报名用户')
+    WxUser creator
+    @Title(zh_CN='状态')
+    Integer status=10//10报名成功，20已完成，30已评价
     @Title(zh_CN='审核通过')
     Boolean approve=false
     @Title(zh_CN='是否删除')
@@ -32,9 +38,14 @@ class Apply {
         idcard(nullable: false,size:0..20)
         telephone(nullable: false,size:0..20)
         address(nullable: true,size:0..200)
+        creator(nullable: false)
+        status(nullable: false)
     }
 
     String toString(){
         return "【${name}】报名了："+trade;
     }
+
+    transient static final Map STATUSMAP=[10:"报名成功",20:"已完成",30:"已评价"];
+
 }

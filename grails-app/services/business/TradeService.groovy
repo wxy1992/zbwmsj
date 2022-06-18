@@ -5,6 +5,7 @@ import com.wmsj.business.Trade
 import com.wmsj.business.TradeType
 import com.wmsj.cms.behaviour.Commentary
 import com.wmsj.core.BaseUser
+import com.wmsj.core.WxUser
 import grails.transaction.Transactional
 import org.hibernate.criterion.CriteriaSpecification
 
@@ -35,20 +36,21 @@ class TradeService {
      * @param params
      * @return
      */
-    Map describeTrades(def params){
+    Map describeTrades(def params,def wxUser){
         def sortMap = ['sequencer':'asc','id':'desc'];
         def tradeResult= Trade.createCriteria().list([max   : params.max.toInteger(),
                                                       offset: params.offset.toInteger()]) {
-            createAlias("tradeType","t")
+            createAlias("organization","o")
             projections{
                 property('id','id')
                 property('title','title')
-                property('t.name','typeName')
+                property('o.name','organizationName')
+                property('peopleNum','peopleNum')
                 property('dateCreated','dateCreated')
                 property('status','status')
             }
             if(params.tradeTypeId){
-                eq("t.id",params.tradeTypeId.toLong())
+                eq("tradeType.id",params.tradeTypeId.toLong())
             }
             if(params.status){
                 eq("status",params.status.toInteger())
@@ -59,9 +61,30 @@ class TradeService {
                 order(st,sortMap[st])
             }
         }
+        def tradeList=tradeResult.resultList;
+        //报名情况
+        def applynum=Apply.createCriteria().list{
+            projections {
+                count("creator.id","num")
+                groupProperty("trade.id","tradeId")
+            }
+            inList("trade.id",tradeList*.id)
+            eq("approve",true)
+            eq("deleted",false)
+        }
         def resultMap=[:];
+        tradeList.each{tradeMap->
+            def tradeId=tradeMap?.get("id");
+            def currentApplyNum= applynum.find{return it.getAt(1)==tradeId}?.getAt(0);
+            tradeMap["remain"]=tradeMap.getAt("peopleNum")-(currentApplyNum?:0);
+            tradeMap["isApplied"]=Apply.createCriteria().count{
+                eq("creator.id",wxUser.id)
+                eq("trade.id",tradeId)
+                eq("deleted",false)
+            }
+        }
         resultMap["total"]=tradeResult.totalCount;
-        resultMap["rows"]=tradeResult.resultList;
+        resultMap["rows"]=tradeList;
         return resultMap;
     }
 
@@ -70,7 +93,7 @@ class TradeService {
      * @param params
      * @return
      */
-    Map describeTradeDetail(def params){
+    Map describeTradeDetail(def params, WxUser wxUser){
         Map trade;
         if(params.tradeId){
             trade=Trade.createCriteria().get {
@@ -93,6 +116,11 @@ class TradeService {
                 eq("id",params.tradeId.toLong())
                 maxResults(1)
             }
+            trade["isApplied"]=Apply.createCriteria().count{
+                eq("creator.id",wxUser.id)
+                eq("trade.id",params.tradeId.toLong())
+                eq("deleted",false)
+            }
         }
         return trade;
     }
@@ -102,7 +130,7 @@ class TradeService {
      * @param params
      * @return
      */
-    Map tradeApply(def params){
+    Map tradeApply(def params, WxUser wxUser){
         def resultMap=[:];
         resultMap.result=false;
         resultMap.data=null;
@@ -113,6 +141,7 @@ class TradeService {
             apply.idcard=params.idcard.trim();
             apply.telephone=params.telephone.trim();
             apply.address=params.address.trim();
+            apply.creator=wxUser;
             if(apply.save(flush: true)){
                 resultMap.result=true;
                 resultMap.data=apply.id;
@@ -129,18 +158,18 @@ class TradeService {
      * @param baseUser
      * @return
      */
-    Map submitCommentary(Map params, BaseUser baseUser){
+    Map submitCommentary(Map params, WxUser wxUser){
         def map=[:];
         map['result']=false;
         map['message']="请完善评论";
         map['data']=0;
-        if(params.applyId&&params.score&&params.content&&baseUser){
+        if(params.applyId&&params.score&&params.content&&wxUser){
             def commentary=new Commentary();
             commentary.apply= Apply.get(params.applyId.toLong());
             commentary.score=params.score.toInteger();
             commentary.content=params.content;
-            commentary.baseUser=baseUser;
-            commentary.createdBy=baseUser.realName;
+            commentary.creator=wxUser;
+            commentary.createdBy=wxUser.name;
             if(commentary.save(flush: true)){
                 map['result']=true;
                 map['message']="评论成功";
@@ -166,7 +195,7 @@ class TradeService {
             createAlias("a.trade","t")
             projections{
                 property('id','id')
-                property('baseUser.id','baseUserId')
+                property('creator.id','creatorId')
                 property('score','score')
                 property('createdBy','createdBy')
                 property('content','content')

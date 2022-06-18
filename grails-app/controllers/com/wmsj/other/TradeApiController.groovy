@@ -31,7 +31,8 @@ class TradeApiController {
         if(!params.offset) params.offset ='0';
         def sortMap = ['sequencer':'asc','id':'desc'];
         try {
-            def tradeList = tradeService.describeTrades(params);
+            def wxUser=request.getAttribute("wxUser");
+            def tradeList = tradeService.describeTrades(params,wxUser);
             render ServerResponse.success(tradeList);
         }catch(e){
             log.error(e.message);
@@ -46,7 +47,8 @@ class TradeApiController {
         Map trade;
         try{
             if(params.tradeId){
-                trade = tradeService.describeTradeDetail(params);
+                def wxUser=request.getAttribute("wxUser");
+                trade = tradeService.describeTradeDetail(params,wxUser);
             }
             render ServerResponse.success(trade);
         }catch(e){
@@ -61,7 +63,8 @@ class TradeApiController {
     def tradeApply(){
         Map result=[:];
         try{
-            result=tradeService.tradeApply(params);
+            def wxUser=request.getAttribute("wxUser");
+            result=tradeService.tradeApply(params,wxUser);
             render ServerResponse.success(result);
         }catch(e){
             log.error(e.message);
@@ -73,10 +76,10 @@ class TradeApiController {
      * 评价服务
      */
     Map submitCommentary(def params){
-        def baseUser=request.getAttribute("baseUser");
+        def wxUser=request.getAttribute("wxUser");
         Map result=[:];
         try{
-            result=tradeService.submitCommentary(params,baseUser);
+            result=tradeService.submitCommentary(params,wxUser);
             render ServerResponse.success(result);
         }catch(e){
             log.error(e.message);
