@@ -54,7 +54,7 @@ input[type="radio"], input[type="checkbox"] {
                         <div class="col-md-5">
                             <sec:ifAnyGranted roles="ROLE_ADMIN">
                                 <g:select from="${com.wmsj.core.Organization.list([sort: 'id'])}" optionKey="id" optionValue="name"
-                                          class="form-control" name="organization.id" noSelection="['':'请选择机构']"
+                                          class="form-control" name="organization.id"
                                           value="${trade?.organizationId}"></g:select>
                             </sec:ifAnyGranted>
                             <sec:ifAllGranted roles="ROLE_SUBADMIN">

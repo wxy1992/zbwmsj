@@ -19,10 +19,12 @@ class TradeController {
         def sortMap = ['id':'desc'];
         def newsResult=Trade.createCriteria().list ([max: params.max.toInteger(),offset: params.offset.toInteger()]){
             createAlias('organization','o')
+            createAlias('tradeType','t')
             eq("deleted",false)
             projections{
                 property('id','id')
                 property('title','title')
+                property('t.name','typeName')
                 property('o.name','organization')
                 property('beginDate','beginDate')
                 property('endDate','endDate')
@@ -39,7 +41,9 @@ class TradeController {
                     eq("status",5)
                 }
             }
-
+            if(params.tradeType){
+                eq("t.id",params.tradeType.toLong())
+            }
             if(params.organization){
                 eq("o.id",params.organization.toLong())
             }

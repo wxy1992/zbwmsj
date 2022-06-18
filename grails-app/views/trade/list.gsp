@@ -65,6 +65,7 @@
                         <th data-checkbox="true"></th>
                         <th data-align="center" data-field="title" data-width="300">标题</th>
                         <th data-align="center" data-field="organization">发单机构</th>
+                        <th data-align="center" data-field="typeName">服务类型</th>
                         <th data-align="center" data-field="statusName">状态</th>
                         <g:if test="${params.operation=='todo'}">
                             <th data-align="center" data-field="backreason">修改意见</th>

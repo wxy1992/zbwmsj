@@ -72,6 +72,25 @@ class TradeApiController {
         }
     }
 
+
+    /**
+     * 我的报名
+     * @return
+     */
+    def describeApplyList(){
+        if(!params.max) params.max='10';
+        if(!params.offset) params.offset ='0';
+        def wxUser=request.getAttribute("wxUser");
+        Map result=[:];
+        try{
+            result=tradeService.describeApplyList(params,wxUser);
+            render ServerResponse.success(result);
+        }catch(e){
+            log.error(e.message);
+            render ServerResponse.fail();
+        }
+    }
+
     /**
      * 评价服务
      */
@@ -105,4 +124,19 @@ class TradeApiController {
             render ServerResponse.fail();
         }
     }
+
+    /**
+     * 评价详情
+     */
+    def commentaryDetail(){
+        def wxUser=request.getAttribute("wxUser");
+        try {
+            def comment=tradeService.commentaryDetail(params,wxUser);
+            render ServerResponse.success(comment);
+        }catch(e){
+            log.error(e.message);
+            render ServerResponse.fail();
+        }
+    }
+
 }

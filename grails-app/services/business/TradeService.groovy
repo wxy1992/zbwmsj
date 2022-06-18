@@ -37,7 +37,7 @@ class TradeService {
      * @return
      */
     Map describeTrades(def params,def wxUser){
-        def sortMap = ['sequencer':'asc','id':'desc'];
+        def sortMap = ['sequencer':'asc','status':'asc','id':'desc'];
         def tradeResult= Trade.createCriteria().list([max   : params.max.toInteger(),
                                                       offset: params.offset.toInteger()]) {
             createAlias("organization","o")
@@ -123,15 +123,18 @@ class TradeService {
                 eq("id",params.tradeId.toLong())
                 maxResults(1)
             }
-            trade["applyStatus"]=Apply.createCriteria().get{
-                projections{
-                    property("status","status")
-                }
+            Apply myApply=Apply.createCriteria().get{
                 eq("creator.id",wxUser.id)
                 eq("trade.id",params.tradeId.toLong())
                 eq("deleted",false)
                 maxResults(1)
-            }?:0;
+            }
+            trade["applyStatus"]=myApply?.status?:0;
+            trade["applyId"]=myApply?.id?:"";
+            trade["name"]=myApply?.name?:"";
+            trade["idcard"]=myApply?.idcard?:"";
+            trade["telephone"]=myApply?.telephone?:"";
+            trade["address"]=myApply?.address?:"";
             trade["isCommented"]=Commentary.createCriteria().count{
                 createAlias("apply","a")
                 createAlias("a.trade","t")
@@ -150,8 +153,17 @@ class TradeService {
     Map tradeApply(def params, WxUser wxUser){
         def resultMap=[:];
         resultMap.result=false;
-        resultMap.data=null;
-        if (params.tradeId && params.name && params.idcard && params.telephone && params.address) {
+        resultMap.message="缺少参数";
+        resultMap.data=0;
+        if (params.tradeId && params.name && params.idcard && params.telephone) {
+            def mynum=Apply.createCriteria().count{
+                eq("trade.id",params.tradeId.toLong())
+                eq("creator.id",wxUser.id)
+            }
+            if(mynum>0){
+                resultMap.message="您已经报名过该服务";
+                return resultMap;
+            }
             Apply apply=new Apply();
             apply.trade=Trade.get(params.tradeId.toLong());
             apply.name=params.name.trim();
@@ -170,17 +182,54 @@ class TradeService {
     }
 
     /**
+     * 我的报名
+     * @param params
+     * @param wxUser
+     * @return
+     */
+    Map describeApplyList(def params,def wxUser){
+        def result=Apply.createCriteria().list([max:params.max.toInteger(),offset:params.offset.toInteger()]) {
+            createAlias("trade","t")
+            createAlias("t.organization","o")
+            projections{
+                property('id','id')
+                property('t.id','tradeId')
+                property('t.title','title')
+                property('t.status','tradeStatus')
+                property('t.dateCreated','dateCreated')
+                property('status','applyStatus')
+                property('o.name','organizationName')
+            }
+            eq("creator.id",wxUser.id)
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            order("id","desc")
+        }
+        def map = [:];
+        map.total = result.totalCount;
+        map.rows = result.resultList;
+        return map;
+    }
+
+    /**
      * 评论
      * @param params
      * @param baseUser
      * @return
      */
-    Map submitCommentary(Map params, WxUser wxUser){
+    Map submitCommentary(Map params, def wxUser){
         def map=[:];
         map['result']=false;
         map['message']="请完善评论";
         map['data']=0;
         if(params.applyId&&params.score&&params.content&&wxUser){
+            def mynum=Commentary.createCriteria().count{
+                eq("apply.id",params.applyId.toLong())
+                eq("creator.id",wxUser.id)
+            }
+            if(mynum>0){
+                map['message']="您已经评价过该服务";
+                return map;
+            }
             def commentary=new Commentary();
             commentary.apply= Apply.get(params.applyId.toLong());
             commentary.score=params.score.toInteger();
@@ -229,4 +278,31 @@ class TradeService {
         map.rows = result.resultList;
         return map;
     }
+
+    /**
+     * 评价详情
+     * @param params
+     * @param wxUser
+     * @return
+     */
+    Map commentaryDetail(def params,def wxUser){
+        def comment=Commentary.createCriteria().get{
+            projections{
+                property("createdBy","createdBy")
+                property("score","score")
+                property("content","content")
+                property("dateCreated","dateCreated")
+            }
+            if(params.applyId){
+                eq("apply.id",params.applyId.toLong())
+            }
+            eq("creator.id",wxUser.id)
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            order("id","desc")
+            maxResults(1)
+        }
+        return comment;
+    }
+
+
 }
