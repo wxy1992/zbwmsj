@@ -291,6 +291,7 @@ class NewsAdminController {
     }
 
     def copyNews(){
+        println params
         def map=[:];
         map.result=false;
         map.message="网络错误，请重试！";
@@ -298,40 +299,49 @@ class NewsAdminController {
         ids.reverse()
         String state="发布"
         if(params.cid){
-            def catalog1=Catalog.get(params.cid?.toLong());
-            News.withTransaction {trastate->
-                ids?.reverse().each{
-                    def oldNews=News.get(it.toLong())
-                    if(oldNews){
-                        if(params.operation=='copy'){//复制
-                            state=oldNews?.state
-                            def newNews=new News()
-                            newNews.properties = oldNews.properties
-                            newNews.catalog=catalog1
-                            newNews.clicknum=0
-                            newNews.comments=null
-                            if(newNews.save(flush:true)){
-                                Attachment.findAllByNews(oldNews)?.each{a->
-                                    def attachmentInstance=new Attachment()
-                                    attachmentInstance.news=newNews
-                                    attachmentInstance.name=a.name
-                                    attachmentInstance.data=a.data
-                                    attachmentInstance.save(flush:true)
+            if(params.operation=="move"&&params.cid.contains(",")){
+                map.message="仅可选择一个移动栏目";
+                render "${map as JSON}";
+                return;
+            }
+            def cids=params.cid.tokenize(",").collect{it.toLong()};
+            def catalogs=Catalog.createCriteria().list {
+                inList("id",cids)
+            }
+            catalogs.eachWithIndex{ Catalog catalogItem, int i ->
+                News.withTransaction {trastate->
+                    ids?.reverse().each{
+                        def oldNews=News.get(it.toLong())
+                        if(oldNews){
+                            if(params.operation=='copy'){//复制
+                                state=oldNews?.state
+                                def newNews=new News()
+                                newNews.properties = oldNews.properties;
+                                newNews.catalog=catalogItem;
+                                newNews.comments=null;
+                                if(newNews.save(flush:true)){
+                                    Attachment.findAllByNews(oldNews)?.each{a->
+                                        def attachmentInstance=new Attachment();
+                                        attachmentInstance.properties=a.properties;
+                                        attachmentInstance.news=newNews;
+                                        attachmentInstance.save(flush:true)
+                                    }
+                                }else{
+                                    trastate.setRollbackOnly();
                                 }
-                            }else{
-                                trastate.setRollbackOnly();
-                            }
-                        }else if(params.operation=='move'){
-                            oldNews.catalog=catalog1;
-                            if(!oldNews.save(flush:true)){
-                                map.result=false;
-                                map.message="网络错误，请重试！";
-                                log.error(oldNews.errors);
-                                trastate.setRollbackOnly();
+                            }else if(params.operation=='move'){
+                                oldNews.catalog=catalogItem;
+                                if(!oldNews.save(flush:true)){
+                                    map.result=false;
+                                    map.message="网络错误，请重试！";
+                                    log.error(oldNews.errors);
+                                    trastate.setRollbackOnly();
+                                }
                             }
                         }
                     }
                 }
+
             }
             map.result=true;
             map.message="操作成功";
