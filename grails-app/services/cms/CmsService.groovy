@@ -1,7 +1,5 @@
 package cms
 
-import com.wmsj.business.Apply
-import com.wmsj.business.Trade
 import com.wmsj.cms.Catalog
 import com.wmsj.cms.behaviour.Commentary
 import com.wmsj.cms.News
@@ -15,6 +13,102 @@ class CmsService {
 
     def grailsApplication;
 
+    /**
+     * 栏目列表
+     * @param params
+     * @return
+     */
+    List describeCatalogs(def params){
+        def sortMap = ['sequencer':'asc','id':'desc'];
+        def siteId=grailsApplication.config.project.setting.defaultSite;
+        def catalogs= Catalog.createCriteria().list ([max   : params.max.toInteger(),
+                                                  offset: params.offset.toInteger()]) {
+            projections{
+                property('id','id')
+                property('name','name')
+                property('positions','positions')
+                property('allowComment','allowComment')
+                property('templateList','templateList')
+                property('templateDetail','templateDetail')
+            }
+            if(params.positions){
+                eq("positions",params.positions.toInteger())
+            }
+            if(params.parentId){
+                parent{
+                    eq("id",params.parentId.toLong())
+                }
+            }
+            eq("enabled",true)
+            eq("site.id",siteId.toLong());
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            sortMap.keySet().each {st->
+                order(st,sortMap[st])
+            }
+        }
+        return catalogs;
+    }
+
+    /**
+     * 稿件列表
+     * @param params
+     * @return
+     */
+    Map describeNewsByCatalog(def params){
+        def sortMap = ['sequencer':'asc','id':'desc'];
+        def newsList= News.createCriteria().list ([max   : params.max.toInteger(),
+                                               offset: params.offset.toInteger()]) {
+            projections{
+                property('id','id')
+                property('title','title')
+                property('subtitle','subtitle')
+                property('publishDate','publishDate')
+                property('clicknum','clicknum')
+            }
+            eq("catalog.id",params.catalogId.toLong())
+            eq("state","发布")
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            sortMap.keySet().each {st->
+                order(st,sortMap[st])
+            }
+        }
+        def resultMap=[:];
+        resultMap["total"]=newsList.totalCount;
+        resultMap["rows"]=newsList.resultList;
+        return resultMap;
+    }
+
+    /**
+     * 稿件详情
+     * @return
+     */
+    Map describeNewsDetail(def params){
+        Map news=News.createCriteria().get{
+            projections{
+                property('id','id')
+                property('title','title')
+                property('subtitle','subtitle')
+                property('publishDate','publishDate')
+                property('picture','picture')
+                property('clicknum','clicknum')
+                property('source','source')
+                property('author','author')
+                property('outline','outline')
+                property('redirectURL','redirectURL')
+                property('picture','picture')
+                property('content','content')
+                property('allowComment','allowComment')
+            }
+            eq("id",params.newsId.toLong())
+            eq("state","发布")
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            maxResults(1)
+        }
+        if(news){
+            News.executeUpdate("update News set clicknum=clicknum+1 where id=?",[params.newsId.toLong()]);
+        }
+        return news;
+    }
 
     /**
      * 我的
@@ -87,98 +181,6 @@ class CmsService {
             }
         }
         return res;
-    }
-
-    /**
-     * 栏目列表
-     * @param params
-     * @return
-     */
-    List describeCatalogs(def params){
-        def sortMap = ['sequencer':'asc','id':'desc'];
-        def siteId=grailsApplication.config.project.setting.defaultSite;
-        def catalogs= Catalog.createCriteria().list ([max   : params.max.toInteger(),
-                                                  offset: params.offset.toInteger()]) {
-            projections{
-                property('id','id')
-                property('name','name')
-                property('positions','positions')
-                property('allowComment','allowComment')
-                property('templateList','templateList')
-                property('templateDetail','templateDetail')
-            }
-            if(params.positions){
-                eq("positions",params.positions.toInteger())
-            }
-            eq("enabled",true)
-            eq("site.id",siteId.toLong());
-            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
-            sortMap.keySet().each {st->
-                order(st,sortMap[st])
-            }
-        }
-        return catalogs;
-    }
-
-    /**
-     * 稿件列表
-     * @param params
-     * @return
-     */
-    Map describeNewsByCatalog(def params){
-        def sortMap = ['sequencer':'asc','id':'desc'];
-        def newsList= News.createCriteria().list ([max   : params.max.toInteger(),
-                                               offset: params.offset.toInteger()]) {
-            projections{
-                property('id','id')
-                property('title','title')
-                property('subtitle','subtitle')
-                property('publishDate','publishDate')
-                property('clicknum','clicknum')
-            }
-            eq("catalog.id",params.catalogId.toLong())
-            eq("state","发布")
-            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
-            sortMap.keySet().each {st->
-                order(st,sortMap[st])
-            }
-        }
-        def resultMap=[:];
-        resultMap["total"]=newsList.totalCount;
-        resultMap["rows"]=newsList.resultList;
-        return resultMap;
-    }
-
-    /**
-     * 稿件详情
-     * @return
-     */
-    Map describeNewsDetail(def params){
-        Map news=News.createCriteria().get{
-            projections{
-                property('id','id')
-                property('title','title')
-                property('subtitle','subtitle')
-                property('publishDate','publishDate')
-                property('picture','picture')
-                property('clicknum','clicknum')
-                property('source','source')
-                property('author','author')
-                property('outline','outline')
-                property('redirectURL','redirectURL')
-                property('picture','picture')
-                property('content','content')
-                property('allowComment','allowComment')
-            }
-            eq("id",params.newsId.toLong())
-            eq("state","发布")
-            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
-            maxResults(1)
-        }
-        if(news){
-            News.executeUpdate("update News set clicknum=clicknum+1 where id=?",[params.newsId.toLong()]);
-        }
-        return news;
     }
 
 }
