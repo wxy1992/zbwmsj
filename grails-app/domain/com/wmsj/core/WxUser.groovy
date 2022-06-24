@@ -10,6 +10,20 @@ class WxUser {
     String nickname
     @Title(zh_CN='手机号')
     String tel
+    @Title(zh_CN='手机号')
+    String pureTel
+    @Title(zh_CN='头像')
+    String avatarUrl
+    @Title(zh_CN='国籍')
+    String country
+    @Title(zh_CN='省份')
+    String province
+    @Title(zh_CN='城市')
+    String city
+    @Title(zh_CN='性别')
+    Integer gender
+    @Title(zh_CN='语言')
+    Integer language
     @Title(zh_CN='姓名')
     String name
     @Title(zh_CN='身份证号')
@@ -18,11 +32,13 @@ class WxUser {
     String address
 
     static constraints = {
-        openId nullable: false,size: 0..100
-        nickname nullable: false,size: 0..100
+        openId nullable: false,size: 0..100,unique: true
+        nickname nullable: true,size: 0..100
         name nullable: true,size: 0..100
         idcard nullable: true,size: 0..20
-        tel nullable: false,size: 0..20
+        tel nullable: true,size: 0..20,unique: true
+        pureTel nullable: true,size: 0..20,unique: true
         address nullable: true
+        avatarUrl nullable: true
     }
 }

@@ -1,17 +1,128 @@
 package cms
 
+import com.google.gson.JsonObject
 import com.wmsj.cms.Catalog
 import com.wmsj.cms.behaviour.Commentary
 import com.wmsj.cms.News
 import com.wmsj.cms.behaviour.Favourite
 import com.wmsj.core.BaseUser
+import com.wmsj.core.WxUser
+import com.wmsj.utils.HttpClientUtils
 import grails.transaction.Transactional
+import grails.web.JSONBuilder
+import jdk.nashorn.internal.parser.JSONParser
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.hibernate.criterion.CriteriaSpecification
 
 @Transactional
 class CmsService {
 
     def grailsApplication;
+
+    /**
+     * 根据code获取用户id
+     * @param params
+     * @return
+     */
+    Map code2Userid(def params){
+        def appid=grailsApplication.config.project.miniprogram.appid;
+        def secret=grailsApplication.config.project.miniprogram.secret;
+        def code2openidUrl=grailsApplication.config.project.miniprogram.code2openidUrl+
+                "&appid=${appid}&secret=${secret}&js_code=${params.code}";
+        def client=new HttpClientUtils();
+        def result=client.httpsConnectionJson(code2openidUrl, "","GET",null);
+        def result_json=new JSONObject(result);
+        println "code2Userid_json："+result_json
+        def resultMap=[:];
+        resultMap["userid"]=null;
+        resultMap["openid"]=result_json.openid?:"";
+        resultMap["errcode"]=result_json.errcode;
+        resultMap["errmsg"]=result_json.errmsg?:"";
+        if(result_json.errcode==0&&result_json.openid){
+            def wxUser= WxUser.findByOpenId(result_json.openid);
+            if(!wxUser){
+                wxUser=new WxUser();
+                wxUser.openId=resultMap["openid"];
+                if(!wxUser.save(flush: true)){
+                    resultMap["errmsg"]=wxUser.errors;
+                }
+            }
+            resultMap["userid"]=wxUser.id;
+        }
+        return resultMap;
+    }
+
+    /**
+     * 更新用户信息
+     * @param params
+     * @return
+     */
+    Boolean updateUserInfo(def params){
+        Boolean result=false;
+        if(params.userid){
+            def user=WxUser.get(params.userid.toLong());
+            user.nickname=params.nickName;
+            user.avatarUrl=params.avatarUrl;
+            user.province=params.province;
+            user.city=params.city;
+            user.language=params.language;
+            user.gender=params.gender?.toInteger();
+            if(user.save(flush: true)){
+                result=true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取AccessToken
+     * @return
+     */
+    Map getAccessToken(){
+        def appid=grailsApplication.config.project.miniprogram.appid;
+        def secret=grailsApplication.config.project.miniprogram.secret;
+        def getAccessTokenUrl=grailsApplication.config.project.miniprogram.getAccessToken+"&appid=${appid}&secret=${secret}";
+        def client=new HttpClientUtils();
+        def result=client.httpsConnectionJson(getAccessTokenUrl, "","GET",null);
+        def result_json=new JSONObject(result);
+        println "acsessToken_json："+result_json;
+        def resultMap=[:];
+        resultMap["access_token"]=result_json.access_token;
+        resultMap["expires_in"]=result_json.expires_in;
+        resultMap["errcode"]=result_json.errcode;
+        resultMap["errmsg"]=result_json.errmsg?:"";
+        return resultMap;
+    }
+
+    /**
+     * 更新用户手机号
+     * @param params
+     * @return
+     */
+    Map updateUserTel(def params){
+        if(!params.access_token||!params.userid){
+            return false;
+        }
+        def getUserTelUrl=grailsApplication.config.project.miniprogram.getUserTel+
+                "?access_token=${params.access_token}&code=${params.code}";
+        def client=new HttpClientUtils();
+        def result=client.httpsConnectionJson(getUserTelUrl, "","POST",null);
+        def result_json=new JSONObject(result);
+        println "userphone_json："+result_json;
+        def resultMap=[:];
+        resultMap["updated"]=false;
+        resultMap["phoneNumber"]=result_json.phoneNumber;
+        resultMap["purePhoneNumber"]=result_json.purePhoneNumber;
+        if (result_json.errcode == 0 && result_json.phone_info) {
+            def user=WxUser.get(params.userid.toLong());
+            user.tel=result_json.phoneNumber;
+            user.pureTel=result_json.purePhoneNumber;
+            if(user.save(flush: true)){
+                resultMap["updated"]=true;
+            }
+        }
+        return resultMap;
+    }
 
     /**
      * 栏目列表

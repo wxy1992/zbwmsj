@@ -136,4 +136,9 @@ project.setting.uploadFileExts="doc,docx,xls,xlsx,wps,pdf,zip,rar"
 //--------------------项目全局配置------------------------------
 project.setting.name="张北新时代文明实践中心"
 project.setting.templateNames=[]
-
+project.miniprogram.appid="wx5ed7480ee73033bc"
+project.miniprogram.secret="2cbe1ef44a833c9e3463e15a3773b68f"
+project.miniprogram.grant_type="authorization_code"
+project.miniprogram.code2openidUrl="https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code"
+project.miniprogram.getAccessToken="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential"
+project.miniprogram.getUserTel="https://api.weixin.qq.com/wxa/business/getuserphonenumber"

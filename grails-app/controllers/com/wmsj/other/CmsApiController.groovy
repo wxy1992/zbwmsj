@@ -11,6 +11,68 @@ class CmsApiController {
     CmsService cmsService;
 
     /**
+     * 根据code换取openid
+     * @return
+     */
+    def code2Userid() {
+        try {
+            def result=[:];
+            if(params.code){
+                result = cmsService.code2Userid(params);
+            }
+            render ServerResponse.success(result);
+        } catch (e) {
+            render ServerResponse.fail();
+        }
+    }
+
+    /**
+     * 更新用户信息
+     * @return
+     */
+    def updateUserInfo(){
+        try {
+            def result=[:];
+            if(params.userid){
+                result = cmsService.updateUserInfo(params);
+            }
+            render ServerResponse.success(result);
+        } catch (e) {
+            render ServerResponse.fail();
+        }
+    }
+
+    /**
+     * 获取AccessToken
+     */
+    def getAccessToken(){
+        try {
+            def result=cmsService.getAccessToken();
+            render ServerResponse.success(result);
+        } catch (e) {
+            render ServerResponse.fail();
+        }
+    }
+
+    /**
+     * 更新用户信息
+     * @param params
+     * @return
+     */
+    def updateUserTel(){
+        try {
+            def result=[:];
+            if(params.userid&&params.access_token){
+                result=cmsService.updateUserTel(params);
+            }
+            render ServerResponse.success(result);
+        } catch (e) {
+            render ServerResponse.fail();
+        }
+    }
+
+
+    /**
      * 栏目列表
      */
     def describeCatalogs(){
