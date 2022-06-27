@@ -38,20 +38,19 @@ class BootStrap {
 
     private void createDefaultUsers() {
         if (BaseUser.count() == 0) {
-            def admins = ['manager', 'admin']
-            admins.each {
-                def admin = BaseUser.findByUsername(it)
-                if (!admin) {
-                    admin = new BaseUser(username: it, password: '123456', enabled: true, accountExpired: false, accountLocked: false, passwordExpired: false, type: null)
-                    if (admin.save(flush: true)) {
-                        new BaseUserBaseRole(baseUser: admin, baseRole: BaseRole.findByAuthority('ROLE_MANAGER')).save(flush: true)
-                        new BaseUserBaseRole(baseUser: admin, baseRole: BaseRole.findByAuthority('ROLE_ADMIN')).save(flush: true)
-                    } else {
-                        println admin.errors
-                    }
+            //一级用户
+            def parentOrg = Organization.get(1L);
+            if (!parentOrg) {
+                parentOrg = new Organization(name: '张北县新时代文明实践中心', shortName: '张北县新时代文明实践中心', parent: null);
+                parentOrg.save(flush: true);
+                def admin = new BaseUser(username: "admin", realName: "管理员", organization:parentOrg,
+                        department: '张北县新时代文明实践中心', password: '123456', enabled: true, accountExpired: false, accountLocked: false, passwordExpired: false)
+                if (admin.save(flush: true)) {
+                    new BaseUserBaseRole(baseUser: admin, baseRole: BaseRole.findByAuthority('ROLE_ADMIN')).save(flush: true)
+                } else {
+                    println admin.errors
                 }
             }
-
             //二级单位用户
             def subadmins = ["政府办"     : "张北县政府办志愿服务队",
                              "政法委"     : "",
@@ -124,11 +123,7 @@ class BootStrap {
                              "二台镇"     : "二台镇志愿服务大队",
                              "郝家营乡"    : "郝家营乡人民政府志愿队"
             ];
-            def parentOrg = Organization.get(1L);
-            if (!parentOrg) {
-                parentOrg = new Organization(name: '张北县新时代文明实践中心', shortName: '张北县新时代文明实践中心', parent: null);
-                parentOrg.save(flush: true);
-            }
+
             subadmins.each {
                 def shortName = it.key;
                 def name = it.value;

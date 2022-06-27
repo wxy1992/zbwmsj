@@ -4,9 +4,9 @@
 
     <li class="label">待办事项</li>
     <li><a onclick="loadRemotePage('${request.contextPath}/trade/list?operation=todo')">
-        <i class="glyphicon glyphicon-share"></i> 服务 </a></li>
+        <i class="glyphicon glyphicon-share"></i> 服务 <span class="badge badge-primary todoTradeNum">0</span></a></li>
     <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/todoList')">
-        <i class="glyphicon glyphicon-edit"></i> 稿件 </a></li>
+        <i class="glyphicon glyphicon-edit"></i> 稿件 <span class="badge badge-primary todoNewsNum">0</span></a></li>
 
     <li class="label">采编/运维</li>
     <li><a onclick="loadRemotePage('${request.contextPath}/trade/list')"><i class="glyphicon glyphicon-list-alt"></i> 服务管理 </a></li>
@@ -21,7 +21,8 @@
         <li><a onclick="loadRemotePage('${request.contextPath}/baseUser/list')"><i class="glyphicon glyphicon-user"></i> 用户管理 </a></li>
         <li><a onclick="loadRemotePage('${request.contextPath}/baseRole/list')"><i class="glyphicon glyphicon-asterisk"></i> 角色管理 </a></li>
         <li><a onclick="loadRemotePage('${request.contextPath}/organization/list')"><i class="glyphicon glyphicon-home"></i> 单位管理 </a></li>
-        <li class="label">统计</li>
-        <li><a onclick="loadRemotePage('${request.contextPath}/chart/newsVisitBarChart')"><i class="glyphicon glyphicon-signal"></i> 访问量 </a></li>
     </sec:ifAnyGranted>
+    <li class="label">统计</li>
+    <li><a onclick="loadRemotePage('${request.contextPath}/chart/newsVisitBarChart')"><i class="glyphicon glyphicon-signal"></i> 访问量 </a></li>
+
 </ul>

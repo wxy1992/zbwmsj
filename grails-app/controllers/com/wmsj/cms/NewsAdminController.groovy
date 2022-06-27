@@ -44,11 +44,18 @@ class NewsAdminController {
                 property('state','state')
                 property('sequencer','sequencer')
             }
-            if(!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//二级用户
+            if(['草稿','回收站'].contains(params.state)){
                 createAlias('publisher','p')
                 createAlias('p.organization','o')
                 eq("o.id",currentUser.organizationId)
+            }else{
+                if(!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//二级用户
+                    createAlias('publisher','p')
+                    createAlias('p.organization','o')
+                    eq("o.id",currentUser.organizationId)
+                }
             }
+
             if(params['catalog.id']){
                 eq("c.id",params['catalog.id'].toLong())
 
@@ -435,8 +442,7 @@ class NewsAdminController {
             }
             if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//管理员
                 eq("state","已提交")//待办已提交服务
-            }else{//二级用户只管理本单位服务
-
+            }else{//二级用户只管理本单位
                 eq("o.id",currentUser.organizationId)
                 eq("state","退回")
             }

@@ -10,6 +10,15 @@
             line-height: 36px;
             color: #006eec;
         }
+        .operation_column{
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .operation_column a{
+            display: inline-block;
+            width: 49%;
+        }
     </style>
 </head>
 <body>
@@ -45,13 +54,16 @@
                             </g:each>
                         </ul>
                     </div>
+
                     <sec:ifAllGranted roles="ROLE_SUBADMIN">
-                        <button class="btn btn-success" type="button" onclick="changeTradeStatus('提交');"><i class="glyphicon glyphicon-ok"></i> 提交</button>
+                        <button class="btn btn-success" type="button" onclick="changeTradeStatus('提交');">提交</button>
                     </sec:ifAllGranted>
                     <sec:ifAnyGranted roles="ROLE_ADMIN">
-                        <button class="btn btn-success" type="button" onclick="changeTradeStatus('发布');"><i class="glyphicon glyphicon-ok"></i> 发布</button>
-                        <button class="btn btn-danger" type="button" onclick="changeTradeStatus('退回');"><i class="glyphicon glyphicon-ban-circle"></i> 退回</button>
+                        <button class="btn btn-success" type="button" onclick="changeTradeStatus('发布');">发布</button>
+                        <button class="btn btn-danger" type="button" onclick="changeTradeStatus('退回');">退回</button>
                     </sec:ifAnyGranted>
+                    <button class="btn btn-danger" type="button" onclick="changeTradeStatus('结束');">结束</button>
+
                 </div>
             </div>
             <div class="row form-control-inline">

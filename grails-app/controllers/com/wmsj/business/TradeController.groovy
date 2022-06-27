@@ -34,6 +34,14 @@ class TradeController {
             if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//管理员
                 if(params.operation=='todo'){
                     eq("status",10)//待办已提交服务
+                }else{
+                    or{
+                        inList("status",[10,20,30])
+                        and{
+                            eq("o.id",currentUser.organizationId)
+                            inList("status",[0,5])
+                        }
+                    }
                 }
             }else{//二级用户只管理本单位服务
                 eq("o.id",currentUser.organizationId)
@@ -166,4 +174,5 @@ class TradeController {
         }
         render "${map as JSON}";
     }
+
 }

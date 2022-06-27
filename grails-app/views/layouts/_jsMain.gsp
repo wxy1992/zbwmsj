@@ -51,27 +51,8 @@
     //气泡数字计算
     function countTodoTask(){
         $.post("${request.contextPath}/cms/countMyTask", {}, function (data, textStatus) {
-            if(data['todoDesign']){//待审设计
-                $('.auditDesignNum').text(data['todoDesign']);
-            }
-            if(data['todoAnswer']){//待审答卷
-                $('.auditAnswerNum').text(data['todoAnswer']);
-            }
-            if(data['newsAudit1']){
-                $('.auditNewsNum').text(data['newsAudit1']);
-            }
-            if(data['newsAudit2']){
-                $('.pubauditNewsNum').text(data['newsAudit2']);
-            }
-            $('#rolemenuUl .sumTodoNum').each(function () {
-                var sumTodoNum=$(this);var totalnum=0;
-                var badges=sumTodoNum.parents('li').find('ul.badgeTodo li .badge');
-                badges.each(function () {
-                    var num=$(this).text();
-                    totalnum+=parseInt(num);
-                });
-                sumTodoNum.text(totalnum);
-            });
+            $('.todoTradeNum').text(data['todoTradeNum']);
+            $('.todoNewsNum').text(data['todoNewsNum']);
         }, "json");
     }
 

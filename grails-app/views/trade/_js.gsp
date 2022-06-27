@@ -45,9 +45,10 @@
     //操作
     function optionFormatter(value, row, index) {
         var str=[];
-        str.push('<button class="btn btn-primary" onclick="javascript:createOrEdit(\''+row.id+'\',\'\',\'\')"><i class="glyphicon glyphicon-pencil"></i></button>&nbsp;&nbsp;');
-        str.push('<a class="btn btn-info" href="'+row.url+'" target="_blank"><i class="glyphicon glyphicon-eye-open text-white"></i></a>&nbsp;&nbsp;');
-        str.push('<button class="btn btn-danger" onclick="javascript:deleteTrade(\''+row.id+'\')"><i class="glyphicon glyphicon-trash"></i></button>');
+        str.push('<div class="operation_column"><a class="text-primary" href="javascript://" onclick="javascript:createOrEdit(\''+row.id+'\',\'\',\'\')">编辑</a>');
+        str.push('<a class="text-danger" href="javascript://" onclick="javascript:deleteTrade(\''+row.id+'\')">删除</a>');
+        str.push('<a class="text-primary" href="javascript://" onclick="javascript:showApply(\''+row.id+'\',\'\',\'\')">报名列表</a>');
+        str.push('<a class="text-primary" href="javascript://" onclick="javascript:showCommentary(\''+row.id+'\',\'\',\'\')">评论列表</a></div>');
         return str.join('');
     }
 
@@ -63,32 +64,51 @@
     }
 
 
-    function changeTradeStatus(operation){
-        var selectRows=$('#tradeTable').bootstrapTable('getSelections');
+    function changeTradeStatus(operation) {
+        var selectRows = $('#tradeTable').bootstrapTable('getSelections');
         if (selectRows.length <= 0) {
-            alert("请至少选择一条数据！");
-        }else {
-            if(window.confirm(operation+"选中的服务？")){
-                var fields='';
-                for (var i = 0; i < selectRows.length; i++) {
-                    if (fields != '') fields += ',';
-                    fields += selectRows[i].id;
-                }
-                var obj=new Object();
-                obj.fields=fields;
-                obj.operation=operation;
-                if(operation=='退回'){
-                    obj.backreason = prompt('意见建议', '');
-                }
-                $.post('${request.contextPath}/trade/changeTradeStatus',obj,function (data){
-                    alert(data.message);
-                    doSearch();
-                },"json");
+            alert("请至少选择一条数据");
+            return;
+        }
+
+        if (operation == '结束') {
+            var goingRows = $.grep(selectRows, function (obj, i) {
+                return obj['status'] != 20;  //return为过滤的条件
+            });
+            if(goingRows.length > 0){
+                alert("仅可结束进行中的服务");
+                return;
             }
+        }
+        if (window.confirm(operation + "选中的服务？")) {
+            var fields = '';
+            for (var i = 0; i < selectRows.length; i++) {
+                if (fields != '') fields += ',';
+                fields += selectRows[i].id;
+            }
+            var obj = new Object();
+            obj.fields = fields;
+            obj.operation = operation;
+            if (operation == '退回') {
+                obj.backreason = prompt('意见建议', '');
+            }
+            $.post('${request.contextPath}/trade/changeTradeStatus', obj, function (data) {
+                alert(data.message);
+                doSearch();
+                countTodoTask();
+            }, "json");
         }
     }
 
     function backToList(){
         loadRemotePage('${request.contextPath}/trade/list');
+    }
+
+    function showCommentary(tradeId){
+        loadRemotePage('${request.contextPath}/commentary/list?tradeId='+tradeId);
+    }
+
+    function showApply(tradeId){
+        loadRemotePage('${request.contextPath}/apply/list?tradeId='+tradeId);
     }
 </script>

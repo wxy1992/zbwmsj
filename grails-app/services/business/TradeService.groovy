@@ -3,8 +3,7 @@ package business
 import com.wmsj.business.Apply
 import com.wmsj.business.Trade
 import com.wmsj.business.TradeType
-import com.wmsj.cms.behaviour.Commentary
-import com.wmsj.core.BaseUser
+import com.wmsj.business.Commentary
 import com.wmsj.core.WxUser
 import grails.transaction.Transactional
 import org.hibernate.criterion.CriteriaSpecification

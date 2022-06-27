@@ -1,8 +1,10 @@
 package com.wmsj.cms
 
 import cms.CommonService
+import com.wmsj.business.Trade
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
+import grails.plugin.springsecurity.SpringSecurityUtils
 
 import java.text.SimpleDateFormat
 
@@ -39,12 +41,29 @@ class CmsController {
      * @return
      */
     def countMyTask(){
-        def newsSql=new StringBuilder("select count(id) as num,state as state from News where state in ('初步审核','拟发审核') ");
-        newsSql.append("group by state");
-        def newstotal=News.executeQuery(newsSql.toString());
+        def currentUser=springSecurityService.currentUser;
+        def todoTradeNum= Trade.createCriteria().count{
+            if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){
+                eq("status",10)
+            }else{
+                createAlias('organization','o')
+                eq("o.id",currentUser.organizationId)
+                eq("status",5)
+            }
+        }
+        def todoNewsNum= News.createCriteria().count{
+            if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//管理员
+                eq("state","已提交")//待办已提交服务
+            }else{//二级用户只管理本单位
+                createAlias('publisher','p')
+                createAlias('p.organization','o')
+                eq("o.id",currentUser.organizationId)
+                eq("state","退回")
+            }
+        }
         def map=[:];
-        map.newsAudit1=newstotal.find{return it[1]=='初步审核'}?.getAt(0);
-        map.newsAudit2=newstotal.find{return it[1]=='拟发审核'}?.getAt(0);
+        map.todoTradeNum=todoTradeNum?:0;
+        map.todoNewsNum=todoNewsNum?:0;
         render "${map as JSON}";
     }
 

@@ -1,4 +1,4 @@
-package com.wmsj.cms.behaviour
+package com.wmsj.business
 
 import com.wmsj.annotation.Title
 import com.wmsj.business.Apply
