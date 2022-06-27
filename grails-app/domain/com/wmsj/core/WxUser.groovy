@@ -21,9 +21,9 @@ class WxUser {
     @Title(zh_CN='城市')
     String city
     @Title(zh_CN='性别')
-    Integer gender
+    String gender
     @Title(zh_CN='语言')
-    Integer language
+    String language
     @Title(zh_CN='姓名')
     String name
     @Title(zh_CN='身份证号')
@@ -34,11 +34,16 @@ class WxUser {
     static constraints = {
         openId nullable: false,size: 0..100,unique: true
         nickname nullable: true,size: 0..100
+        tel nullable: true,size: 0..20
+        pureTel nullable: true,size: 0..20,unique: true
+        avatarUrl nullable: true,size: 0..500
+        country nullable: true,size: 0..100
+        province nullable: true,size: 0..100
+        city nullable: true,size: 0..100
+        gender nullable: true,size: 0..10
+        language nullable: true,size: 0..10
         name nullable: true,size: 0..100
         idcard nullable: true,size: 0..20
-        tel nullable: true,size: 0..20,unique: true
-        pureTel nullable: true,size: 0..20,unique: true
-        address nullable: true
-        avatarUrl nullable: true
+        address nullable: true,size: 0..300
     }
 }

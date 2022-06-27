@@ -38,7 +38,7 @@ class CmsService {
         resultMap["openid"]=result_json.openid?:"";
         resultMap["errcode"]=result_json.errcode;
         resultMap["errmsg"]=result_json.errmsg?:"";
-        if(result_json.errcode==0&&result_json.openid){
+        if(result_json.openid){
             def wxUser= WxUser.findByOpenId(result_json.openid);
             if(!wxUser){
                 wxUser=new WxUser();
@@ -58,6 +58,7 @@ class CmsService {
      * @return
      */
     Boolean updateUserInfo(def params){
+        println params
         Boolean result=false;
         if(params.userid){
             def user=WxUser.get(params.userid.toLong());
@@ -69,6 +70,8 @@ class CmsService {
             user.gender=params.gender?.toInteger();
             if(user.save(flush: true)){
                 result=true;
+            }else{
+                log.error(user.errors);
             }
         }
         return result;
@@ -104,19 +107,21 @@ class CmsService {
             return false;
         }
         def getUserTelUrl=grailsApplication.config.project.miniprogram.getUserTel+
-                "?access_token=${params.access_token}&code=${params.code}";
+                "?access_token=${params.access_token}";
         def client=new HttpClientUtils();
-        def result=client.httpsConnectionJson(getUserTelUrl, "","POST",null);
+        def result=client.httpsConnectionJson(getUserTelUrl, "{\"code\": \"${params.code}\"}","POST",null);
         def result_json=new JSONObject(result);
         println "userphone_json："+result_json;
         def resultMap=[:];
         resultMap["updated"]=false;
-        resultMap["phoneNumber"]=result_json.phoneNumber;
-        resultMap["purePhoneNumber"]=result_json.purePhoneNumber;
         if (result_json.errcode == 0 && result_json.phone_info) {
+            def phone_json=new JSONObject(result_json.phone_info);
+            println "phone_json："+phone_json;
+            resultMap["phoneNumber"]=phone_json.phoneNumber;
+            resultMap["purePhoneNumber"]=phone_json.purePhoneNumber;
             def user=WxUser.get(params.userid.toLong());
-            user.tel=result_json.phoneNumber;
-            user.pureTel=result_json.purePhoneNumber;
+            user.tel=phone_json.phoneNumber;
+            user.pureTel=phone_json.purePhoneNumber;
             if(user.save(flush: true)){
                 resultMap["updated"]=true;
             }

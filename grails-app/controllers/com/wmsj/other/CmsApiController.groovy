@@ -22,7 +22,7 @@ class CmsApiController {
             }
             render ServerResponse.success(result);
         } catch (e) {
-            render ServerResponse.fail();
+            render ServerResponse.fail(e.message);
         }
     }
 
@@ -38,7 +38,7 @@ class CmsApiController {
             }
             render ServerResponse.success(result);
         } catch (e) {
-            render ServerResponse.fail();
+            render ServerResponse.fail(e.message);
         }
     }
 
@@ -50,7 +50,7 @@ class CmsApiController {
             def result=cmsService.getAccessToken();
             render ServerResponse.success(result);
         } catch (e) {
-            render ServerResponse.fail();
+            render ServerResponse.fail(e.message);
         }
     }
 
@@ -67,7 +67,7 @@ class CmsApiController {
             }
             render ServerResponse.success(result);
         } catch (e) {
-            render ServerResponse.fail();
+            render ServerResponse.fail(e.message);
         }
     }
 
@@ -82,7 +82,7 @@ class CmsApiController {
             def catalogs=cmsService.describeCatalogs(params);
             render ServerResponse.success(catalogs);
         }catch(e){
-            render ServerResponse.fail();
+            render ServerResponse.fail(e.message);
         }
     }
 
@@ -99,7 +99,7 @@ class CmsApiController {
             }
             render ServerResponse.success(newsList);
         }catch(e){
-            render ServerResponse.fail();
+            render ServerResponse.fail(e.message);
         }
     }
 
@@ -118,8 +118,7 @@ class CmsApiController {
             }
             render ServerResponse.success(news);
         }catch(e){
-            log.error(e.message);
-            render ServerResponse.fail();
+            render ServerResponse.fail(e.message);
         }
     }
 
