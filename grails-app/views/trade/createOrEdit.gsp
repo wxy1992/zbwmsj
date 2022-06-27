@@ -78,12 +78,12 @@ input[type="radio"], input[type="checkbox"] {
                         <div class="col-md-5">
                             <input type="text" class="form-control" name="telephone" required maxlength="40" value="${trade?.telephone}">
                         </div>
-                        <div class="col-md-1">开始时间</div>
+                        <div class="col-md-1">报名开始时间</div>
                         <div class="col-md-5">
                             <input type="text" readonly class="form-control datetimepicker" name="beginDate" required
                             value="${(trade?.beginDate?:today)?.format('yyyy-MM-dd HH:mm')}"/>
                         </div>
-                        <div class="col-md-1">结束时间</div>
+                        <div class="col-md-1">报名结束时间</div>
                         <div class="col-md-5">
                             <input type="text" readonly class="form-control datetimepicker" name="endDate" required
                                    value="${(trade?.endDate?:(today+10))?.format('yyyy-MM-dd HH:mm')}"/>

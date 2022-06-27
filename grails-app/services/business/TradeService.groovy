@@ -47,6 +47,8 @@ class TradeService {
                 property('peopleNum','peopleNum')
                 property('dateCreated','dateCreated')
                 property('status','status')
+                property('beginDate','beginDate')
+                property('endDate','endDate')
             }
             if(params.tradeTypeId){
                 eq("tradeType.id",params.tradeTypeId.toLong())
@@ -161,6 +163,21 @@ class TradeService {
             }
             if(mynum>0){
                 resultMap.message="您已经报名过该服务";
+                return resultMap;
+            }
+            def now=new Date();
+            def trade=Trade.get(params.tradeId.toLong());
+            if(!trade){
+                resultMap.message="您已经报名过该服务";
+                return resultMap;
+            }
+            if(now.before(trade.beginDate)||now.after(trade.endDate)){
+                resultMap.message="不在报名时间范围内";
+                return resultMap;
+            }
+            def alreadyNum=Apply.countByTrade(trade);
+            if((trade.peopleNum-alreadyNum)<=0){
+                resultMap.message="报名人数已满";
                 return resultMap;
             }
             Apply apply=new Apply();

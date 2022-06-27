@@ -48,7 +48,8 @@
         str.push('<div class="operation_column"><a class="text-primary" href="javascript://" onclick="javascript:createOrEdit(\''+row.id+'\',\'\',\'\')">编辑</a>');
         str.push('<a class="text-danger" href="javascript://" onclick="javascript:deleteTrade(\''+row.id+'\')">删除</a>');
         str.push('<a class="text-primary" href="javascript://" onclick="javascript:showApply(\''+row.id+'\',\'\',\'\')">报名列表</a>');
-        str.push('<a class="text-primary" href="javascript://" onclick="javascript:showCommentary(\''+row.id+'\',\'\',\'\')">评论列表</a></div>');
+        str.push('<a class="text-primary" href="javascript://" onclick="javascript:showCommentary(\''+row.id+'\',\'\',\'\')">评论列表</a>');
+        str.push('<a class="text-primary" href="javascript://" onclick="javascript:tradeAchievement(\''+row.id+'\',\'\',\'\')">服务成果</a></div>');
         return str.join('');
     }
 
@@ -110,5 +111,24 @@
 
     function showApply(tradeId){
         loadRemotePage('${request.contextPath}/apply/list?tradeId='+tradeId);
+    }
+
+
+    function tradeAchievement(tradeId){
+        loadRemotePage('${request.contextPath}/trade/achievement?tradeId='+tradeId);
+    }
+
+
+    //保存
+    function saveAchievement() {
+        if ($("#achievementForm").valid()) {
+            $.post("${request.contextPath}/trade/saveAchievement", $("#achievementForm").serialize(), function (data) {
+                $("#messageModalBody").html(data.message);
+                $("#messageModal").modal('show');
+                if (data.result) {
+                    backToList();
+                }
+            }, "json");
+        }
     }
 </script>

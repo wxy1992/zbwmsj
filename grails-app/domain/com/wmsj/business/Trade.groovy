@@ -18,10 +18,10 @@ class Trade {
     Integer peopleNum
     @Title(zh_CN='状态')
     Integer status=10//00草稿，05退回，10已提交，20发布中，30已结束
-    @Title(zh_CN='开始时间')
+    @Title(zh_CN='报名开始时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date beginDate
-    @Title(zh_CN='结束时间')
+    @Title(zh_CN='报名结束时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date endDate
     @Title(zh_CN='发布单位')

@@ -175,4 +175,57 @@ class TradeController {
         render "${map as JSON}";
     }
 
+    /**
+     * 服务成果
+     * @return
+     */
+    def achievement(){
+        Achievement achievement;
+        Trade trade;
+        if(params.tradeId){
+            achievement=Achievement.createCriteria().get {
+                eq("trade.id",params.tradeId.toLong())
+                maxResults(1)
+            }
+            if(!achievement){
+                achievement=new Achievement();
+                trade=Trade.get(params.tradeId.toLong());
+                achievement.trade=trade;
+            }
+        }
+        return [achievement:achievement,trade:trade];
+    }
+
+    /**
+     * 保存服务成果
+     * @return
+     */
+    def saveAchievement() {
+        def map = [:];
+        map.result = false;
+        map.message = "网络错误";
+        if (params.tradeId) {
+            try {
+                Achievement achievement = Achievement.createCriteria().get {
+                    eq("trade.id", params.tradeId.toLong())
+                    maxResults(1)
+                }
+                if(!achievement){
+                    achievement=new Achievement();
+                    achievement.trade=Trade.get(params.tradeId.toLong());
+                }
+                achievement.properties=params;
+                achievement.baseUser=springSecurityService.currentUser;
+                if(achievement.save(flush: true)){
+                    map.result = true;
+                    map.message = "保存成功";
+                }else{
+                    log.error(achievement.errors);
+                }
+            } catch (e) {
+                log.error(e.message);
+            }
+        }
+        render "${map as JSON}";
+    }
 }
