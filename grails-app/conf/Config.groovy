@@ -134,7 +134,7 @@ project.setting.uploadVideoExts="mp4,mpeg4,mpg4,flv,avi,rmvb,ogv"
 project.setting.uploadFileExts="doc,docx,xls,xlsx,wps,pdf,zip,rar"
 
 //--------------------项目全局配置------------------------------
-project.setting.name="张北新时代文明实践中心"
+project.setting.name="张北县新时代文明实践中心"
 project.setting.templateNames=[]
 project.miniprogram.appid="wx5ed7480ee73033bc"
 project.miniprogram.secret="2cbe1ef44a833c9e3463e15a3773b68f"

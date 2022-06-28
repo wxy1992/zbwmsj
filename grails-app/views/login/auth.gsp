@@ -22,26 +22,27 @@
     </style>
 </head>
 
-<body>
+<body style="background: url('${request.contextPath}/images/loginbg.jpg') no-repeat center;">
 <g:set var="cmsTitle" value="${grailsApplication.config.project.setting.name}"/>
-<div class="container-fluid pr-0 pl-0">
+<div class="container-fluid pr-0 pl-0" style="margin-top: 100px;">
     <div class="row mr-0 ml-0">
-        <h1 class="text-white text-center container">${cmsTitle}</h1>
+        <h1 class="text-primary text-center container">
+            ${cmsTitle}</h1>
     </div>
     <div class="row mr-0 ml-0">
         <div style="margin: 50px auto;width: 20%;min-width: 300px;">
             <form action="${request.contextPath}/login/loginVerify" method="POST" id="loginForm" class="form-horizontal" autocomplete="off">
                 <input value="${params.loginType?:flash?.loginType?:'show'}" type="hidden" name="loginType"/>
                 <div class="row">
-                    <div class="col-lg-12 text-white text-center">${flash?.message}</div>
                     <div class="col-lg-12 mt-lg-4">
                         <input type="text" class="form-control" name="username" id="username" placeholder="用户名" value="${flash?.username}">
                     </div>
                     <div class="col-lg-12 mt-lg-4">
                         <input type="password" class="form-control" name="password" id="password" placeholder="密码">
                     </div>
+                    <div class="col-lg-12 text-white text-center">${flash?.message}</div>
                     <div class="col-lg-12 text-center mt-lg-5">
-                        <button class="btn btn-primary btn-lg form-control" style="background: #0f7297;border: #3895b8;" type="submit">登　　录</button>
+                        <button class="btn btn-primary btn-lg form-control" type="submit">登　　录</button>
                     </div>
                 </div>
             </form>
