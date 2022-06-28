@@ -63,18 +63,29 @@
         <div class="col-lg-12 advanceAttributes"><span class="hidden-sm-up"><i
                 class="glyphicon glyphicon-new-window"></i></span> <span class="hidden-xs-down">高级属性</span></div>
 
-        <div class="col-lg-2" align="right">发稿流程</div>
+        <div class="col-lg-2" align="right">需要审核</div>
 
         <div class="col-lg-4">
-            <label><input type="checkbox" id="needPreview" name="needPreview" value="true"
-                          <g:if test="${catalogInstance?.needPreview}">checked</g:if>/></label> 需要审核
+            <div class="row">
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="needPreview" value="true"
+                                                              <g:if test="${catalogInstance?.needPreview}">checked</g:if>/> 是</label></div>
+
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="needPreview" value="false"
+                                                              <g:if test="${!catalogInstance?.needPreview}">checked</g:if>/> 否</label></div>
+            </div>
         </div>
 
 
         <div class="col-lg-2" align="right">是否启用</div>
 
-        <div class="col-lg-4"><label><input type="checkbox" id="enabled" name="enabled" value="true"
-                                            <g:if test="${catalogInstance?.enabled}">checked</g:if> /></label></div>
+        <div class="col-lg-4">
+            <div class="row">
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="enabled" value="true"
+                                                              <g:if test="${catalogInstance?.enabled}">checked</g:if> /> 是</label></div>
+                <div class="col-lg-6 pt-0 pb-0"><label><input type="radio" name="enabled" value="false"
+                                                              <g:if test="${!catalogInstance?.enabled}">checked</g:if> /> 否</label></div>
+            </div>
+        </div>
 
         <div class="col-lg-2" align="right">首页展示</div>
 
