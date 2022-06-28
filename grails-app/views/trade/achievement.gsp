@@ -38,7 +38,7 @@ input[type="radio"], input[type="checkbox"] {
                     <div class="row">
                         <div class="col-md-12">
                             <input type="text" class="form-control text-center font-weight-bold" name="title" required
-                                   value="${achievement?.title?:"${trade?.title}服务成果"}" maxlength="200" placeholder="${}"/>
+                                   value="${achievement?.title?:"${trade?.title}服务成果"}" maxlength="200"/>
                         </div>
                         <div class="col-md-12">
                             <script id="content" name="content" type="text/plain" style="width:100%;height:360px;">${raw(achievement?.content)}</script>
