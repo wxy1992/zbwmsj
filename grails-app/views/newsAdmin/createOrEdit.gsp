@@ -316,9 +316,9 @@
     }
 
 
-    var pictureLimit = 2;
-    var videoLimit = 2;
-    var attachmentLimit = 5;
+    var pictureLimit = 10;
+    var videoLimit = 1;
+    var attachmentLimit = 10;
     var pictureType=$('label#pictureTypeLabel').text().split(',');
     var attachmentType=$('label#attachmentTypeLabel').text().split(',');
     var videoType=$('label#videoTypeLabel').text().split(',');

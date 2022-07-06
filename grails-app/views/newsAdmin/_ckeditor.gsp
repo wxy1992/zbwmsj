@@ -3,7 +3,6 @@
     $(function() {
         CKEDITOR.editorConfig = function (config) {
             config.uiColor = '#9AB8F3';
-            console.log(config);
             config.height = 300;
             config.toolbarCanCollapse = true;
             // config.toolbar_Mytoolbar =

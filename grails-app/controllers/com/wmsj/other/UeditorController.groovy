@@ -167,7 +167,7 @@ class UeditorController {
         def originalName = file.getOriginalFilename();//原文件名
 //        println originalName
         def extName=originalName.tokenize('.').last();//扩展名
-        def filename="${UUID.randomUUID()}_${originalName}";//文件存储名
+        def filename="${System.currentTimeMillis()}_${originalName}";//文件存储名
         def filepart=File.separator+"${userId}"+File.separator+"${xtype?.capitalize()}"+File.separator+"${filename}";
 //        def filepart="/${xtype}/${new Date().format("yyyyMM")}/${filename}";
         def filepath="";
@@ -186,7 +186,7 @@ class UeditorController {
         result['size']=file.size;
         result['state']=message;
         result['type']=extName;
-        result['url']="${request.contextPath}/ueditor/download?path=${filepart}";
+        result['url']="${request.contextPath}/ueditor/download?path=${filepart.encodeAsURL()}";
         String callback = request.getParameter("callback");
         if( callback == null ){
             render "${result as JSON}";
