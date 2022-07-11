@@ -55,7 +55,7 @@ class UeditorController {
     /* 上传图片配置项 */
     "imageActionName": "uploadimage", /* 执行上传图片的action名称 */
     "imageFieldName": "upfile", /* 提交的图片表单名称 */
-    "imageMaxSize": 2048000000, /* 上传大小限制，单位B */
+    "imageMaxSize": 40960000, /* 上传大小限制，单位B */
     "imageAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"], /* 上传图片格式显示 */
     "imageCompressEnable": true, /* 是否压缩图片,默认是true */
     "imageCompressBorder": 1600, /* 图片压缩最长边限制 */
@@ -103,7 +103,7 @@ class UeditorController {
     "videoFieldName": "upfile", /* 提交的视频表单名称 */
     "videoPathFormat": "/ueditor/jsp/upload/video/{yyyy}{mm}{dd}/{time}{rand:6}", /* 上传保存路径,可以自定义保存路径和文件名格式 */
     "videoUrlPrefix": "", /* 视频访问路径前缀 */
-    "videoMaxSize": 102400000, /* 上传大小限制，单位B，默认100MB */
+    "videoMaxSize": 204800000, /* 上传大小限制，单位B，默认100MB */
     "videoAllowFiles": [
         ".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg",
         ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid"], /* 上传视频格式显示 */
