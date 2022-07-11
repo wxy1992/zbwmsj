@@ -19,6 +19,8 @@ package com.wmsj.other
 import grails.converters.JSON
 import org.springframework.web.multipart.MultipartFile
 
+import javax.servlet.ServletOutputStream
+
 class UeditorController {
     def springSecurityService;
 
@@ -149,13 +151,27 @@ class UeditorController {
         def baseUrl=grailsApplication.config.ueditor.upload.baseUrl;
         def filepath=baseUrl+params.path;
 //        def filepath=servletContext.getRealPath(baseUrl)+params.path;//项目工程内
-        File file = new File(filepath)
-        if(file.file && file.exists()) {
-            FileInputStream fis = new FileInputStream(file)
-            response.outputStream << fis
-        } else {
-            response.sendError(HttpURLConnection.HTTP_NOT_FOUND)
+        try {
+            File file = new File(filepath);
+            if(file.file && file.exists()) {
+                if(params.path.contains(File.separator+"Video")){
+                    // Parse range specifier
+                    response.setHeader "Cache-Control", "no-store, must-revalidate"
+                    response.setHeader "Accept-Ranges", "bytes"
+                    // :TODO: a temporary fixed value, which should reflect the movie.contentType
+                    String contentType = "video/mp4"
+                    response.contentType = contentType
+//                response.setHeader "Content-Length", file.size()
+                }
+                FileInputStream fis = new FileInputStream(file)
+                response.outputStream << fis
+            } else {
+                response.sendError(HttpURLConnection.HTTP_NOT_FOUND)
+            }
+        }catch(e){
+            log.error(e.message);
         }
+
     }
 
     def upload(String xtype) {
