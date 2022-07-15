@@ -8,13 +8,11 @@ class CheckUserFilters {
     def filters = {
         justApi(controller:'tradeApi',action:"*") {
             before = {
-                def token=request.getHeader("Authorization")?.replace("Bearer ","");
-                if(!token) token="no1yozy";
-//                println  "------------------token：${token}-----------------------------------"
-                if(token){
-                    def wxUser= WxUser.findByOpenId(token);
+                def userid=request.getHeader("userid");
+                if(!userid){
+                    def wxUser= WxUser.get(userid);
                     if(wxUser){
-//                        println  "------------------token：${wxUser}-----------------------------------"
+                        println  "---------userid：${userid}----------wxUser：${wxUser}-----------"
                         request.setAttribute("wxUser",wxUser);
                     }else{
                         render "非法用户";

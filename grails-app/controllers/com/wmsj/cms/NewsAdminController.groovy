@@ -2,6 +2,7 @@ package com.wmsj.cms
 
 import com.wmsj.cms.behaviour.Visit
 import com.wmsj.core.BaseUser
+import com.wmsj.core.BaseUserBaseRole
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.SpringSecurityUtils
@@ -58,7 +59,6 @@ class NewsAdminController {
 
             if(params['catalog.id']){
                 eq("c.id",params['catalog.id'].toLong())
-
             } else if (params['site.id']) {
                 createAlias('c.site','s')
                 eq("s.id", params['site.id'].toLong())
@@ -99,10 +99,10 @@ class NewsAdminController {
     def saveOrUpdate(){
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         try{
             if(!params['catalog.id']){
-                map.message="请在左侧选择一项栏目！";
+                map.message="请在左侧选择一项栏目";
                 render "${map as JSON}";
                 return;
             }
@@ -174,7 +174,7 @@ class NewsAdminController {
     def deleteAll (){
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         def ids = params.fields?.split(',').toList().collect {it.toLong()};
         try{
             ids.each{
@@ -202,7 +202,7 @@ class NewsAdminController {
     def changeNewsState(){
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         if(!News.constraints."state".inList.contains(params.state)){
             render "${map as JSON}";
             return;
@@ -298,10 +298,9 @@ class NewsAdminController {
     }
 
     def copyNews(){
-        println params
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         def ids = params.fields?.split(',').toList().collect {it.toLong()};
         ids.reverse()
         String state="发布"
@@ -340,7 +339,7 @@ class NewsAdminController {
                                 oldNews.catalog=catalogItem;
                                 if(!oldNews.save(flush:true)){
                                     map.result=false;
-                                    map.message="网络错误，请重试！";
+                                    map.message="网络错误，请重试";
                                     log.error(oldNews.errors);
                                     trastate.setRollbackOnly();
                                 }
@@ -377,6 +376,15 @@ class NewsAdminController {
                     eq('site.id',params.id?.toLong())
                 }else if(params.type=="catalog"){
                     eq('parent.id',params.id?.toLong()?:-1l)
+                }
+                if(!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//二级用户
+                    Set catalogs= BaseUserBaseRole.findAllByBaseUser(currentUser).
+                            findAll {it.baseRole.catalogstr}.
+                            sum {it.baseRole.catalogList()};
+
+                    if(catalogs.size()>0){
+                        inList("id",catalogs.collect{it.toLong()})
+                    }
                 }
                 order('sequencer','asc')
                 order('id','asc')

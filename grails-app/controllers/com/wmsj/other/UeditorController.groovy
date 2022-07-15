@@ -175,13 +175,11 @@ class UeditorController {
     }
 
     def upload(String xtype) {
-//        println "xtype:"+xtype
-//        println params
         def userId = springSecurityService.currentUserId;
         def baseUrl=grailsApplication.config.ueditor.upload.baseUrl;
+        def domainUrl=grailsApplication.config.ueditor.upload.domainUrl;
         MultipartFile file = (MultipartFile)request.getFile('upfile');
         def originalName = file.getOriginalFilename();//原文件名
-//        println originalName
         def extName=originalName.tokenize('.').last();//扩展名
         def filename="${System.currentTimeMillis()}_${originalName}";//文件存储名
         def filepart=File.separator+"${userId}"+File.separator+"${xtype?.capitalize()}"+File.separator+"${filename}";
@@ -202,7 +200,7 @@ class UeditorController {
         result['size']=file.size;
         result['state']=message;
         result['type']=extName;
-        result['url']="${request.contextPath}/ueditor/download?path=${filepart.encodeAsURL()}";
+        result['url']="${domainUrl}/ueditor/download?path=${filepart.encodeAsURL()}";
         String callback = request.getParameter("callback");
         if( callback == null ){
             render "${result as JSON}";
