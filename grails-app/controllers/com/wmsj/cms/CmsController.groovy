@@ -317,7 +317,7 @@ class CmsController {
                 }
             }
         } else {
-            map.message = "缺少参数！";
+            map.message = "缺少参数";
         }
         render "${map as JSON}";
     }

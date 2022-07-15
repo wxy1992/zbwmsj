@@ -121,7 +121,7 @@ class BaseUserController {
     def deleteAll() {
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         def ids = params.fields?.split(',').toList();
         try{
             ids.each{id->
@@ -152,7 +152,7 @@ class BaseUserController {
     def changeUserEnable(){
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         if(params.id){
             def user=BaseUser.get(params.id);
             if(user){
@@ -163,7 +163,7 @@ class BaseUserController {
                 }
             }
         }else{
-            map.message="缺少参数！";
+            map.message="缺少参数";
         }
         render "${map as JSON}";
     }

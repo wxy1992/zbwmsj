@@ -18,6 +18,8 @@ class Commentary {
     String content
     @Title(zh_CN='评论人')
     WxUser creator
+    @Title(zh_CN='是否审核通过')
+    Integer state=0 //0未审核，1通过，2不通过
     @Title(zh_CN='评论时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date dateCreated
@@ -30,6 +32,7 @@ class Commentary {
         creator(nullable: false)
         score(nullable: false,min: 0)
         content(size:1..2000,nullable: false)
+        state nullable: false,inList: [0,1,2]
     }
 
     static mapping = {

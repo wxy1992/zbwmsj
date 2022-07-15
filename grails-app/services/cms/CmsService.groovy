@@ -56,16 +56,21 @@ class CmsService {
      * @return
      */
     Boolean updateUserInfo(def params){
-        println params
         Boolean result=false;
         if(params.userid){
             def user=WxUser.get(params.userid.toLong());
-            user.nickname=params.nickName;
-            user.avatarUrl=params.avatarUrl;
-            user.province=params.province;
-            user.city=params.city;
-            user.language=params.language;
-            user.gender=params.gender?.toInteger();
+            if(params.nickName) user.nickname=params.nickName;
+            if(params.avatarUrl) user.avatarUrl=params.avatarUrl;
+            if(params.country) user.country=params.country;
+            if(params.province) user.province=params.province;
+            if(params.city) user.city=params.city;
+            if(params.language) user.language=params.language;
+            if(params.gender) user.gender=params.gender?.toInteger();
+            if(params.lng) user.lng=params.lng;
+            if(params.lat) user.lat=params.lat;
+            if(params.name) user.name=params.name;
+            if(params.idcard) user.idcard=params.idcard;
+            if(params.address) user.address=params.address;
             if(user.save(flush: true)){
                 result=true;
             }else{

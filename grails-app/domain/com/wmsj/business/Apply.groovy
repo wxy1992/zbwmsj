@@ -48,4 +48,9 @@ class Apply {
 
     transient static final Map STATUSMAP=[10:"报名成功",20:"已完成",30:"已评价"];
 
+    def afterUpdate(){
+        if(this.deleted){
+            int commentaryNum=Commentary.executeUpdate("delete from Commentary where apply.id=? ",[this.id]);
+        }
+    }
 }

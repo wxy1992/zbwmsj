@@ -17,7 +17,7 @@ class SiteController {
     def saveOrUpdate(){
         def site,map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         if(params.id){
             site=Site.get(params.id.toLong())
         }else{
@@ -44,11 +44,11 @@ class SiteController {
     def deleteSite(){
         def site,map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         if(params.id){
             site=Site.get(params.id.toLong());
             if(Catalog.countBySite(site)>0){
-                map.message="请先删除该站点栏目！";
+                map.message="请先删除该站点栏目";
             }else{
                 try{
                     site.delete(flush: true);

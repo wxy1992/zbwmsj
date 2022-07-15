@@ -125,7 +125,7 @@ class AttachmentController {
             map.message="上传成功";
             map.videoPath=name;
         }else{
-            map.message="文件为0字节文件！";
+            map.message="文件为0字节文件";
         }
         render "${map as JSON}";
     }
@@ -133,7 +133,7 @@ class AttachmentController {
     def deleteVideo(){
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         if(params.newsId){
             def newsInstance=News.get(params.newsId.toLong());
             newsInstance.videoPath=null;
@@ -142,7 +142,7 @@ class AttachmentController {
                 map.message="操作成功";
             }
         }else{
-            map.message="缺少参数！";
+            map.message="缺少参数";
         }
         render "${map as JSON}";
     }

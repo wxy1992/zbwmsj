@@ -139,4 +139,21 @@ class TradeApiController {
         }
     }
 
+    /**
+     * 服务成果
+     * */
+    def describeTradeAchievement(){
+        Map achievement;
+        try{
+            if(params.tradeId){
+                def wxUser=request.getAttribute("wxUser");
+                achievement = tradeService.describeTradeAchievement(params,wxUser);
+            }
+            render ServerResponse.success(achievement);
+        }catch(e){
+            log.error(e.message);
+            render ServerResponse.fail();
+        }
+    }
+
 }

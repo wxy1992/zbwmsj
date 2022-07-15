@@ -136,7 +136,7 @@ class TradeController {
         map.result=false;
         map.message="数据不存在";
         if(params.id){
-            int num=Trade.executeUpdate("update Trade set deleted=1 where id=?",[params.id]);
+            int num=Trade.executeUpdate("update Trade set deleted=1 where id=?",[params.id?.toLong()]);
             if(num>0){
                 map.result=true;
                 map.message="操作成功";

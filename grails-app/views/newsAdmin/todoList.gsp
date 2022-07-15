@@ -44,6 +44,15 @@
         </div>
     </div>
 </div>
-<g:render template="/newsAdmin/js"/>
+<script>
+    $(function(){
+        $('.bootstrapTable').bootstrapTable({escape:true});
+    });
+    function queryParams(params){
+        params.max=params.limit;
+        return params;
+    }
+
+</script>
 </body>
 </html>

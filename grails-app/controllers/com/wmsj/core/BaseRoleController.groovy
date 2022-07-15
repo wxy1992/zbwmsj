@@ -96,7 +96,7 @@ class BaseRoleController {
         }else{
             log.error(baseRole.errors);
             map.result = false
-            map.message = "网络错误，请重试！"
+            map.message = "网络错误，请重试"
         }
         render "${map as JSON}";
     }

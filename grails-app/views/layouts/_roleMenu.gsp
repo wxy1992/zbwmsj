@@ -5,7 +5,7 @@
     <li class="label">待办事项</li>
     <li><a onclick="loadRemotePage('${request.contextPath}/trade/list?operation=todo')">
         <i class="glyphicon glyphicon-share"></i> 服务 <span class="badge badge-primary todoTradeNum">0</span></a></li>
-    <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/todoList')">
+    <li><a onclick="loadRemotePage('${request.contextPath}/newsAdmin/list?operation=todo')">
         <i class="glyphicon glyphicon-edit"></i> 稿件 <span class="badge badge-primary todoNewsNum">0</span></a></li>
 
     <li class="label">采编/运维</li>

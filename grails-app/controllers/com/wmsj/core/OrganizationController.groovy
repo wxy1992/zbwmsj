@@ -18,7 +18,7 @@ class OrganizationController {
     def saveOrUpdate(){
         def organization,map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         if(params.id){
             organization=Organization.get(params.id.toLong())
         }else{
@@ -41,11 +41,11 @@ class OrganizationController {
     def deleteOrganization(){
         def organization,map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         if(params.id){
             organization=Organization.get(params.id.toLong());
             if(BaseUser.countByOrganization(organization)>0){
-                map.message="请先删除该单位用户！";
+                map.message="请先删除该单位用户";
             }else{
                 try{
                     organization.delete(flush: true);

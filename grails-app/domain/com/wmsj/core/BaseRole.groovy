@@ -23,6 +23,6 @@ class BaseRole {
 		return authority;
 	}
 	List catalogList(){
-		this.catalogstr.tokenize(',').toList()
+		this.catalogstr?.tokenize(',')?.toList()
 	}
 }

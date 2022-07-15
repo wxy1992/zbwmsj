@@ -30,6 +30,10 @@ class WxUser {
     String idcard
     @Title(zh_CN='联系地址')
     String address
+    @Title(zh_CN='经度')
+    String lng
+    @Title(zh_CN='纬度')
+    String lat
 
     static constraints = {
         openId nullable: false,size: 0..100,unique: true
@@ -45,5 +49,7 @@ class WxUser {
         name nullable: true,size: 0..100
         idcard nullable: true,size: 0..20
         address nullable: true,size: 0..300
+        lng nullable: true,size: 0..50
+        lat nullable: true,size: 0..50
     }
 }

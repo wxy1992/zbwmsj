@@ -10,12 +10,13 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="row form-control-inline">
-                <div class="col-lg-2">
+                <div class="col-lg-6">
                     <input type="text" class="form-control" id="createdBy" placeholder="评论人">
                 </div>
-
-                <div class="col-lg-3 text-right">
+                <div class="col-lg-6 text-right">
                     <button class="btn btn-info" type="button" onclick="doSearch();"><i class="glyphicon glyphicon-search"></i>搜索</button>
+                    <button class="btn btn-success" type="button" onclick="auditCommentary('1');">审核通过</button>
+                    <button class="btn btn-danger" type="button" onclick="auditCommentary('2');">审核不通过</button>
                 </div>
             </div>
             <div class="row form-control-inline">
@@ -26,10 +27,12 @@
                        data-query-params="queryParams">
                     <thead>
                     <tr>
+                        <th data-checkbox="true"></th>
                         <th data-align="center" data-field="createdBy" data-width="300">评论人</th>
                         <th data-align="center" data-field="score">评分</th>
                         <th data-align="center" data-field="content">内容</th>
                         <th data-align="center" data-field="dateCreated">时间</th>
+                        <th data-align="center" data-field="state" data-formatter="approvedFormatter">审核状态</th>
                         <th data-align="center" data-field="id"  data-width="200" data-formatter="optionFormatter">操作</th>
                     </tr>
                     </thead>

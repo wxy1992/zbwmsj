@@ -113,7 +113,7 @@ class CatalogController {
     def batchDelete(){
         def map=[:];
         map.result=false;
-        map.message="网络错误，请重试！";
+        map.message="网络错误，请重试";
         def ids = params.fields?.split(',').toList().collect {it.toLong()};
         try{
             def num=News.createCriteria().count{

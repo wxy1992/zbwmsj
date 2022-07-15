@@ -18,7 +18,11 @@
         if(pageNum){
             obj.pageNum=pageNum;
         }
-        $.post("${request.contextPath}/newsAdmin/newsList",obj,function(data){
+        var url="${request.contextPath}/newsAdmin/newsList";
+        if(obj.operation=='todo'){
+            url="${request.contextPath}/newsAdmin/todoList";
+        }
+        $.post(url,obj,function(data){
             $('#newsListTable').html('');
             $('#newsListTable').html(data);
         },"html");
@@ -40,11 +44,9 @@
 
     function optionFormatter(value, row, index) {
         var str=[];
-        <sec:ifNotGranted roles="ROLE_AUDITOR,ROLE_PUBAUDITOR">
         if(row['state']=='草稿'||row['state']=='退回'){
             str.push('<button type="button" class="btn btn-primary" title="编辑" onclick="createOrEdit(\''+row.id+'\',\'\');"><i class="glyphicon glyphicon-pencil"></i></button>&nbsp;&nbsp;');
         }
-        </sec:ifNotGranted>
         str.push('<button type="button" class="btn btn-info" title="预览" onclick="previewIndex(\''+row.id+'\');"><i class="glyphicon glyphicon-eye-open"></i></button>');
         return str.join('');
     }
@@ -153,10 +155,34 @@
             }
             $('#exportNewsId').val(fields);
             $('#exportNewsForm').submit();
-
         }
     }
 
 
+    //保存新闻
+    function createOrEdit(id,catalogId){
+        if(!id&&!catalogId){
+            alert('请先选择左侧栏目');
+            return;
+        }
+        var pageNum=$('#newsTable').bootstrapTable('getOptions').pageNumber;
+        $.post('${request.contextPath}/newsAdmin/createOrEdit',{id:id,'catalog.id':catalogId,pageNum:pageNum,
+            operation:'${params.operation}',catalogName:'${catalog?.name}'},function(data){
+            $('#newsListTable').html('');
+            $('#newsListTable').html(data);
+        },'html');
+    }
+
+    //控制撤稿、复制等按钮显示
+    function operateGroup(){
+        if($('#state').val()){
+            var stateVal=$('#state').val();
+            var btns=buttonWithState[stateVal];
+            $('.changeStateButtonGroup a').removeClass('active');
+            $('.operateButtonGroup button').hide();
+            $('.changeStateButtonGroup .'+btns).addClass('active');
+            $('.operateButtonGroup .'+btns).show();
+        }
+    }
 </script>
 

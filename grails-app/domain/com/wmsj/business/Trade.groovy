@@ -75,4 +75,11 @@ class Trade {
     String toString(){
         return organization+"发布的【${title}】";
     }
+
+    def afterUpdate(){
+        if(this.deleted){
+            int applyNum=Apply.executeUpdate("update Apply set deleted=1 where trade.id=?",[this.id]);
+            int achievementNum=Achievement.executeUpdate("update Achievement set deleted=1 where trade.id=?",[this.id]);
+        }
+    }
 }

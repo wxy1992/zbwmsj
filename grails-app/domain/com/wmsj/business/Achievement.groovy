@@ -14,6 +14,8 @@ class Achievement {
     String content
     @Title('操作人')
     BaseUser baseUser
+    @Title(zh_CN='是否删除')
+    Boolean deleted=false
     @Title(zh_CN='创建时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date dateCreated
@@ -25,6 +27,7 @@ class Achievement {
         trade nullable: false,unique: true
         content nullable: false
         baseUser nullable: false
+        deleted nullable: false
     }
 
     static mapping = {

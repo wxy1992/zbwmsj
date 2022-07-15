@@ -1,7 +1,7 @@
 <script>
 
     $(function () {
-        $(".datetimepicker" ).datetimepicker({language: 'zh-CN',autoclose: true,todayBtn: true,format: 'yyyy-mm-dd hh:ii',endDate:'${new Date().format('yyyy-MM-dd')}'});
+        $(".datetimepicker" ).datetimepicker({language: 'zh-CN',autoclose: true,todayBtn: true,format: 'yyyy-mm-dd hh:ii'});
         $("#tradeForm input:required").after('<span class="error-span">*</span>');
     });
 
@@ -45,11 +45,15 @@
     //操作
     function optionFormatter(value, row, index) {
         var str=[];
-        str.push('<div class="operation_column"><a class="text-primary" href="javascript://" onclick="javascript:createOrEdit(\''+row.id+'\',\'\',\'\')">编辑</a>');
-        str.push('<a class="text-danger" href="javascript://" onclick="javascript:deleteTrade(\''+row.id+'\')">删除</a>');
+        str.push('<div class="operation_column">');
+        str.push('<a class="text-primary" href="javascript://" onclick="javascript:createOrEdit(\''+row.id+'\',\'\',\'\')">编辑</a>');
+        if(row['status']!=20){
+            str.push('<a class="text-danger" href="javascript://" onclick="javascript:deleteTrade(\''+row.id+'\')">删除</a>');
+        }
         str.push('<a class="text-primary" href="javascript://" onclick="javascript:showApply(\''+row.id+'\',\'\',\'\')">报名列表</a>');
         str.push('<a class="text-primary" href="javascript://" onclick="javascript:showCommentary(\''+row.id+'\',\'\',\'\')">评论列表</a>');
         str.push('<a class="text-primary" href="javascript://" onclick="javascript:tradeAchievement(\''+row.id+'\',\'\',\'\')">服务成果</a></div>');
+        str.push('</div>');
         return str.join('');
     }
 

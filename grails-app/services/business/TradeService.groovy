@@ -1,5 +1,6 @@
 package business
 
+import com.wmsj.business.Achievement
 import com.wmsj.business.Apply
 import com.wmsj.business.Trade
 import com.wmsj.business.TradeType
@@ -57,6 +58,7 @@ class TradeService {
                 eq("status",params.status.toInteger())
             }
             ge("status",20)
+            eq("deleted",false)
             setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
             sortMap.keySet().each {st->
                 order(st,sortMap[st])
@@ -122,6 +124,7 @@ class TradeService {
                 }
                 setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
                 eq("id",params.tradeId.toLong())
+                eq("deleted",false)
                 maxResults(1)
             }
             Apply myApply=Apply.createCriteria().get{
@@ -182,10 +185,10 @@ class TradeService {
             }
             Apply apply=new Apply();
             apply.trade=Trade.get(params.tradeId.toLong());
-            apply.name=params.name.trim();
-            apply.idcard=params.idcard.trim();
-            apply.telephone=params.telephone.trim();
-            apply.address=params.address.trim();
+            apply.name=params.name?.trim();
+            apply.idcard=params.idcard?.trim();
+            apply.telephone=params.telephone?.trim();
+            apply.address=params.address?.trim();
             apply.creator=wxUser;
             if(apply.save(flush: true)){
                 resultMap.result=true;
@@ -217,6 +220,7 @@ class TradeService {
                 property('o.name','organizationName')
             }
             eq("creator.id",wxUser.id)
+            eq("deleted",false)
             setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
             order("id","desc")
         }
@@ -254,7 +258,7 @@ class TradeService {
             commentary.createdBy=wxUser.name;
             if(commentary.save(flush: true)){
                 map['result']=true;
-                map['message']="评论成功";
+                map['message']="评论成功，等待管理员审核";
                 map['data']=commentary.id;
             }else{
                 log.error(commentary.errors);
@@ -286,6 +290,7 @@ class TradeService {
             if (params?.tradeId) {
                 eq("t.id", params?.tradeId.toLong())
             }
+            eq("state",1)//审核通过
             setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
             order("id", "desc")
         }
@@ -320,5 +325,28 @@ class TradeService {
         return comment;
     }
 
+    /**
+     * 服务成果
+     * @param params
+     * @param wxUser
+     * @return
+     */
+    Map describeTradeAchievement(def params,def wxUser){
+        def achievement = Achievement.createCriteria().get {
+            projections {
+                property("title", "title")
+                property("content", "content")
+                property("lastUpdated", "lastUpdated")
+            }
+            if (params.tradeId) {
+                eq("trade.id", params.tradeId.toLong())
+            }
+            eq("deleted", false)
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+            order("id", "desc")
+            maxResults(1)
+        }
+        return achievement;
+    }
 
 }

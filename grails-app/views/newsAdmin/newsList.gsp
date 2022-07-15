@@ -8,7 +8,7 @@
     <div class="col-lg-5 text-right">
         <button class="btn btn-info" type="button" onclick="doSearch();"><i class="glyphicon glyphicon-search"></i> 搜索</button>
         <sec:ifAnyGranted roles="ROLE_SUBADMIN,ROLE_ADMIN">
-            <button class="btn btn-primary" type="button" onclick="createOrEdit('');"><i class="glyphicon glyphicon-plus"></i>新增</button>
+            <button class="btn btn-primary" type="button" onclick="createOrEdit('',$('#catalogId').val());"><i class="glyphicon glyphicon-plus"></i>新增</button>
         </sec:ifAnyGranted>
     </div>
 </div>
@@ -21,12 +21,12 @@
                             <a href="javascript:searchNewsTable({'#state':'草稿'});" class="btn btn-info draft" title="草稿库">草稿库</a>
                             <a href="javascript:searchNewsTable({'#state':'发布'});" class="btn btn-info publish active" title="发布库">发布库</a>
                             <g:set var="isAudit" value="${catalog?.needPreview}"/>
-                            <g:if test="${isAudit}">
+                            <g:if test="${isAudit||!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")}">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">审核库<span class="caret"></span></button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a href="javascript:searchNewsTable({'#state':'已提交'});" class="audit" title="已提交">已提交</a></li>
-                                        <li><a href="javascript:searchNewsTable({'#state':'退回'});" class="audit" title="退回">退回</a></li>
+                                        <li><a href="javascript:searchNewsTable({'#state':'退回'});" class="audit reback" title="退回">退回</a></li>
                                     </ul>
                                 </div>
                             </g:if>
@@ -43,28 +43,27 @@
                                         title="退回">退回</button>
                             </sec:ifAnyGranted>
 
-                            <sec:ifNotGranted roles="ROLE_AUDITOR,ROLE_PUBAUDITOR">
-                                <!--草稿库-->
-                                <g:if test="${catalog?.needPreview&&!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")}">
-                                    <button onclick="changeNewsState('已提交');" class="btn btn-warning draft" title="已提交">提交</button>
-                                </g:if><g:else>
-                                <button onclick="changeNewsState('发布');" class="btn btn-warning draft" title="发布">发布</button>
-                                </g:else>
-                                <!--发布库-->
-                                <button onclick="changeNewsState('草稿');" class="btn btn-warning publish" title="撤稿">撤稿</button>
+                            <!--草稿库-->
+                            <g:if test="${catalog?.needPreview&&!SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")}">
+                                <button onclick="changeNewsState('已提交');" class="btn btn-warning draft reback" title="已提交">提交</button>
+                            </g:if><g:else>
+                            <button onclick="changeNewsState('发布');" class="btn btn-warning draft" title="发布">发布</button>
+                            </g:else>
+                            <!--发布库-->
+                            <button onclick="changeNewsState('草稿');" class="btn btn-warning publish" title="撤稿">撤稿</button>
 
-                                <div class="btn-group draft publish">
-                                    <button type="button" class="btn btn-info dropdown-toggle draft publish" data-toggle="dropdown">复制/移动<span class="caret"></span></button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="javascript:showCopyPanel('copy');" class="btn btn-info w-100" title="复制">复制</a></li>
-                                        <li> <hr> <input id="newsOperationType" type="hidden" ></li>
-                                        <li><a href="javascript:showCopyPanel('move');" class="btn btn-info w-100" title="移动">移动</a></li>
-                                    </ul>
-                                </div>
-                                <!--回收站-->
-                                <button onclick="changeNewsState('草稿');" class="btn btn-warning refuse" title="还原">还原</button>
-                                <button onclick="deleteAll();" class="btn btn-danger draft refuse" title="删除">删除</button>
-                            </sec:ifNotGranted>
+                            <div class="btn-group draft publish">
+                                <button type="button" class="btn btn-info dropdown-toggle draft publish" data-toggle="dropdown">复制/移动<span class="caret"></span></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="javascript:showCopyPanel('copy');" class="btn btn-info w-100" title="复制">复制</a></li>
+                                    <li> <hr> <input id="newsOperationType" type="hidden" ></li>
+                                    <li><a href="javascript:showCopyPanel('move');" class="btn btn-info w-100" title="移动">移动</a></li>
+                                </ul>
+                            </div>
+                            <!--回收站-->
+                            <button onclick="changeNewsState('草稿');" class="btn btn-warning refuse" title="还原">还原</button>
+                            <button onclick="deleteAll();" class="btn btn-danger reback draft refuse" title="删除">删除</button>
+
                         </div>
                     </div>
                 </div>
@@ -112,30 +111,5 @@
         doSearch();
     }
 
-    //控制撤稿、复制等按钮显示
-    function operateGroup(){
-        if($('#state').val()){
-            var stateVal=$('#state').val();
-            var btns=buttonWithState[stateVal];
-            $('.changeStateButtonGroup a').removeClass('active');
-            $('.operateButtonGroup button').hide();
-            $('.changeStateButtonGroup .'+btns).addClass('active');
-            $('.operateButtonGroup .'+btns).show();
-        }
-    }
 
-    //保存新闻
-    function createOrEdit(id){
-        var catalogId='${catalog?.id}';
-        if(!id&&!catalogId){
-            alert('请先选择左侧栏目');
-            return;
-        }
-        var pageNum=$('#newsTable').bootstrapTable('getOptions').pageNumber;
-        $.post('${request.contextPath}/newsAdmin/createOrEdit',{id:id,'catalog.id':catalogId,pageNum:pageNum,
-            operation:'${params.operation}',catalogName:'${catalog?.name}'},function(data){
-            $('#newsListTable').html('');
-            $('#newsListTable').html(data);
-        },'html');
-    }
 </script>

@@ -25,6 +25,7 @@ class CommentaryController {
                 property('createdBy','createdBy')
                 property('content','content')
                 property('dateCreated','dateCreated')
+                property('state','state')
             }
             if (params?.tradeId) {
                 eq("t.id", params?.tradeId.toLong())
@@ -56,5 +57,30 @@ class CommentaryController {
             }
         }
         render map as JSON;
+    }
+
+    /**
+     * 审核评论
+     * @return
+     */
+    def auditCommentary(){
+        def map=[:];
+        map.result=false;
+        map.message="网络错误，请重试";
+        if(!Commentary.constraints."state".inList.contains(params.state.toInteger())){
+            render "${map as JSON}";
+            return;
+        }
+        def ids = params.fields?.split(',').toList().collect {it.toLong()};
+        try{
+            def updateMap=[:];
+            updateMap.state=params.state.toInteger();
+            Commentary.where{id in ids}.updateAll(updateMap);
+            map.result=true;
+            map.message="操作成功";
+        }catch(e){
+            log.error(e.message);
+        }
+        render "${map as JSON}";
     }
 }
