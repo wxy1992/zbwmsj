@@ -36,4 +36,8 @@
         }
     }
 
+    function backToTradeList(){
+        loadRemotePage('${request.contextPath}/trade/list');
+    }
+
 </script>

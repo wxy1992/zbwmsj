@@ -17,6 +17,7 @@
                     <button class="btn btn-info" type="button" onclick="doSearch();"><i class="glyphicon glyphicon-search"></i>搜索</button>
                     <button class="btn btn-success" type="button" onclick="auditCommentary('1');">审核通过</button>
                     <button class="btn btn-danger" type="button" onclick="auditCommentary('2');">审核不通过</button>
+                    <button class="btn btn-info" type="button" onclick="backToTradeList();"><i class="glyphicon glyphicon-share-alt"></i>返回</button>
                 </div>
             </div>
             <div class="row form-control-inline">

@@ -158,10 +158,10 @@ class UeditorController {
                     // Parse range specifier
                     response.setHeader "Cache-Control", "no-store, must-revalidate"
                     response.setHeader "Accept-Ranges", "bytes"
+                    response.setHeader "Content-Length", file.length().toString()
                     // :TODO: a temporary fixed value, which should reflect the movie.contentType
                     String contentType = "video/mp4"
                     response.contentType = contentType
-//                response.setHeader "Content-Length", file.size()
                 }
                 FileInputStream fis = new FileInputStream(file)
                 response.outputStream << fis

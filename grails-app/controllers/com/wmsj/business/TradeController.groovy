@@ -106,6 +106,11 @@ class TradeController {
             trade = new Trade(params);
         }
         trade.properties=params;
+        if(trade.endDate.before(trade.beginDate)){
+            map.message="结束时间不能早于开始时间";
+            render map as JSON;
+            return;
+        }
         if(!params."organization.id"){
             trade.organization=springSecurityService.currentUser.organization;
         }

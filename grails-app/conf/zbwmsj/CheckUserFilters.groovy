@@ -9,10 +9,11 @@ class CheckUserFilters {
         justApi(controller:'tradeApi',action:"*") {
             before = {
                 def userid=request.getHeader("userid");
-                if(!userid){
+                println  "---------userid：${userid}------------------"
+                if(userid){
                     def wxUser= WxUser.get(userid);
                     if(wxUser){
-                        println  "---------userid：${userid}----------wxUser：${wxUser}-----------"
+                        println  "---------wxUser：${wxUser}-----------"
                         request.setAttribute("wxUser",wxUser);
                     }else{
                         render "非法用户";

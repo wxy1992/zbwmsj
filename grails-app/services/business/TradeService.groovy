@@ -160,41 +160,46 @@ class TradeService {
         resultMap.message="缺少参数";
         resultMap.data=0;
         if (params.tradeId && params.name && params.idcard && params.telephone) {
-            def mynum=Apply.createCriteria().count{
-                eq("trade.id",params.tradeId.toLong())
-                eq("creator.id",wxUser.id)
-            }
-            if(mynum>0){
-                resultMap.message="您已经报名过该服务";
-                return resultMap;
-            }
-            def now=new Date();
-            def trade=Trade.get(params.tradeId.toLong());
-            if(!trade){
-                resultMap.message="您已经报名过该服务";
-                return resultMap;
-            }
-            if(now.before(trade.beginDate)||now.after(trade.endDate)){
-                resultMap.message="不在报名时间范围内";
-                return resultMap;
-            }
-            def alreadyNum=Apply.countByTrade(trade);
-            if((trade.peopleNum-alreadyNum)<=0){
-                resultMap.message="报名人数已满";
-                return resultMap;
-            }
-            Apply apply=new Apply();
-            apply.trade=Trade.get(params.tradeId.toLong());
-            apply.name=params.name?.trim();
-            apply.idcard=params.idcard?.trim();
-            apply.telephone=params.telephone?.trim();
-            apply.address=params.address?.trim();
-            apply.creator=wxUser;
-            if(apply.save(flush: true)){
-                resultMap.result=true;
-                resultMap.data=apply.id;
-            }else{
-                log.error(apply.errors);
+            try{
+                def mynum=Apply.createCriteria().count{
+                    eq("trade.id",params.tradeId.toLong())
+                    eq("creator.id",wxUser.id)
+                }
+                if(mynum>0){
+                    resultMap.message="您已经报名过该服务";
+                    return resultMap;
+                }
+                def now=new Date();
+                def trade=Trade.get(params.tradeId.toLong());
+                if(!trade){
+                    resultMap.message="您已经报名过该服务";
+                    return resultMap;
+                }
+                if(now.before(trade.beginDate)||now.after(trade.endDate)){
+                    resultMap.message="不在报名时间范围内";
+                    return resultMap;
+                }
+                def alreadyNum=Apply.countByTrade(trade);
+                if((trade.peopleNum-alreadyNum)<=0){
+                    resultMap.message="报名人数已满";
+                    return resultMap;
+                }
+                Apply apply=new Apply();
+                apply.trade=Trade.get(params.tradeId.toLong());
+                apply.name=params.name?.trim();
+                apply.idcard=params.idcard?.trim();
+                apply.telephone=params.telephone?.trim();
+                apply.address=params.address?.trim();
+                apply.creator=wxUser;
+                if(apply.save(flush: true)){
+                    resultMap.result=true;
+                    resultMap.data=apply.id;
+                    resultMap.message="报名成功";
+                }else{
+                    log.error(apply.errors);
+                }
+            }catch(e){
+                log.error(e.message);
             }
         }
         return resultMap;
