@@ -226,6 +226,7 @@ class TradeService {
             }
             eq("creator.id",wxUser.id)
             eq("deleted",false)
+            ge("t.status",20)
             setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
             order("id","desc")
         }
