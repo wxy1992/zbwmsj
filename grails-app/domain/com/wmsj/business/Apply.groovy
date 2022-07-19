@@ -20,7 +20,7 @@ class Apply {
     @Title(zh_CN='报名用户')
     WxUser creator
     @Title(zh_CN='状态')
-    Integer status=10//10报名成功，20已完成，30已评价
+    Integer status=10//0退单，10报名成功，20已完成，30已评价
     @Title(zh_CN='审核通过')
     Boolean approve=true
     @Title(zh_CN='是否删除')
@@ -39,14 +39,14 @@ class Apply {
         telephone(nullable: false,size:0..20)
         address(nullable: true,size:0..200)
         creator(nullable: false)
-        status(nullable: false)
+        status(nullable: false,inList: [0,10,20,30])
     }
 
     String toString(){
         return "【${name}】报名了："+trade;
     }
 
-    transient static final Map STATUSMAP=[10:"报名成功",20:"已完成",30:"已评价"];
+    transient static final Map STATUSMAP=[0:"已退单",10:"报名成功",20:"已完成",30:"已评价"];
 
     def afterUpdate(){
         if(this.deleted){

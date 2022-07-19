@@ -38,9 +38,37 @@ class ApplyController {
             order("id", "desc")
         }
         def map = [:];
+        result.resultList.each{row->
+            row.statusName= Apply.STATUSMAP.get(row.status);
+        }
         map.total = result.totalCount;
         map.rows = result.resultList;
         render map as JSON;
     }
 
+
+    /**
+     * 修改报名状态
+     * @return
+     */
+    def changeApplyStatus(){
+        def map=[:];
+        map.result=false;
+        map.message="参数错误";
+        if(!Apply.constraints."status".inList.contains(params.status.toInteger())){
+            render "${map as JSON}";
+            return;
+        }
+        def ids = params.fields?.split(',').toList().collect {it.toLong()};
+        try{
+            def updateMap=[:];
+            updateMap.status=params.status.toInteger();
+            Apply.where{id in ids}.updateAll(updateMap);
+            map.result=true;
+            map.message="操作成功";
+        }catch(e){
+            log.error(e.message);
+        }
+        render "${map as JSON}";
+    }
 }

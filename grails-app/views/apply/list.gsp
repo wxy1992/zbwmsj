@@ -20,8 +20,10 @@
                     <input type="text" class="form-control" id="idcard" placeholder="身份证号">
                 </div>
                 <div class="col-lg-4 text-right">
-                    <button class="btn btn-info" type="button" onclick="doSearch();"><i class="glyphicon glyphicon-search"></i>搜索</button>
-                    <button class="btn btn-info" type="button" onclick="backToTradeList();"><i class="glyphicon glyphicon-share-alt"></i>返回</button>
+                    <button class="btn btn-info" type="button" onclick="doSearch();"><i class="glyphicon glyphicon-search"></i> 搜索</button>
+                    <button class="btn btn-success" type="button" onclick="changeApplyStatus('20');"><i class="glyphicon glyphicon-ok"></i> 完成</button>
+                    <button class="btn btn-danger" type="button" onclick="changeApplyStatus('0');"><i class="glyphicon glyphicon-ban-circle"></i> 退单</button>
+                    <button class="btn btn-info" type="button" onclick="backToTradeList();"><i class="glyphicon glyphicon-share-alt"></i> 返回</button>
                 </div>
             </div>
             <div class="row form-control-inline">
@@ -32,11 +34,13 @@
                        data-query-params="queryParams">
                     <thead>
                     <tr>
-                        <th data-align="center" data-field="name" data-width="300">报名人</th>
-                        <th data-align="center" data-field="idcard">身份证号</th>
+                        <th data-checkbox="true"></th>
+                        <th data-align="center" data-field="name">报名人</th>
+                        <th data-align="center" data-field="idcard" data-width="300">身份证号</th>
                         <th data-align="center" data-field="telephone">手机号</th>
                         <th data-align="center" data-field="address" data-width="200">地址</th>
                         <th data-align="center" data-field="dateCreated">报名时间</th>
+                        <th data-align="center" data-field="statusName">状态</th>
 %{--                        <th data-align="center" data-field="id"  data-width="200" data-formatter="optionFormatter">操作</th>--}%
                     </tr>
                     </thead>

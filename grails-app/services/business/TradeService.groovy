@@ -256,12 +256,15 @@ class TradeService {
                 return map;
             }
             def commentary=new Commentary();
-            commentary.apply= Apply.get(params.applyId.toLong());
+            def apply=Apply.get(params.applyId.toLong());
+            commentary.apply= apply;
             commentary.score=params.score.toInteger();
             commentary.content=params.content;
             commentary.creator=wxUser;
             commentary.createdBy=wxUser.name;
             if(commentary.save(flush: true)){
+                apply.status=30;
+                apply.save(flush: true);//评价之后，报名状态改为《已评价》
                 map['result']=true;
                 map['message']="评论成功，等待管理员审核";
                 map['data']=commentary.id;

@@ -172,6 +172,9 @@ class TradeController {
             updateMap.auditDate=new Date();
             updateMap.auditUser=springSecurityService.currentUser;
             Trade.where{id in ids}.updateAll(updateMap);
+            if(updateMap.status==30){//服务结束，所有报名《已完成》状态
+                Apply.executeUpdate("update Apply set status=20 where trade.id in (${params.fields})");
+            }
             map.result=true;
             map.message="操作成功";
         }catch(e){
