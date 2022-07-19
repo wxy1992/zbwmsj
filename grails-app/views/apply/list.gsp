@@ -41,7 +41,7 @@
                         <th data-align="center" data-field="address" data-width="200">地址</th>
                         <th data-align="center" data-field="dateCreated">报名时间</th>
                         <th data-align="center" data-field="statusName">状态</th>
-%{--                        <th data-align="center" data-field="id"  data-width="200" data-formatter="optionFormatter">操作</th>--}%
+                        <th data-align="center" data-field="backreason" data-formatter="backreasonFormatter">退单原因</th>
                     </tr>
                     </thead>
                 </table>

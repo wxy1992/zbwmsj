@@ -21,6 +21,7 @@ class ApplyController {
                 property('telephone','telephone')
                 property('status','status')
                 property('dateCreated','dateCreated')
+                property('backreason','backreason')
             }
             if (params?.tradeId) {
                 eq("trade.id", params?.tradeId.toLong())

@@ -17,7 +17,14 @@
     function doSearch(){
         $("#applyTable").bootstrapTable("refresh",[]);
     }
-
+    //退单原因
+    function backreasonFormatter(value, row, index) {
+        var str=value;
+        if(row['status']!=0){
+            str="-";
+        }
+        return str;
+    }
     //操作
     function optionFormatter(value, row, index) {
         var str=[];
