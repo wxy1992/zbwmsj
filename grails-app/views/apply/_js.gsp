@@ -31,12 +31,12 @@
     }
 
 
-    //改变评论状态
+    //改变报名状态
     function changeApplyStatus(status) {
         var selectRows=$('#applyTable').bootstrapTable('getSelections');
         if (selectRows.length <= 0) {
             alert("请至少选择一条报名信息！");
-        }else if(window.confirm("确定对选中的记录进行此操作？")){
+        }else if(window.confirm("确定对选中的报名进行此操作？")){
             var fields='';
             for (var i = 0; i < selectRows.length; i++) {
                 if (fields != '') fields += ',';
@@ -45,6 +45,9 @@
             var obj=new Object();
             obj.fields=fields;
             obj.status=status;
+            if (status == '0') {
+                obj.backreason = prompt('退单原因', '');
+            }
             $.post('${request.contextPath}/apply/changeApplyStatus',obj,function (data){
                 alert(data.message);
                 doSearch();

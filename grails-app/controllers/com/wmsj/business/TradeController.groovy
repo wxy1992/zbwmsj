@@ -30,6 +30,7 @@ class TradeController {
                 property('endDate','endDate')
                 property('status','status')
                 property('backreason','backreason')
+                property('way','way')
             }
             if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//管理员
                 if(params.operation=='todo'){
@@ -74,7 +75,8 @@ class TradeController {
         }
         def map=[:]
         newsResult.resultList.each{row->
-            row.statusName= Trade.STATUSMAP.get(row.status);
+            row.statusName = Trade.STATUSMAP.get(row.status);
+            row.wayName = Trade.WAYMAP.get(row.way);
         }
         map.rows=newsResult.resultList;
         map.total=newsResult.totalCount;

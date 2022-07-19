@@ -25,6 +25,8 @@ class Apply {
     Boolean approve=true
     @Title(zh_CN='是否删除')
     Boolean deleted=false
+    @Title('退单原因')
+    String backreason
     @Title(zh_CN='报名时间')
     @BindingFormat("yyyy-MM-dd HH:mm")
     Date dateCreated
@@ -40,6 +42,7 @@ class Apply {
         address(nullable: true,size:0..200)
         creator(nullable: false)
         status(nullable: false,inList: [0,10,20,30])
+        backreason(nullable: true,size: 0..500)
     }
 
     String toString(){

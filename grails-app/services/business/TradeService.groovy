@@ -76,8 +76,8 @@ class TradeService {
             }else{
                 eq("id",-1L)
             }
-            eq("approve",true)
             eq("deleted",false)
+            ne("status",0)
         }
         def resultMap=[:];
         tradeList.each{tradeMap->
@@ -91,7 +91,8 @@ class TradeService {
                 eq("creator.id",wxUser.id)
                 eq("trade.id",tradeId)
                 eq("deleted",false)
-            }?:0;
+                ne("status",0)
+            }?:"";
         }
         resultMap["total"]=tradeResult.totalCount;
         resultMap["rows"]=tradeList;
@@ -131,6 +132,7 @@ class TradeService {
                 eq("creator.id",wxUser.id)
                 eq("trade.id",params.tradeId.toLong())
                 eq("deleted",false)
+                ne("status",0)
                 maxResults(1)
             }
             trade["applyStatus"]=myApply?.status?:0;
@@ -139,6 +141,7 @@ class TradeService {
             trade["idcard"]=myApply?.idcard?:"";
             trade["telephone"]=myApply?.telephone?:"";
             trade["address"]=myApply?.address?:"";
+            trade["backreason"]=myApply?.backreason?:"";
             trade["isCommented"]=Commentary.createCriteria().count{
                 createAlias("apply","a")
                 createAlias("a.trade","t")
@@ -164,6 +167,7 @@ class TradeService {
                 def mynum=Apply.createCriteria().count{
                     eq("trade.id",params.tradeId.toLong())
                     eq("creator.id",wxUser.id)
+                    ne("status",0)
                 }
                 if(mynum>0){
                     resultMap.message="您已经报名过该服务";
@@ -172,20 +176,24 @@ class TradeService {
                 def now=new Date();
                 def trade=Trade.get(params.tradeId.toLong());
                 if(!trade){
-                    resultMap.message="您已经报名过该服务";
+                    resultMap.message="该服务不存在";
                     return resultMap;
                 }
                 if(now.before(trade.beginDate)||now.after(trade.endDate)){
                     resultMap.message="不在报名时间范围内";
                     return resultMap;
                 }
-                def alreadyNum=Apply.countByTrade(trade);
+                //非退单的报名人数
+                def alreadyNum=Apply.createCriteria().count{
+                    eq("trade.id",params.tradeId.toLong())
+                    ne("status",0)
+                };
                 if((trade.peopleNum-alreadyNum)<=0){
                     resultMap.message="报名人数已满";
                     return resultMap;
                 }
                 Apply apply=new Apply();
-                apply.trade=Trade.get(params.tradeId.toLong());
+                apply.trade=trade;
                 apply.name=params.name?.trim();
                 apply.idcard=params.idcard?.trim();
                 apply.telephone=params.telephone?.trim();
@@ -262,7 +270,7 @@ class TradeService {
             commentary.score=params.score.toInteger();
             commentary.content=params.content;
             commentary.creator=wxUser;
-            commentary.createdBy=wxUser.name;
+            commentary.createdBy=wxUser.toString();
             if(commentary.save(flush: true)){
                 apply.status=30;
                 apply.save(flush: true);//评价之后，报名状态改为《已评价》

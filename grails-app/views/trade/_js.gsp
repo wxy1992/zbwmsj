@@ -37,11 +37,6 @@
     function doSearch(){
         $("#tradeTable").bootstrapTable("refresh",[]);
     }
-
-    function statusFormatter(value, row, index) {
-
-    }
-
     //操作
     function optionFormatter(value, row, index) {
         var str=[];

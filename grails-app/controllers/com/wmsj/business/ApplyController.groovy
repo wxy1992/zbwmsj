@@ -63,6 +63,7 @@ class ApplyController {
         try{
             def updateMap=[:];
             updateMap.status=params.status.toInteger();
+            updateMap.backreason=params.backreason;
             Apply.where{id in ids}.updateAll(updateMap);
             map.result=true;
             map.message="操作成功";

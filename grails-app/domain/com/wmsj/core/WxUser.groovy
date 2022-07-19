@@ -52,4 +52,8 @@ class WxUser {
         lng nullable: true,size: 0..50
         lat nullable: true,size: 0..50
     }
+
+    String toString(){
+        return tel;
+    }
 }
