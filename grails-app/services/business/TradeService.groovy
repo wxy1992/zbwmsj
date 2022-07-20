@@ -105,7 +105,7 @@ class TradeService {
      * @return
      */
     Map describeTradeDetail(def params, WxUser wxUser){
-        Map trade;
+        Map trade=[:];
         if(params.tradeId){
             trade=Trade.createCriteria().get {
                 createAlias("organization","o")
@@ -128,14 +128,19 @@ class TradeService {
                 eq("deleted",false)
                 maxResults(1)
             }
-            Apply myApply=Apply.createCriteria().get{
-                eq("creator.id",wxUser.id)
-                eq("trade.id",params.tradeId.toLong())
-                eq("deleted",false)
-                ne("status",0)
-                maxResults(1)
+            Apply myApply;
+            if(params.applyId){
+                myApply=Apply.get(params.applyId);
+            }else if(params.applyStatus){
+                myApply=Apply.createCriteria().get{
+                    eq("creator.id",wxUser.id)
+                    eq("trade.id",params.tradeId.toLong())
+                    eq("deleted",false)
+                    eq("status",params.applyStatus.toInteger())
+                    maxResults(1)
+                }
             }
-            trade["applyStatus"]=myApply?.status?:0;
+            trade["applyStatus"]=myApply?.status==null?"":myApply?.status;
             trade["applyId"]=myApply?.id?:"";
             trade["name"]=myApply?.name?:"";
             trade["idcard"]=myApply?.idcard?:"";
@@ -234,6 +239,7 @@ class TradeService {
             }
             eq("creator.id",wxUser.id)
             eq("deleted",false)
+            eq("t.deleted",false)
             ge("t.status",20)
             setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
             order("id","desc")

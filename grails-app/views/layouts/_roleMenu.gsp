@@ -23,6 +23,7 @@
         <li><a onclick="loadRemotePage('${request.contextPath}/organization/list')"><i class="glyphicon glyphicon-home"></i> 单位管理 </a></li>
     </sec:ifAnyGranted>
     <li class="label">统计</li>
+    <li><a onclick="loadRemotePage('${request.contextPath}/chart/publishRank')"><i class="glyphicon glyphicon-th-list"></i> 发布量 </a></li>
     <li><a onclick="loadRemotePage('${request.contextPath}/chart/newsVisitBarChart')"><i class="glyphicon glyphicon-signal"></i> 访问量 </a></li>
 
 </ul>

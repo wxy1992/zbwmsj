@@ -44,6 +44,15 @@
         if (selectRows.length <= 0) {
             alert("请至少选择一条报名信息！");
         }else if(window.confirm("确定对选中的报名进行此操作？")){
+            if (status == '20'||status == '0') {
+                var filterRows = $.grep(selectRows, function (obj, i) {
+                    return obj['status'] != 10;  //return为过滤的条件
+                });
+                if(filterRows.length > 0){
+                    alert("仅可完成或退回进行中的报名");
+                    return;
+                }
+            }
             var fields='';
             for (var i = 0; i < selectRows.length; i++) {
                 if (fields != '') fields += ',';

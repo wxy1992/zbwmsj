@@ -1,7 +1,9 @@
 package com.wmsj.cms
 
-
+import com.wmsj.business.Trade
+import com.wmsj.core.Organization
 import grails.converters.JSON
+import org.hibernate.criterion.CriteriaSpecification
 
 class ChartController {
 
@@ -55,5 +57,55 @@ class ChartController {
 
     def basicSiteInfo(){
 
+    }
+
+    /**
+     * 文章发布量排名
+     */
+    def publishRank(){
+
+    }
+
+    def publishRankJson(){
+        List list=[];
+        def orgnizations= Organization.createCriteria().list {
+            projections{
+                property("id","id")
+                property("name","name")
+            }
+            order("id","asc")
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+        }
+        def oids=orgnizations.collect {it?.getAt("id")};
+        def newsNum=News.createCriteria().list{
+            createAlias("publisher","p")
+            createAlias("p.organization","o")
+            projections{
+                count('id',"num")
+                groupProperty("o.id","oid")
+            }
+            inList("o.id",oids)
+            eq("state","发布")
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+        }
+        def tradeNum= Trade.createCriteria().list{
+            createAlias("organization","o")
+            projections{
+                count('id',"num")
+                groupProperty("o.id","oid")
+            }
+            inList("o.id",oids)
+            ge("status",20)
+            eq("deleted",false)
+            setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
+        }
+        orgnizations.each{org->
+            Map publishRank=[:];
+            publishRank["name"]=org.getAt("name");
+            publishRank["newsNum"]=newsNum.find{it.getAt("oid")==org.id}?.getAt("num")?:0;
+            publishRank["tradeNum"]=tradeNum.find{it.getAt("oid")==org.id}?.getAt("num")?:0;
+            list<<publishRank;
+        }
+        render list as JSON;
     }
 }

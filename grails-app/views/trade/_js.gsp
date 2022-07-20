@@ -70,13 +70,28 @@
             alert("请至少选择一条数据");
             return;
         }
-
         if (operation == '结束') {
-            var goingRows = $.grep(selectRows, function (obj, i) {
+            var filterRows = $.grep(selectRows, function (obj, i) {
                 return obj['status'] != 20;  //return为过滤的条件
             });
-            if(goingRows.length > 0){
+            if(filterRows.length > 0){
                 alert("仅可结束进行中的服务");
+                return;
+            }
+        }else if(operation == '退回'||operation == '发布'){
+            var filterRows = $.grep(selectRows, function (obj, i) {
+                return obj['status'] != 10;  //return为过滤的条件
+            });
+            if(filterRows.length > 0){
+                alert("仅可退回或发布已提交的服务");
+                return;
+            }
+        }else if(operation == '提交'){
+            var filterRows = $.grep(selectRows, function (obj, i) {
+                return (obj['status'] != 0 ||  obj['status'] != 5);  //return为过滤的条件
+            });
+            if(filterRows.length > 0){
+                alert("仅可提交草稿和退回的服务");
                 return;
             }
         }
