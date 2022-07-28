@@ -47,7 +47,12 @@
         if(row['state']=='草稿'||row['state']=='退回'){
             str.push('<button type="button" class="btn btn-primary" title="编辑" onclick="createOrEdit(\''+row.id+'\',\'\');"><i class="glyphicon glyphicon-pencil"></i></button>&nbsp;&nbsp;');
         }
-        str.push('<button type="button" class="btn btn-info" title="预览" onclick="previewIndex(\''+row.id+'\');"><i class="glyphicon glyphicon-eye-open"></i></button>');
+        str.push('<button type="button" class="btn btn-info" title="预览" onclick="previewIndex(\''+row.id+'\');"><i class="glyphicon glyphicon-eye-open"></i></button>&nbsp;&nbsp;');
+        if(row['isTop']||row['isTop']=='true'){
+            str.push('<a class="text-primary" href="javascript://" onclick="changeNewsTop(\''+row.id+'\',\'false\');">取消置顶</a>');
+        }else{
+            str.push('<a class="text-primary" href="javascript://" onclick="changeNewsTop(\''+row.id+'\',\'true\');">置顶</a>');
+        }
         return str.join('');
     }
 
@@ -183,6 +188,17 @@
             $('.changeStateButtonGroup .'+btns).addClass('active');
             $('.operateButtonGroup .'+btns).show();
         }
+    }
+
+
+    function changeNewsTop(id,top){
+        $.post('${request.contextPath}/newsAdmin/changeNewsTop',{id:id,top:top},function(data){
+            if(data.result){
+                doSearch();
+            }else{
+                alert(data.message);
+            }
+        },'json');
     }
 </script>
 

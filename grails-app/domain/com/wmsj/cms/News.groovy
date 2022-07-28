@@ -39,6 +39,10 @@ class News {
     int clicknum=0
     @Title('排序数值')
     int sequencer=9999999
+    @Title('是否置顶')
+    boolean isTop=false
+    @Title('置顶日期')
+    Date topDate=new Date().parse('yyyy-MM-dd HH:mm:ss','1900-01-01 00:00:00')
     @Title('新闻内容')
     String content
     @Title('内容文本')
@@ -70,6 +74,8 @@ class News {
         redirectURL(size:0..400,blank: true,nullable:true)
         picture(size:0..400,nullable:true)
         content(blank: true,nullable:true)
+        isTop(nullable:true)
+        topDate(nullable:true)
         auditDate(nullable:true)
         auditUser(nullable:true)
         contentStr(blank: true,nullable:true)

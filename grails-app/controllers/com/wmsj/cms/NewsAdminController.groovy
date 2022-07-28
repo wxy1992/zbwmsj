@@ -3,6 +3,7 @@ package com.wmsj.cms
 import com.wmsj.cms.behaviour.Visit
 import com.wmsj.core.BaseUser
 import com.wmsj.core.BaseUserBaseRole
+import com.wmsj.utils.CommonUtils
 import grails.converters.JSON
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.SpringSecurityUtils
@@ -33,7 +34,7 @@ class NewsAdminController {
         if(!params.offset) params.offset ='0';
         if(!params.state) params.state ='发布';
         def currentUser=springSecurityService.currentUser;
-        def sortMap = ['sequencer': 'asc','publishDate':'desc','id':'desc'];
+        def sortMap = ['isTop': 'desc','topDate':'desc','sequencer': 'asc','publishDate':'desc','id':'desc'];
         def newsResult=News.createCriteria().list ([max: params.max.toInteger(),offset: params.offset.toInteger()]){
             createAlias('catalog','c')
             projections{
@@ -44,6 +45,7 @@ class NewsAdminController {
                 property('publishDate','publishDate')
                 property('state','state')
                 property('sequencer','sequencer')
+                property('isTop','isTop')
             }
             if(['草稿','回收站'].contains(params.state)){
                 createAlias('publisher','p')
@@ -147,9 +149,8 @@ class NewsAdminController {
                     if(!dirfile.exists()){
                         dirfile.mkdirs();
                     }
-                    def picfile=new File(picturepath);
                     if( vFile && !vFile.isEmpty()){
-                        vFile.transferTo(picfile);
+                        CommonUtils.compressPicture(vFile.getInputStream(),picturepath);
                     }
                 }
                 def attachments=request.getParameterValues('attachmentId')?.toList().collect {it.toLong()};
@@ -433,7 +434,7 @@ class NewsAdminController {
         if(!params.max) params.max='10';
         if(!params.offset) params.offset ='0';
         def currentUser=springSecurityService.currentUser;
-        def sortMap = ['sequencer': 'asc','publishDate':'desc','id':'desc'];
+        def sortMap = ['isTop': 'desc','topDate':'desc','sequencer': 'asc','publishDate':'desc','id':'desc'];
         def newsResult=News.createCriteria().list ([max: params.max.toInteger(),offset: params.offset.toInteger()]){
             createAlias('catalog','c')
             createAlias('publisher','p')
@@ -447,6 +448,7 @@ class NewsAdminController {
                 property('state','state')
                 property('o.shortName','organizationName')
                 property('backreason','backreason')
+                property('isTop','isTop')
             }
             if(SpringSecurityUtils.ifAnyGranted("ROLE_ADMIN")){//管理员
                 eq("state","已提交")//待办已提交服务
@@ -474,6 +476,32 @@ class NewsAdminController {
         def map=[:]
         map.rows=newsResult.resultList;
         map.total=newsResult.totalCount;
+        render "${map as JSON}";
+    }
+
+
+    def changeNewsTop(){
+        def map=[:];
+        map.result=false;
+        map.message="网络错误，请重试";
+        if (params.id && params.top) {
+            try{
+                def news=News.get(params.id.toLong());
+                if(params.top=='true'){
+                    news.isTop=true;
+                    news.topDate=new Date();
+                }else{
+                    news.isTop=false;
+                    news.topDate=new Date().parse('yyyy-MM-dd HH:mm:ss','1900-01-01 00:00:00');
+                }
+                if(news.save(flush: true)){
+                    map.result=true;
+                    map.message="操作成功";
+                }
+            }catch(e){
+                log.error(e.message);
+            }
+        }
         render "${map as JSON}";
     }
 }

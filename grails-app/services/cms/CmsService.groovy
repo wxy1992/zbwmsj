@@ -174,7 +174,7 @@ class CmsService {
      * @return
      */
     Map describeNewsByCatalog(def params){
-        def sortMap = ['sequencer':'asc','id':'desc'];
+        def sortMap = ['isTop': 'desc','topDate':'desc','sequencer':'asc','id':'desc'];
         def newsList= News.createCriteria().list ([max   : params.max.toInteger(),
                                                offset: params.offset.toInteger()]) {
             projections{
@@ -183,6 +183,7 @@ class CmsService {
                 property('subtitle','subtitle')
                 property('publishDate','publishDate')
                 property('clicknum','clicknum')
+                property('isTop','isTop')
             }
             eq("catalog.id",params.catalogId.toLong())
             eq("state","发布")

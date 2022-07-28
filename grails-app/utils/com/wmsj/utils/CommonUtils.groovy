@@ -1,5 +1,11 @@
 package com.wmsj.utils
 
+import com.sun.image.codec.jpeg.JPEGCodec
+import com.sun.image.codec.jpeg.JPEGImageEncoder
+
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
+
 class CommonUtils {
     /**
      * 获取扩展名,不带点
@@ -76,4 +82,37 @@ class CommonUtils {
         return res.toString();
     }
 
+    /**
+     * 压缩图片
+     * @param srcfile
+     * @param targetPath
+     */
+    static void compressPicture(InputStream srcfile,String targetPath){
+        try {
+            //图片所在路径
+            BufferedImage templateImage = ImageIO.read(srcfile);
+            //原始图片的长度和宽度
+            int height = templateImage.getHeight();
+            int width = templateImage.getWidth();
+            //通过比例压缩
+            float scale = 0.5f;
+            //通过固定长度压缩
+            /*int doWithHeight = 100;
+            int dowithWidth = 300;*/
+
+            //压缩之后的长度和宽度
+            int doWithHeight = (int) (scale * height);
+            int dowithWidth = (int) (scale * width);
+
+            BufferedImage finalImage = new BufferedImage(dowithWidth, doWithHeight, BufferedImage.TYPE_INT_RGB);
+            finalImage.getGraphics().drawImage(templateImage.getScaledInstance(dowithWidth, doWithHeight, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+            //图片输出路径，以及图片名
+            FileOutputStream  fileOutputStream = new FileOutputStream(targetPath);
+            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(fileOutputStream);
+            encoder.encode(finalImage);
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

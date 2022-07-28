@@ -120,8 +120,8 @@ class TradeService {
                     property('endDate','endDate')
                     property('o.id','organizationId')
                     property('o.name','organizationName')
-                    property('telephone','telephone')
-                    property('address','address')
+                    property('telephone','tradeTelephone')
+                    property('address','tradeAddress')
                 }
                 setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
                 eq("id",params.tradeId.toLong())
